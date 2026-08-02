@@ -4,214 +4,957 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0A63C8">
-<title>SSS Secure Digital Job Sheet</title>
+<title>SSSECURE Job Completion Checklist</title>
 <style>
-:root{--blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;--line:#d8e0e8;--muted:#687586}
+:root{--blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;--line:#d8e0e8;--muted:#687586;--red:#b42318;--amber:#9a6700}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);margin:0;padding:14px;color:var(--ink)}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:14px}
 .wrap{max-width:850px;margin:auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.16)}
 .head{background:var(--blue);color:#fff;padding:20px;text-align:center}
 .head h1{font-size:26px;margin:0 0 4px}.head h2{font-size:17px;margin:0}
 .sec{background:var(--green);color:#fff;padding:11px 15px;font-weight:800;letter-spacing:.2px}
-.pad{padding:15px}
-.field{margin-bottom:13px}
+.section-note{display:block;margin-top:4px;font-size:11px;font-weight:600;font-style:italic;letter-spacing:0;opacity:.92}
+.pad{padding:15px}.field{margin-bottom:13px}
 label.field-label{display:block;font-weight:800;margin-bottom:7px}
-input[type=text],textarea{width:100%;padding:12px;border:1.5px solid #b8c2ce;border-radius:9px;box-sizing:border-box;font-size:16px;background:#fff}
-.addr{height:68px;resize:vertical}.comments{height:100px;resize:vertical}
-.job-types{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.job-types label{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:9px;padding:11px;font-weight:700;margin:0}
-input[type=radio]{width:21px;height:21px;accent-color:var(--blue);flex:0 0 auto}
-table{width:100%;border-collapse:collapse;margin-top:3px}
-th,td{border:1px solid #d9dee5;padding:8px}
-th{background:#f2f4f7;font-size:13px;text-align:center}
-td:first-child{text-align:left;font-weight:700;font-size:14px;line-height:1.3}
-td{text-align:center}
-.sig-wrap{border:2px solid #8d98a6;border-radius:10px;background:#fff;overflow:hidden}
-#signature{display:block;width:100%;height:170px;touch-action:none;background:#fff}
-.sig-help{font-size:13px;color:var(--muted);margin-top:6px}
-.sig-actions{display:flex;justify-content:flex-end;margin-top:9px}
-button{border:none;border-radius:9px;font-weight:800}
-.clear{background:#c62828;color:#fff;padding:10px 14px}
-.share-area{padding:16px;position:sticky;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid var(--line)}
-.share{width:100%;background:var(--blue);color:#fff;padding:16px;font-size:18px}
-.status{display:none;margin:0 15px 15px;padding:12px;border-radius:9px;font-weight:700}
-.status.ok{display:block;background:#e7f6ec;color:#176b39}.status.err{display:block;background:#fdeaea;color:#9b2020}
-.footer{text-align:center;padding:0 15px 16px;color:var(--muted);font-size:12px}
-@media(max-width:600px){body{padding:0}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:24px}th,td{padding:7px 5px}}
+.req{color:#fff;background:#b42318;border-radius:4px;padding:1px 5px;font-size:10px;vertical-align:2px;margin-left:5px;letter-spacing:.2px}
+input[type=text],input[type=date],textarea{width:100%;padding:12px;border:1.5px solid #b8c2ce;border-radius:9px;font-size:16px;background:#fff;color:var(--ink)}
+textarea{font-family:Arial,Helvetica,sans-serif}.addr{height:68px;resize:vertical}.comments{height:100px;resize:vertical}
+input:focus,textarea:focus{outline:3px solid rgba(10,99,200,.18);border-color:var(--blue)}
+.invalid{border-color:var(--red)!important;background:#fff8f7!important}
+.group-invalid{outline:3px solid rgba(180,35,24,.15);border-radius:10px}
+.work-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.work-grid label{display:flex;align-items:center;gap:8px;min-height:54px;padding:10px;border:1.5px solid var(--line);border-radius:9px;font-weight:700;line-height:1.2}
+input[type=checkbox],input[type=radio]{width:21px;height:21px;accent-color:var(--blue);flex:0 0 auto}
+.gear-question{margin-bottom:16px}.gear-question:last-child{margin-bottom:0}.gear-title{font-weight:800;margin-bottom:9px;line-height:1.35}
+.option-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.option-row.two{grid-template-columns:repeat(2,minmax(0,1fr))}.option-row.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.option-row label{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px;border:1.5px solid var(--line);border-radius:9px;font-weight:800}
+.photo-input{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.photo-picker{display:block;width:100%;border:1.5px dashed #8ca0b5;border-radius:10px;padding:14px;background:#f8fbfe;color:var(--blue);font-size:15px;font-weight:800;text-align:center;cursor:pointer}.photo-picker:focus-within,.photo-picker:active{outline:3px solid rgba(10,99,200,.18);border-color:var(--blue)}.photo-picker.invalid{border-color:var(--red)!important;background:#fff8f7!important}
+.photo-note{color:var(--muted);font-size:13px;margin-top:7px;line-height:1.35}.photo-count{font-weight:800;color:var(--blue)}
+.preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.preview{position:relative;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f4f6f8}
+.preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#eef1f4}
+.preview-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 8px;font-size:12px;color:var(--muted);background:#fff}
+.preview-actions{display:flex;gap:5px}.icon-btn{border:1px solid #c9d1da;background:#fff;color:var(--ink);padding:7px 9px;font-size:12px;border-radius:7px}.remove-photo{color:var(--red);border-color:#e8b4ae}
+.declaration-text{background:#f5f8fb;border:1px solid var(--line);border-radius:10px;padding:13px;margin-bottom:14px;font-weight:700;line-height:1.45}
+.declaration-name{color:var(--blue);font-weight:900}
+.sig-wrap{border:2px solid #8d98a6;border-radius:10px;background:#fff;overflow:hidden}.sig-wrap.invalid{border-color:var(--red)!important}
+#signature{display:block;width:100%;height:170px;touch-action:none;background:#fff;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.sig-help{font-size:13px;color:var(--muted);margin-top:6px}.sig-actions{display:flex;justify-content:flex-end;margin-top:9px}
+button{border:none;border-radius:9px;font-weight:800;cursor:pointer}.clear{background:#c62828;color:#fff;padding:10px 14px}
+.share-area{padding:12px 16px calc(12px + env(safe-area-inset-bottom));position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(850px,100%);background:rgba(255,255,255,.98);border-top:1px solid var(--line);box-shadow:0 -3px 14px rgba(0,0,0,.12);display:grid;grid-template-columns:.8fr 1.35fr 1.65fr;gap:8px;z-index:1000}
+.share{width:100%;background:var(--blue);color:#fff;padding:15px 10px;font-size:16px}.save{width:100%;background:#1F8F4D;color:#fff;padding:15px 10px;font-size:15px}.reset{width:100%;background:#e9eef4;color:#344054;padding:14px 8px;font-size:14px;border:1px solid #cbd5df}
+button:disabled{opacity:.6;cursor:not-allowed}
+.status{display:none;margin:0 15px 15px;padding:12px;border-radius:9px;font-weight:700;line-height:1.4}.status.ok{display:block;background:#e7f6ec;color:#176b39}.status.err{display:block;background:#fdeaea;color:#9b2020}.status.info{display:block;background:#eef5ff;color:#184f8c}.status.warn{display:block;background:#fff5d6;color:#745000}
+.compat-warning{display:none;margin:15px;padding:13px;border-radius:10px;background:#fff5d6;color:#694f00;border:1px solid #e6c453;font-weight:700;line-height:1.45}.compat-warning.show{display:block}.error-summary{display:none;margin:15px;padding:13px;border-radius:10px;background:#fdeaea;color:#7a271a;border:1px solid #f3b7b2;font-weight:700;line-height:1.45}.error-summary.show{display:block}
+.draft-note{text-align:right;padding:0 15px 10px;color:var(--muted);font-size:11px;min-height:22px}.footer{text-align:center;padding:0 15px calc(104px + env(safe-area-inset-bottom));color:var(--muted);font-size:12px}
+@media(max-width:720px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.option-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){body{padding:0}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:24px}.share-area{grid-template-columns:.75fr 1.15fr 1.45fr}.preview-grid{grid-template-columns:1fr 1fr}body:has(input:focus,textarea:focus) .share-area{display:none}}
+@media(max-width:430px){.preview-grid{grid-template-columns:1fr}.share-area{grid-template-columns:1fr 1fr}.reset{grid-column:1/-1;order:3}.footer{padding-bottom:calc(165px + env(safe-area-inset-bottom))}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="head"><h1>SSS SECURE</h1><h2>Subcontractor Job Completion Checklist</h2></div>
+  <div class="head"><h1>SSSECURE</h1><h2>Job Completion Checklist</h2></div>
+
+  <div id="compatWarning" class="compat-warning" role="alert"></div>
+  <div id="errorSummary" class="error-summary" role="alert"></div>
 
   <div class="sec">JOB DETAILS</div>
   <div class="pad">
-    <div class="field"><label class="field-label" for="builder">Builder</label><input id="builder" type="text"></div>
-    <div class="field"><label class="field-label" for="address">Site Address</label><textarea id="address" class="addr"></textarea></div>
-    <div class="field">
-      <label class="field-label">Job Type</label>
-      <div class="job-types">
-        <label><input type="radio" name="jobType" value="Base Out">Base Out</label>
-        <label><input type="radio" name="jobType" value="Lift Up">Lift Up</label>
-        <label><input type="radio" name="jobType" value="Lift Down">Lift Down</label>
-        <label><input type="radio" name="jobType" value="Dismantle">Dismantle</label>
-      </div>
-    </div>
-    <div class="field"><label class="field-label" for="crew">Crew</label><input id="crew" type="text"></div>
-    <div class="field"><label class="field-label" for="scaffolder">Competent Scaffolder</label><input id="scaffolder" type="text"></div>
+    <div class="field"><label class="field-label" for="client">Client / Builder <span class="req">REQUIRED</span></label><input id="client" type="text" autocomplete="organization" maxlength="120"></div>
+    <div class="field"><label class="field-label" for="address">Site Address <span class="req">REQUIRED</span></label><textarea id="address" class="addr" autocomplete="street-address" maxlength="300"></textarea></div>
+    <div class="field"><label class="field-label" for="crew">Subcontracting Crew <span class="req">REQUIRED</span></label><input id="crew" type="text" maxlength="120"></div>
+    <div class="field"><label class="field-label" for="scaffolder">Competent Scaffolder <span class="req">REQUIRED</span></label><input id="scaffolder" type="text" autocomplete="name" maxlength="120"></div>
+    <div class="field"><label class="field-label" for="date">Date <span class="req">REQUIRED</span></label><input id="date" type="date"></div>
   </div>
 
-  <div class="sec">CHECKLIST</div>
+  <div class="sec">WORK COMPLETED ON SITE<span class="section-note">Select all that apply. Use comments to describe the work completed.</span></div>
   <div class="pad">
-    <table>
-      <thead><tr><th>Item</th><th>YES</th><th>NO</th><th>N/A</th></tr></thead>
-      <tbody id="checklistBody"></tbody>
-    </table>
+    <div id="workGroup" class="work-grid">
+      <label><input type="checkbox" name="jobType" value="Build-Up">Build-Up</label>
+      <label><input type="checkbox" name="jobType" value="Base Out">Base Out</label>
+      <label><input type="checkbox" name="jobType" value="3rd Lift Up">3rd Lift Up</label>
+      <label><input type="checkbox" name="jobType" value="3rd Lift Down">3rd Lift Down</label>
+      <label><input type="checkbox" name="jobType" value="Dismantle All">Dismantle All</label>
+      <label><input type="checkbox" name="jobType" value="Lower Roof Scaffold">Lower Roof Scaffold</label>
+      <label><input type="checkbox" name="jobType" value="Swimming Pool / Edge Protection">Swimming Pool / Edge Protection</label>
+      <label><input type="checkbox" name="jobType" value="Minimum Charge">Minimum Charge</label>
+    </div>
   </div>
 
   <div class="sec">COMMENTS</div>
-  <div class="pad"><textarea id="comments" class="comments"></textarea></div>
+  <div class="pad"><textarea id="comments" class="comments" maxlength="1500" placeholder="Describe the work completed and note any issues, missing gear, access restrictions or rectification required."></textarea></div>
 
-  <div class="sec">DECLARATION</div>
+  <div class="sec">GEAR STACKING</div>
   <div class="pad">
-    <div class="field"><label class="field-label" for="printName">Print Name</label><input id="printName" type="text"></div>
-    <div class="field">
-      <label class="field-label">Signature</label>
-      <div class="sig-wrap"><canvas id="signature"></canvas></div>
-      <div class="sig-help">Sign above using your finger.</div>
-      <div class="sig-actions"><button type="button" id="clearSig" class="clear">Clear Signature</button></div>
+    <div id="gearPickupGroup" class="gear-question">
+      <div class="gear-title">Gear Has Been Consolidated And Stacked Correctly For: <span class="req">REQUIRED</span></div>
+      <div class="option-row">
+        <label><input type="radio" name="gearPickup" value="Manitou">Manitou</label>
+        <label><input type="radio" name="gearPickup" value="Hiab">Hiab</label>
+        <label><input type="radio" name="gearPickup" value="Either">Either</label>
+        <label><input type="radio" name="gearPickup" value="Not Applicable">N/A</label>
+      </div>
+    </div>
+
+    <div id="gearBlockingGroup" class="gear-question">
+      <div class="gear-title">Is The Gear Blocking The Driveway Or Entrance To Site? <span class="req">REQUIRED</span></div>
+      <div class="option-row three">
+        <label><input type="radio" name="gearBlocking" value="Yes">Yes</label>
+        <label><input type="radio" name="gearBlocking" value="No">No</label>
+        <label><input type="radio" name="gearBlocking" value="Not Applicable">N/A</label>
+      </div>
     </div>
   </div>
 
-  <div id="status" class="status"></div>
-  <div class="share-area"><button type="button" id="shareBtn" class="share">SHARE COMPLETED FORM</button></div>
-  <div class="footer">SSS Secure Digital Job Sheet</div>
+  <div class="sec">COMPLETION PHOTOS<span class="section-note">At least 1 photo is required. You can add photos in separate batches without replacing earlier selections.</span></div>
+  <div class="pad">
+    <label id="photoPicker" class="photo-picker" for="photos">ADD PHOTOS / TAKE PHOTOS</label>
+    <input id="photos" class="photo-input" type="file" accept="image/*" multiple>
+    <div class="photo-note"><span id="photoCount" class="photo-count">0 of 4 photos added.</span> Add up to 4 photos from your phone, or take new photos if required.</div>
+    <div id="previewGrid" class="preview-grid"></div>
+  </div>
+
+  <div class="sec">DECLARATION</div>
+  <div class="pad">
+    <div class="declaration-text">
+      I, <span id="declarationName" class="declaration-name">Competent Scaffolder's Name</span>, confirm that the work completed by my crew has been checked. I understand that any incomplete work, or any work that does not comply with Australian and New Zealand Standards and requires a return visit for rectification, will be completed at the crew's own expense.
+    </div>
+    <div class="field"><label class="field-label" for="printName">Print Name <span class="req">REQUIRED</span></label><input id="printName" type="text" autocomplete="name" maxlength="120"></div>
+    <div class="field"><label class="field-label">Signature <span class="req">REQUIRED</span></label><div id="sigWrap" class="sig-wrap"><canvas id="signature"></canvas></div><div class="sig-help">Sign above using your finger.</div><div class="sig-actions"><button type="button" id="clearSig" class="clear">Clear Signature</button></div></div>
+  </div>
+
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+  <div id="draftNote" class="draft-note" aria-live="polite"></div>
+  <div class="share-area">
+    <button type="button" id="resetBtn" class="reset">RESET</button>
+    <button type="button" id="saveBtn" class="save">SAVE FORM</button>
+    <button type="button" id="shareBtn" class="share">SHARE FORM</button>
+  </div>
+  <div class="footer">SSSECURE Job Completion Checklist</div>
 </div>
 
 <script>
 (() => {
-  const ITEMS = [
-    "Base Jacks Centred",
-    "Scaffold Level And Plumb",
-    "Braces Engaged",
-    "All Fittings Tightened",
-    "Steel Boards Flush And Properly Seated",
-    "Lap Boards Secured And Lashed",
-    "Ties / Structural Ties Installed",
-    "Double Rail Complete",
-    "No Excessive Gaps",
-    "Ladder, Gates And Access Secured And Complete",
-    "Hop-Ups Correctly Installed With Check Fittings Where Applicable",
-    "Mesh And Open Edge Protection Complete",
-    "Scaffold Tag Updated",
-    "Materials Consolidated And Stacked Correctly",
-    "Site Left Clean Of All Access Gear",
-    "Completion Photos Taken And Sent"
-  ];
-  const STORAGE_KEY = "sss_secure_job_sheet_v1";
+  "use strict";
   const $ = id => document.getElementById(id);
+  const STORAGE_KEY = "sssecureJobCompletionDraft";
+  const LEGACY_STORAGE_KEYS = ["sssecureCrewCompletionV9"];
+  const MAX_PHOTOS = 4;
+  const MAX_PHOTO_BYTES = 20 * 1024 * 1024;
+  const fieldIds = ["client","address","crew","scaffolder","date","comments","printName"];
+  let selectedPhotos = [];
+  let previewUrls = [];
+  let drawing = false;
+  let hasSignature = false;
+  let signatureInk = 0;
+  let signatureSnapshot = "";
+  let signatureCssWidth = 0;
+  let signatureResizeTimer = null;
+  let lastPoint = null;
+  let saveTimer = null;
+  let printNameWasManuallyEdited = false;
 
-  const tbody = $("checklistBody");
-  ITEMS.forEach((item, i) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${i+1}. ${item}</td>` + ["YES","NO","N/A"].map(v => `<td><input type="radio" name="q${i}" value="${v}" aria-label="${item} ${v}"></td>`).join("");
-    tbody.appendChild(tr);
-  });
+  function perthDateISO(date = new Date()) {
+    const parts = new Intl.DateTimeFormat("en-AU", {
+      timeZone: "Australia/Perth",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(date).reduce((acc, part) => {
+      if (part.type !== "literal") acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return `${parts.year}-${parts.month}-${parts.day}`;
+  }
+
+  function formatDateAU(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
+    return match ? `${match[3]}/${match[2]}/${match[1]}` : value || "";
+  }
+
+  function setDefaultDate() {
+    if (!$("date").value) $("date").value = perthDateISO();
+  }
+
+  function updateDeclarationName() {
+    const name = $("scaffolder").value.trim();
+    $("declarationName").textContent = name || "Competent Scaffolder's Name";
+  }
+
+  function syncPrintName() {
+    if (!printNameWasManuallyEdited || !$("printName").value.trim()) {
+      $("printName").value = $("scaffolder").value;
+      if ($("printName").value.trim()) {
+        $("printName").classList.remove("invalid");
+        $("printName").removeAttribute("aria-invalid");
+      }
+    }
+  }
+
+  function status(message, type = "info", shouldScroll = false) {
+    const el = $("status");
+    el.className = `status ${type}`;
+    el.textContent = message;
+    if (shouldScroll) el.scrollIntoView({behavior:"smooth", block:"center"});
+  }
+
+  function clearStatus() {
+    const el = $("status");
+    el.className = "status";
+    el.textContent = "";
+  }
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveDraft, 300);
+  }
+
+  function getSignatureData() {
+    return hasSignature ? (signatureSnapshot || $("signature").toDataURL("image/png")) : "";
+  }
+
+  function saveDraft() {
+    try {
+      const data = collect(false);
+      data.signature = getSignatureData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      $("draftNote").textContent = "Draft saved on this device.";
+      setTimeout(() => {
+        if ($("draftNote").textContent === "Draft saved on this device.") $("draftNote").textContent = "";
+      }, 1800);
+    } catch (_) {
+      $("draftNote").textContent = "Draft could not be saved on this device.";
+    }
+  }
+
+  async function restoreDraft() {
+    try {
+      let raw = localStorage.getItem(STORAGE_KEY);
+      let legacyKey = "";
+      if (!raw) {
+        for (const key of LEGACY_STORAGE_KEYS) {
+          raw = localStorage.getItem(key);
+          if (raw) { legacyKey = key; break; }
+        }
+      }
+      if (!raw) return false;
+      const data = JSON.parse(raw);
+      fieldIds.forEach(id => {
+        if (typeof data[id] === "string") $(id).value = data[id];
+      });
+      const savedJobTypes = Array.isArray(data.jobTypes)
+        ? data.jobTypes.map(value => value === "Minimum Charge (Billing)" ? "Minimum Charge" : value)
+        : [];
+      document.querySelectorAll('input[name="jobType"]').forEach(el => {
+        el.checked = savedJobTypes.includes(el.value);
+      });
+      ["gearPickup","gearBlocking"].forEach(group => {
+        if (data[group]) {
+          const el = document.querySelector(`input[name="${group}"][value="${CSS.escape(data[group])}"]`);
+          if (el) el.checked = true;
+        }
+      });
+      if (data.signature) await restoreSignature(data.signature);
+      printNameWasManuallyEdited = Boolean(data.printName && data.printName !== data.scaffolder);
+      updateDeclarationName();
+      if (legacyKey) {
+        localStorage.setItem(STORAGE_KEY, raw);
+        localStorage.removeItem(legacyKey);
+      }
+      $("draftNote").textContent = "Saved draft restored. Photos must be added again for privacy.";
+      return true;
+    } catch (_) {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (__) {}
+      return false;
+    }
+  }
 
   const sig = $("signature");
   const sctx = sig.getContext("2d");
-  let drawing = false;
-  let hasSignature = false;
 
-  function sizeSignatureCanvas(preserve = false){
-    const old = preserve && hasSignature ? sig.toDataURL("image/png") : "";
-    const rect = sig.getBoundingClientRect();
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    sig.width = Math.round(rect.width * ratio);
-    sig.height = Math.round(170 * ratio);
-    sctx.setTransform(ratio,0,0,ratio,0,0);
+  function configureSignatureContext() {
     sctx.lineWidth = 2.6;
     sctx.lineCap = "round";
     sctx.lineJoin = "round";
     sctx.strokeStyle = "#111";
-    if(old){
+    sctx.fillStyle = "#111";
+  }
+
+  function sizeSignatureCanvas(preserve = false) {
+    const rect = sig.getBoundingClientRect();
+    if (preserve && sig.width && Math.abs(rect.width - signatureCssWidth) < 0.5) return;
+    const old = preserve && hasSignature ? (signatureSnapshot || sig.toDataURL("image/png")) : "";
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    signatureCssWidth = rect.width;
+    sig.width = Math.max(1, Math.round(rect.width * ratio));
+    sig.height = Math.round(170 * ratio);
+    sctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    configureSignatureContext();
+    if (old) {
       const img = new Image();
-      img.onload = () => sctx.drawImage(img,0,0,rect.width,170);
+      img.onload = () => sctx.drawImage(img, 0, 0, rect.width, 170);
       img.src = old;
     }
   }
-  function p(e){const r=sig.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};}
-  sig.addEventListener("pointerdown", e => {drawing=true;hasSignature=true;sig.setPointerCapture?.(e.pointerId);const q=p(e);sctx.beginPath();sctx.moveTo(q.x,q.y);e.preventDefault();});
-  sig.addEventListener("pointermove", e => {if(!drawing)return;const q=p(e);sctx.lineTo(q.x,q.y);sctx.stroke();e.preventDefault();});
-  ["pointerup","pointercancel","pointerleave"].forEach(t => sig.addEventListener(t,e=>{drawing=false;try{sig.releasePointerCapture?.(e.pointerId)}catch(_){} saveDraft();}));
-  $("clearSig").addEventListener("click",()=>{sctx.clearRect(0,0,sig.width,sig.height);hasSignature=false;saveDraft();});
 
-  function collect(){
-    const answers = ITEMS.map((_,i)=>document.querySelector(`input[name="q${i}"]:checked`)?.value || "");
-    return {
-      builder:$("builder").value,
-      address:$("address").value,
-      jobType:document.querySelector('input[name="jobType"]:checked')?.value || "",
-      crew:$("crew").value,
-      scaffolder:$("scaffolder").value,
-      comments:$("comments").value,
-      printName:$("printName").value,
-      answers,
-      signature:hasSignature ? sig.toDataURL("image/png") : "",
-      completed:new Date().toLocaleString("en-AU")
-    };
-  }
-  function saveDraft(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(collect()));}catch(_){}}
-  function loadDraft(){
-    try{
-      const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null"); if(!d)return;
-      $("builder").value=d.builder||""; $("address").value=d.address||""; $("crew").value=d.crew||"";
-      $("scaffolder").value=d.scaffolder||""; $("comments").value=d.comments||""; $("printName").value=d.printName||"";
-      if(d.jobType) document.querySelector(`input[name="jobType"][value="${d.jobType}"]`)?.setAttribute("checked","checked");
-      (d.answers||[]).forEach((v,i)=>{if(v)document.querySelector(`input[name="q${i}"][value="${v}"]`)?.setAttribute("checked","checked");});
-      if(d.signature){const img=new Image();img.onload=()=>{sctx.drawImage(img,0,0,sig.getBoundingClientRect().width,170);hasSignature=true;};img.src=d.signature;}
-    }catch(_){}
-  }
-  ["builder","address","crew","scaffolder","comments","printName"].forEach(id=>$(id).addEventListener("input",saveDraft));
-  document.addEventListener("change",e=>{if(e.target.matches('input[type="radio"]'))saveDraft();});
-
-  function wrapText(ctx,text,x,y,maxWidth,lineHeight){
-    const words=(text||"").split(/\s+/); let line=""; const lines=[];
-    words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;});
-    if(line)lines.push(line); lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineHeight)); return lines.length;
+  function restoreSignature(dataUrl) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const rect = sig.getBoundingClientRect();
+        sctx.clearRect(0, 0, rect.width, 170);
+        sctx.drawImage(img, 0, 0, rect.width, 170);
+        hasSignature = true;
+        signatureInk = 100;
+        signatureSnapshot = dataUrl;
+        resolve();
+      };
+      img.onerror = () => resolve();
+      img.src = dataUrl;
+    });
   }
 
-  async function buildPng(data){
-    const W=1240,H=1754; const c=document.createElement("canvas");c.width=W;c.height=H;const ctx=c.getContext("2d");
-    ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);
-    ctx.fillStyle="#0A63C8";ctx.fillRect(0,0,W,150);ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 48px Arial";ctx.fillText("SSS SECURE",W/2,62);ctx.font="bold 28px Arial";ctx.fillText("SUBCONTRACTOR JOB COMPLETION CHECKLIST",W/2,112);ctx.textAlign="left";
-    let y=182; const m=55;
-    const section=(t)=>{ctx.fillStyle="#1F8F4D";ctx.fillRect(m,y,W-m*2,42);ctx.fillStyle="#fff";ctx.font="bold 22px Arial";ctx.fillText(t,m+14,y+29);y+=58;};
-    section("JOB DETAILS"); ctx.fillStyle="#172033";ctx.font="bold 20px Arial";
-    const detail=(lab,val)=>{ctx.fillText(lab+":",m,y);ctx.font="20px Arial";const n=wrapText(ctx,val,m+245,y,W-m*2-245,26);ctx.font="bold 20px Arial";y+=Math.max(32,n*26+7);};
-    detail("Builder",data.builder);detail("Site Address",data.address);detail("Job Type",data.jobType);detail("Crew",data.crew);detail("Competent Scaffolder",data.scaffolder);detail("Completed",data.completed);
-    y+=8;section("CHECKLIST");
-    ctx.font="bold 17px Arial";ctx.fillStyle="#172033";
-    ITEMS.forEach((item,i)=>{const text=`${i+1}. ${item}`;const lines=[];const words=text.split(" ");let line="";words.forEach(word=>{const test=line?line+" "+word:word;if(ctx.measureText(test).width>760&&line){lines.push(line);line=word}else line=test});if(line)lines.push(line);const rh=Math.max(43,lines.length*22+15);ctx.strokeStyle="#d8e0e8";ctx.strokeRect(m,y,W-m*2,rh);lines.forEach((l,j)=>ctx.fillText(l,m+12,y+27+j*22));ctx.font="bold 20px Arial";ctx.fillStyle="#0A63C8";ctx.fillText(data.answers[i]||"",W-195,y+29);ctx.fillStyle="#172033";ctx.font="bold 17px Arial";y+=rh;});
-    y+=14;section("COMMENTS");ctx.fillStyle="#172033";ctx.font="20px Arial";const commentLines=wrapText(ctx,data.comments,m,y,W-m*2,27);y+=Math.max(65,commentLines*27+18);
-    section("DECLARATION");ctx.font="bold 20px Arial";ctx.fillStyle="#172033";ctx.fillText("Print Name:",m,y);ctx.font="20px Arial";ctx.fillText(data.printName,m+165,y);y+=35;ctx.font="bold 20px Arial";ctx.fillText("Signature:",m,y);
-    if(data.signature){await new Promise(resolve=>{const img=new Image();img.onload=()=>{ctx.drawImage(img,m+150,y-28,470,100);resolve();};img.src=data.signature;});}
-    ctx.fillStyle="#687586";ctx.font="16px Arial";ctx.textAlign="center";ctx.fillText("SSS Secure Digital Job Sheet",W/2,H-28);
-    return await new Promise(resolve=>c.toBlob(resolve,"image/png",0.95));
+  function pointFromClient(clientX, clientY) {
+    const r = sig.getBoundingClientRect();
+    return {x: clientX - r.left, y: clientY - r.top};
   }
 
-  function status(msg,type){const el=$("status");el.className="status "+type;el.textContent=msg;el.scrollIntoView({behavior:"smooth",block:"center"});}
-  $("shareBtn").addEventListener("click",async()=>{
-    const data=collect();saveDraft();status("Preparing completed form…","ok");
-    try{
-      const blob=await buildPng(data);const file=new File([blob],`SSS_Job_Sheet_${(data.address||"Completed").replace(/[^a-z0-9]+/gi,"_").slice(0,45)}.png`,{type:"image/png"});
-      if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){await navigator.share({title:"SSS Secure Job Sheet",text:"Completed SSS Secure Job Sheet",files:[file]});status("Completed form shared.","ok");}
-      else{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=file.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);status("Completed form downloaded. Use your phone's Share button to send it.","ok");}
-    }catch(err){if(err?.name!=="AbortError")status("The form could not be shared. Please open this page in Safari or Chrome and try again.","err");}
+  function beginSignatureStroke(clientX, clientY) {
+    drawing = true;
+    $("sigWrap").classList.remove("invalid");
+    $("errorSummary").className = "error-summary";
+    hasSignature = true;
+    lastPoint = pointFromClient(clientX, clientY);
+    sctx.beginPath();
+    sctx.arc(lastPoint.x, lastPoint.y, 1.3, 0, Math.PI * 2);
+    sctx.fill();
+    sctx.beginPath();
+    sctx.moveTo(lastPoint.x, lastPoint.y);
+  }
+
+  function continueSignatureStroke(clientX, clientY) {
+    if (!drawing) return;
+    const p = pointFromClient(clientX, clientY);
+    if (lastPoint) signatureInk += Math.hypot(p.x - lastPoint.x, p.y - lastPoint.y);
+    sctx.lineTo(p.x, p.y);
+    sctx.stroke();
+    lastPoint = p;
+  }
+
+  function finishSignatureStroke() {
+    if (!drawing) return;
+    drawing = false;
+    lastPoint = null;
+    signatureSnapshot = sig.toDataURL("image/png");
+    scheduleSave();
+  }
+
+  // Touch events are registered explicitly because some iPhone file previews
+  // expose PointerEvent but do not deliver usable pointer drawing events.
+  sig.addEventListener("touchstart", e => {
+    const touch = e.changedTouches[0];
+    if (!touch) return;
+    beginSignatureStroke(touch.clientX, touch.clientY);
+    e.preventDefault();
+  }, {passive:false});
+  sig.addEventListener("touchmove", e => {
+    const touch = e.changedTouches[0];
+    if (!touch) return;
+    continueSignatureStroke(touch.clientX, touch.clientY);
+    e.preventDefault();
+  }, {passive:false});
+  sig.addEventListener("touchend", e => { finishSignatureStroke(); e.preventDefault(); }, {passive:false});
+  sig.addEventListener("touchcancel", finishSignatureStroke, {passive:false});
+
+  // Pointer/mouse support for desktop, stylus and non-touch browsers.
+  sig.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch") return;
+    beginSignatureStroke(e.clientX, e.clientY);
+    try { sig.setPointerCapture(e.pointerId); } catch (_) {}
+    e.preventDefault();
+  });
+  sig.addEventListener("pointermove", e => {
+    if (e.pointerType === "touch" || !drawing) return;
+    continueSignatureStroke(e.clientX, e.clientY);
+    e.preventDefault();
+  });
+  ["pointerup","pointercancel","lostpointercapture"].forEach(type => sig.addEventListener(type, e => {
+    if (e.pointerType === "touch") return;
+    finishSignatureStroke();
+    try { sig.releasePointerCapture(e.pointerId); } catch (_) {}
+  }));
+
+  $("clearSig").addEventListener("click", () => {
+    const rect = sig.getBoundingClientRect();
+    sctx.clearRect(0, 0, rect.width, 170);
+    hasSignature = false;
+    signatureInk = 0;
+    signatureSnapshot = "";
+    $("sigWrap").classList.remove("invalid");
+    scheduleSave();
   });
 
-  sizeSignatureCanvas(false);loadDraft();window.addEventListener("resize",()=>sizeSignatureCanvas(true));
+  function photoKey(file) {
+    return `${file.name}|${file.size}|${file.lastModified}`;
+  }
+
+  function updatePhotoCount() {
+    $("photoCount").textContent = `${selectedPhotos.length} of ${MAX_PHOTOS} photos added.`;
+  }
+
+  function clearPreviewUrls() {
+    previewUrls.forEach(url => URL.revokeObjectURL(url));
+    previewUrls = [];
+  }
+
+  function renderPreviews() {
+    clearPreviewUrls();
+    const grid = $("previewGrid");
+    grid.innerHTML = "";
+    selectedPhotos.forEach((file, index) => {
+      const url = URL.createObjectURL(file);
+      previewUrls.push(url);
+      const box = document.createElement("div");
+      box.className = "preview";
+      const img = document.createElement("img");
+      img.alt = `Completion photo ${index + 1}`;
+      img.src = url;
+      const meta = document.createElement("div");
+      meta.className = "preview-meta";
+      const label = document.createElement("span");
+      label.textContent = `Photo ${index + 1}`;
+      const actions = document.createElement("div");
+      actions.className = "preview-actions";
+
+      const left = document.createElement("button");
+      left.type = "button";
+      left.className = "icon-btn";
+      left.textContent = "←";
+      left.setAttribute("aria-label", `Move photo ${index + 1} left`);
+      left.disabled = index === 0;
+      left.addEventListener("click", () => movePhoto(index, index - 1));
+
+      const right = document.createElement("button");
+      right.type = "button";
+      right.className = "icon-btn";
+      right.textContent = "→";
+      right.setAttribute("aria-label", `Move photo ${index + 1} right`);
+      right.disabled = index === selectedPhotos.length - 1;
+      right.addEventListener("click", () => movePhoto(index, index + 1));
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "icon-btn remove-photo";
+      remove.textContent = "Remove";
+      remove.addEventListener("click", () => {
+        selectedPhotos.splice(index, 1);
+        renderPreviews();
+        status(`Photo removed. ${selectedPhotos.length} of ${MAX_PHOTOS} photos remain.`, "info");
+      });
+
+      actions.append(left, right, remove);
+      meta.append(label, actions);
+      box.append(img, meta);
+      grid.appendChild(box);
+    });
+    updatePhotoCount();
+    if (selectedPhotos.length) $("photoPicker").classList.remove("invalid");
+  }
+
+  function movePhoto(from, to) {
+    if (to < 0 || to >= selectedPhotos.length) return;
+    const [file] = selectedPhotos.splice(from, 1);
+    selectedPhotos.splice(to, 0, file);
+    renderPreviews();
+  }
+
+  function isImageFile(file) {
+    if (file.type && file.type.startsWith("image/")) return true;
+    return /\.(jpe?g|png|heic|heif|webp|gif|bmp)$/i.test(file.name || "");
+  }
+
+  $("photos").addEventListener("change", e => {
+    const incoming = Array.from(e.target.files || []);
+    const existing = new Set(selectedPhotos.map(photoKey));
+    let rejectedType = 0;
+    let rejectedSize = 0;
+    let duplicates = 0;
+    let overflow = 0;
+
+    for (const file of incoming) {
+      if (!isImageFile(file)) { rejectedType++; continue; }
+      if (file.size > MAX_PHOTO_BYTES) { rejectedSize++; continue; }
+      const key = photoKey(file);
+      if (existing.has(key)) { duplicates++; continue; }
+      if (selectedPhotos.length >= MAX_PHOTOS) { overflow++; continue; }
+      selectedPhotos.push(file);
+      existing.add(key);
+    }
+
+    e.target.value = "";
+    renderPreviews();
+    const notes = [];
+    if (overflow) notes.push(`${overflow} photo${overflow === 1 ? " was" : "s were"} not added because the 4-photo limit was reached`);
+    if (duplicates) notes.push(`${duplicates} duplicate photo${duplicates === 1 ? " was" : "s were"} ignored`);
+    if (rejectedSize) notes.push(`${rejectedSize} photo${rejectedSize === 1 ? " was" : "s were"} over 20 MB`);
+    if (rejectedType) notes.push(`${rejectedType} unsupported file${rejectedType === 1 ? " was" : "s were"} ignored`);
+    if (notes.length) status(notes.join(". ") + ".", "warn", true);
+    else if (incoming.length) status(`${selectedPhotos.length} photo${selectedPhotos.length === 1 ? "" : "s"} ready.`, "ok");
+  });
+
+  function collect(includeSignature = true) {
+    return {
+      client: $("client").value.trim(),
+      address: $("address").value.trim(),
+      crew: $("crew").value.trim(),
+      scaffolder: $("scaffolder").value.trim(),
+      date: $("date").value,
+      jobTypes: Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el => el.value),
+      gearBlocking: document.querySelector('input[name="gearBlocking"]:checked')?.value || "",
+      gearPickup: document.querySelector('input[name="gearPickup"]:checked')?.value || "",
+      comments: $("comments").value.trim(),
+      printName: $("printName").value.trim(),
+      signature: includeSignature ? getSignatureData() : ""
+    };
+  }
+
+  function clearValidation() {
+    document.querySelectorAll(".invalid").forEach(el => el.classList.remove("invalid"));
+    document.querySelectorAll(".group-invalid").forEach(el => el.classList.remove("group-invalid"));
+    document.querySelectorAll("[aria-invalid=true]").forEach(el => el.removeAttribute("aria-invalid"));
+    $("errorSummary").className = "error-summary";
+    $("errorSummary").textContent = "";
+  }
+
+  function validate(data) {
+    clearValidation();
+    const errors = [];
+    const markField = (id, message) => {
+      const el = $(id);
+      el.classList.add("invalid");
+      el.setAttribute("aria-invalid", "true");
+      errors.push({message, element: el});
+    };
+    const markGroup = (id, message) => {
+      const el = $(id);
+      el.classList.add("group-invalid");
+      errors.push({message, element: el});
+    };
+
+    if (!data.client) markField("client", "Client / Builder is required.");
+    if (!data.address) markField("address", "Site Address is required.");
+    if (!data.crew) markField("crew", "Subcontracting Crew is required.");
+    if (!data.scaffolder) markField("scaffolder", "Competent Scaffolder is required.");
+    if (!data.date) markField("date", "Date is required.");
+    if (!data.jobTypes.length) markGroup("workGroup", "Select at least one type of work completed.");
+    if (!data.gearPickup) markGroup("gearPickupGroup", "Select how the gear has been stacked.");
+    if (!data.gearBlocking) markGroup("gearBlockingGroup", "Answer whether the gear is blocking the driveway or entrance to site.");
+    if (data.gearBlocking === "Yes" && !data.comments) markField("comments", "Add an explanation because the gear is blocking the driveway or entrance to site.");
+    if (!selectedPhotos.length) {
+      $("photoPicker").classList.add("invalid");
+      errors.push({message:"Add at least one completion photo.", element:$("photoPicker")});
+    }
+    if (!data.printName) markField("printName", "Print Name is required.");
+    if (!hasSignature || signatureInk < 10) {
+      $("sigWrap").classList.add("invalid");
+      errors.push({message:"A signature is required.", element:$("sigWrap")});
+    }
+
+    if (errors.length) {
+      const summary = $("errorSummary");
+      summary.className = "error-summary show";
+      summary.textContent = `Please fix ${errors.length} item${errors.length === 1 ? "" : "s"}: ${errors.map(e => e.message).join(" ")}`;
+      errors[0].element.scrollIntoView({behavior:"smooth", block:"center"});
+      errors[0].element.focus?.({preventScroll:true});
+      return false;
+    }
+    return true;
+  }
+
+  function loadImageFromFile(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error(`Could not read ${file.name}`)); };
+      img.src = url;
+    });
+  }
+
+  function loadDataUrl(url) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error("Could not read signature"));
+      img.src = url;
+    });
+  }
+
+  function wrapLines(ctx, text, maxWidth, font) {
+    ctx.font = font;
+    const paragraphs = String(text || "").replace(/\r/g, "").split("\n");
+    const lines = [];
+
+    function splitLongWord(word) {
+      if (ctx.measureText(word).width <= maxWidth) return [word];
+      const parts = [];
+      let part = "";
+      for (const character of word) {
+        const test = part + character;
+        if (part && ctx.measureText(test).width > maxWidth) {
+          parts.push(part);
+          part = character;
+        } else {
+          part = test;
+        }
+      }
+      if (part) parts.push(part);
+      return parts;
+    }
+
+    paragraphs.forEach((paragraph, pIndex) => {
+      const words = paragraph.split(/\s+/).filter(Boolean).flatMap(splitLongWord);
+      if (!words.length) lines.push("");
+      let line = "";
+      words.forEach(word => {
+        const test = line ? `${line} ${word}` : word;
+        if (ctx.measureText(test).width > maxWidth && line) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = test;
+        }
+      });
+      if (line) lines.push(line);
+      if (pIndex < paragraphs.length - 1 && lines[lines.length - 1] !== "") lines.push("");
+    });
+    return lines.length ? lines : [""];
+  }
+
+  function roundedRect(ctx, x, y, w, h, r) {
+    const radius = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + w, y, x + w, y + h, radius);
+    ctx.arcTo(x + w, y + h, x, y + h, radius);
+    ctx.arcTo(x, y + h, x, y, radius);
+    ctx.arcTo(x, y, x + w, y, radius);
+    ctx.closePath();
+  }
+
+  async function buildReport(data) {
+    const photoImages = await Promise.all(selectedPhotos.map(loadImageFromFile));
+    const W = 1240;
+    const m = 55;
+    const contentW = W - m * 2;
+    const measureCanvas = document.createElement("canvas");
+    const measure = measureCanvas.getContext("2d");
+    const sectionGap = 18;
+    const sectionHeaderH = 48;
+    const blockGap = 12;
+    const labelFont = "bold 18px Arial";
+    const valueFont = "21px Arial";
+    const declarationFont = "bold 19px Arial";
+    const detailValueW = contentW - 36;
+
+    function detailHeight(value) {
+      const lines = wrapLines(measure, value || "—", detailValueW, valueFont);
+      return 20 + 10 + lines.length * 27 + 18;
+    }
+
+    const jobValues = [data.client, data.address, data.crew, data.scaffolder, formatDateAU(data.date), data.jobTypes.join(", ")];
+    const jobHeight = sectionHeaderH + 16 + jobValues.reduce((sum, value) => sum + detailHeight(value) + blockGap, 0);
+    const commentLines = wrapLines(measure, data.comments || "No additional comments.", contentW - 32, valueFont);
+    const commentsHeight = sectionHeaderH + 16 + Math.max(90, commentLines.length * 29 + 30);
+    const gearHeight = sectionHeaderH + 16 + detailHeight(data.gearPickup) + blockGap + detailHeight(data.gearBlocking);
+    const declarationLines = wrapLines(measure,
+      `I, ${data.scaffolder}, confirm that the work completed by my crew has been checked. I understand that any incomplete work, or any work that does not comply with Australian and New Zealand Standards and requires a return visit for rectification, will be completed at the crew's own expense.`,
+      contentW, declarationFont);
+    const declarationHeight = sectionHeaderH + 16 + declarationLines.length * 27 + 25 + detailHeight(data.printName) + 145;
+    const photoRows = Math.ceil(photoImages.length / 2);
+    const photosHeight = sectionHeaderH + 20 + photoRows * 380;
+    const H = 180 + jobHeight + commentsHeight + gearHeight + declarationHeight + photosHeight + sectionGap * 5 + 70;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#0A63C8";
+    ctx.fillRect(0, 0, W, 150);
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.font = "bold 48px Arial";
+    ctx.fillText("SSSECURE", W / 2, 62);
+    ctx.font = "bold 28px Arial";
+    ctx.fillText("JOB COMPLETION CHECKLIST", W / 2, 112);
+    ctx.textAlign = "left";
+
+    let y = 180;
+
+    function section(title) {
+      ctx.fillStyle = "#1F8F4D";
+      ctx.fillRect(m, y, contentW, sectionHeaderH);
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 22px Arial";
+      ctx.fillText(title, m + 14, y + 32);
+      y += sectionHeaderH + 16;
+    }
+
+    function detail(label, value) {
+      const lines = wrapLines(ctx, value || "—", detailValueW, valueFont);
+      const h = 20 + 10 + lines.length * 27 + 18;
+      ctx.fillStyle = "#f6f8fa";
+      roundedRect(ctx, m, y, contentW, h, 10);
+      ctx.fill();
+      ctx.strokeStyle = "#d8e0e8";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.fillStyle = "#4b5565";
+      ctx.font = labelFont;
+      ctx.fillText(label.toUpperCase(), m + 18, y + 24);
+      ctx.fillStyle = "#172033";
+      ctx.font = valueFont;
+      lines.forEach((line, index) => ctx.fillText(line, m + 18, y + 57 + index * 27));
+      y += h + blockGap;
+    }
+
+    function wrappedText(lines, x, startY, lineHeight, font, fill = "#172033") {
+      ctx.fillStyle = fill;
+      ctx.font = font;
+      lines.forEach((line, index) => ctx.fillText(line, x, startY + index * lineHeight));
+    }
+
+    section("JOB DETAILS");
+    detail("Client / Builder", data.client);
+    detail("Site Address", data.address);
+    detail("Subcontracting Crew", data.crew);
+    detail("Competent Scaffolder", data.scaffolder);
+    detail("Date", formatDateAU(data.date));
+    detail("Work Completed", data.jobTypes.join(", "));
+    y += sectionGap;
+
+    section("COMMENTS");
+    const commentsBoxH = Math.max(90, commentLines.length * 29 + 30);
+    ctx.fillStyle = "#f6f8fa";
+    roundedRect(ctx, m, y, contentW, commentsBoxH, 10);
+    ctx.fill();
+    ctx.strokeStyle = "#d8e0e8";
+    ctx.stroke();
+    wrappedText(commentLines, m + 16, y + 29, 29, valueFont);
+    y += commentsBoxH + sectionGap;
+
+    section("GEAR STACKING");
+    detail("Gear Stacked Correctly For", data.gearPickup);
+    detail("Gear Blocking Driveway Or Entrance To Site", data.gearBlocking);
+    y += sectionGap;
+
+    section("DECLARATION");
+    wrappedText(declarationLines, m, y + 22, 27, declarationFont);
+    y += declarationLines.length * 27 + 25;
+    detail("Print Name", data.printName);
+    ctx.fillStyle = "#4b5565";
+    ctx.font = labelFont;
+    ctx.fillText("SIGNATURE", m, y + 22);
+    ctx.fillStyle = "#fff";
+    roundedRect(ctx, m, y + 34, 560, 110, 8);
+    ctx.fill();
+    ctx.strokeStyle = "#8d98a6";
+    ctx.stroke();
+    if (data.signature) {
+      const signatureImage = await loadDataUrl(data.signature);
+      ctx.drawImage(signatureImage, m + 10, y + 38, 540, 100);
+    }
+    y += 160 + sectionGap;
+
+    section("COMPLETION PHOTOS");
+    const gap = 20;
+    const photoW = (contentW - gap) / 2;
+    const photoH = 335;
+    photoImages.forEach((img, index) => {
+      const col = index % 2;
+      const row = Math.floor(index / 2);
+      const px = m + col * (photoW + gap);
+      const py = y + row * 380;
+      ctx.fillStyle = "#f3f5f7";
+      roundedRect(ctx, px, py, photoW, photoH, 8);
+      ctx.fill();
+      ctx.save();
+      roundedRect(ctx, px, py, photoW, photoH, 8);
+      ctx.clip();
+      const scale = Math.min(photoW / img.naturalWidth, photoH / img.naturalHeight);
+      const drawW = img.naturalWidth * scale;
+      const drawH = img.naturalHeight * scale;
+      const dx = px + (photoW - drawW) / 2;
+      const dy = py + (photoH - drawH) / 2;
+      ctx.drawImage(img, dx, dy, drawW, drawH);
+      ctx.restore();
+      ctx.strokeStyle = "#d8e0e8";
+      roundedRect(ctx, px, py, photoW, photoH, 8);
+      ctx.stroke();
+      ctx.fillStyle = "#687586";
+      ctx.font = "16px Arial";
+      ctx.fillText(`Photo ${index + 1}`, px, py + photoH + 24);
+    });
+
+    ctx.fillStyle = "#687586";
+    ctx.font = "16px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("SSSECURE Job Completion Checklist", W / 2, H - 28);
+
+    return await new Promise((resolve, reject) => {
+      canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("Could not create report image")), "image/png", 0.95);
+    });
+  }
+
+  function safeFilenamePart(value) {
+    return (value || "Completed")
+      .normalize("NFKD")
+      .replace(/[^a-z0-9]+/gi, "_")
+      .replace(/^_+|_+$/g, "")
+      .slice(0, 55) || "Completed";
+  }
+
+  function openReportFallback(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    // iPhone viewers sometimes ignore the download attribute. Open the image
+    // in a new tab as a second route so it can be saved/shared from Safari.
+    setTimeout(() => {
+      const opened = window.open(url, "_blank");
+      if (opened) status("The completed form opened as an image. Use Safari's Share button to save or send it.", "ok", true);
+      else status("The completed form was created. Check Downloads, or open this page in Safari and try again.", "ok", true);
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }, 250);
+  }
+
+  async function generateReport(mode = "share") {
+    clearStatus();
+    const data = collect();
+    if (!validate(data)) {
+      status("The form has not been created. Complete the highlighted items first.", "err");
+      return;
+    }
+
+    const shareButton = $("shareBtn");
+    const saveButton = $("saveBtn");
+    const resetButton = $("resetBtn");
+    [shareButton, saveButton, resetButton].forEach(button => button.disabled = true);
+    const oldShareText = shareButton.textContent;
+    const oldSaveText = saveButton.textContent;
+    shareButton.textContent = "PREPARING…";
+    saveButton.textContent = "PREPARING…";
+    status("Preparing completed form…", "info");
+
+    try {
+      const blob = await buildReport(data);
+      const filename = `SSSECURE_Job_Completion_${safeFilenamePart(data.address)}.png`;
+      const file = new File([blob], filename, {type:"image/png"});
+
+      if (mode === "share" && window.isSecureContext && navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))) {
+        try {
+          await navigator.share({
+            title:"SSSECURE Job Completion Checklist",
+            text:"Completed SSSECURE job completion checklist",
+            files:[file]
+          });
+          status("Completed form shared successfully.", "ok", true);
+        } catch (error) {
+          if (error?.name === "AbortError") status("Sharing was cancelled. Your completed form is still here.", "info");
+          else openReportFallback(blob, filename);
+        }
+      } else {
+        openReportFallback(blob, filename);
+      }
+    } catch (error) {
+      console.error(error);
+      status("The form could not be created. Open the hosted page in Safari, check the selected photos, and try again.", "err", true);
+    } finally {
+      [shareButton, saveButton, resetButton].forEach(button => button.disabled = false);
+      shareButton.textContent = oldShareText;
+      saveButton.textContent = oldSaveText;
+    }
+  }
+
+  function resetForm() {
+    if (!window.confirm("Clear every field, photo and signature from this form?")) return;
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      LEGACY_STORAGE_KEYS.forEach(key => localStorage.removeItem(key));
+    } catch (_) {}
+    fieldIds.forEach(id => $(id).value = "");
+    document.querySelectorAll('input[type="checkbox"],input[type="radio"]').forEach(el => el.checked = false);
+    selectedPhotos = [];
+    renderPreviews();
+    const rect = sig.getBoundingClientRect();
+    sctx.clearRect(0, 0, rect.width, 170);
+    hasSignature = false;
+    signatureInk = 0;
+    signatureSnapshot = "";
+    printNameWasManuallyEdited = false;
+    clearValidation();
+    clearStatus();
+    setDefaultDate();
+    updateDeclarationName();
+    $("draftNote").textContent = "Form reset.";
+    $("client").scrollIntoView({behavior:"smooth", block:"center"});
+    $("client").focus({preventScroll:true});
+  }
+
+  $("scaffolder").addEventListener("input", () => {
+    updateDeclarationName();
+    syncPrintName();
+    scheduleSave();
+  });
+  $("printName").addEventListener("input", () => {
+    printNameWasManuallyEdited = true;
+    scheduleSave();
+  });
+  fieldIds.filter(id => !["scaffolder","printName"].includes(id)).forEach(id => $(id).addEventListener("input", scheduleSave));
+  document.querySelectorAll('input[type="checkbox"],input[type="radio"]').forEach(el => el.addEventListener("change", scheduleSave));
+  document.addEventListener("input", e => {
+    if (e.target.matches("input, textarea")) {
+      e.target.classList.remove("invalid");
+      e.target.removeAttribute("aria-invalid");
+      $("errorSummary").className = "error-summary";
+    }
+  });
+  document.addEventListener("change", e => {
+    if (e.target.name === "jobType") $("workGroup").classList.remove("group-invalid");
+    if (e.target.name === "gearPickup") $("gearPickupGroup").classList.remove("group-invalid");
+    if (e.target.name === "gearBlocking") $("gearBlockingGroup").classList.remove("group-invalid");
+    $("errorSummary").className = "error-summary";
+  });
+  $("shareBtn").addEventListener("click", () => generateReport("share"));
+  $("saveBtn").addEventListener("click", () => generateReport("save"));
+  $("resetBtn").addEventListener("click", resetForm);
+  window.addEventListener("resize", () => {
+    clearTimeout(signatureResizeTimer);
+    signatureResizeTimer = setTimeout(() => sizeSignatureCanvas(true), 120);
+  });
+  window.addEventListener("beforeunload", clearPreviewUrls);
+
+  if (location.protocol === "file:" || !window.isSecureContext) {
+    const warning = $("compatWarning");
+    warning.className = "compat-warning show";
+    warning.textContent = "IPHONE NOTICE: This downloaded file may open in a preview that blocks signing and sharing. For reliable use, publish it as a website and open the live link in Safari.";
+  }
+
+  requestAnimationFrame(() => sizeSignatureCanvas(false));
+  restoreDraft().then(restored => {
+    if (!restored) setDefaultDate();
+    updateDeclarationName();
+  });
 })();
 </script>
 </body>
