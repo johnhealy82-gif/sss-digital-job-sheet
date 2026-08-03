@@ -135,6 +135,16 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
         <label><input type="radio" name="photosTaken" value="No">No</label>
       </div>
     </div>
+
+    <div id="photoDistanceSection" class="question conditional" hidden>
+      <div class="question-title">
+        Were The Photos Taken From A Sufficient Distance Back To Clearly Show The Full Front Elevation, Verge, Site Access And Delivery / Pickup Area?
+      </div>
+      <div class="answer-row two">
+        <label><input type="radio" name="photoDistance" value="Yes">Yes</label>
+        <label><input type="radio" name="photoDistance" value="No">No</label>
+      </div>
+    </div>
   </div>
 
   <div class="sec">COMMENTS</div>
@@ -177,10 +187,19 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     $("dismantleAllSection").hidden = !showDismantleAll;
     $("completedQuestion").textContent = type === "Delivery" ? "Is The Delivery Fully Completed?" : type === "Pickup" ? "Is The Pickup Fully Completed?" : "Is The Delivery Or Pickup Fully Completed?";
     $("photosQuestion").textContent = type === "Delivery" ? "Have Delivery Photos Been Taken?" : type === "Pickup" ? "Have Pickup Photos Been Taken?" : "Have Delivery Or Pickup Photos Been Taken?";
+
+    const showPhotoDistance = radioValue("photosTaken") === "Yes";
+    $("photoDistanceSection").hidden = !showPhotoDistance;
+
+    if(!showPhotoDistance){
+      document.querySelectorAll('input[name="photoDistance"]').forEach(input => {
+        input.checked = false;
+      });
+    }
   }
 
   document.addEventListener("change", event => {
-    if(event.target.matches('input[name="movementType"], input[name="jobType"]')){
+    if(event.target.matches('input[name="movementType"], input[name="jobType"], input[name="photosTaken"]')){
       updateConditionalSections();
     }
   });
@@ -215,6 +234,7 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
       fullyCompleted:radioValue("fullyCompleted"),
       clearAccess:radioValue("clearAccess"),
       photosTaken:radioValue("photosTaken"),
+      photoDistance:radioValue("photoDistance"),
       comments:$("comments").value
     };
   }
@@ -256,7 +276,7 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     const photoImages = await Promise.all(selectedPhotos.map(loadImageFromFile));
     const photoRows = Math.ceil(photoImages.length/2);
     const W = 1240;
-    const H = 1370 + (photoRows ? photoRows*360 + 80 : 0);
+    const H = 1470 + (photoRows ? photoRows*360 + 80 : 0);
     const canvas = document.createElement("canvas");
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext("2d");
@@ -303,6 +323,9 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     detail((data.movementType || "Delivery / Pickup") + " Fully Completed",data.fullyCompleted);
     detail("Gear Clear Of Driveways And Site Access",data.clearAccess);
     detail((data.movementType || "Delivery / Pickup") + " Photos Taken",data.photosTaken);
+    if(data.photosTaken === "Yes"){
+      detail("Photos Show Full Elevation, Verge, Site Access And Delivery / Pickup Area",data.photoDistance);
+    }
 
     y += 8; section("COMMENTS");
     ctx.fillStyle = "#172033"; ctx.font = "20px Arial";
