@@ -33,9 +33,30 @@ input[type=checkbox],input[type=radio]{width:21px;height:21px;accent-color:var(-
 .gear-question{margin-bottom:16px}.gear-question:last-child{margin-bottom:0}.gear-title{font-weight:800;margin-bottom:9px;line-height:1.35}
 .option-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.option-row.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .option-row label{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px;border:1.5px solid var(--line);border-radius:9px;font-weight:800}
-.photo-input{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
-.photo-picker{display:block;width:100%;border:1.5px dashed #8ca0b5;border-radius:10px;padding:14px;background:#f8fbfe;color:var(--blue);font-size:15px;font-weight:800;text-align:center;cursor:pointer}
-.photo-picker.invalid{border-color:var(--red)!important;background:#fff8f7!important}
+.photo-picker{display:block;font-weight:800;margin-bottom:8px;color:var(--ink)}
+.photo-input{
+  display:block;
+  width:100%;
+  min-height:54px;
+  padding:11px;
+  border:1.5px dashed #8ca0b5;
+  border-radius:10px;
+  background:#f8fbfe;
+  color:var(--ink);
+  font-size:16px;
+  cursor:pointer;
+}
+.photo-input::file-selector-button{
+  border:0;
+  border-radius:8px;
+  background:var(--blue);
+  color:#fff;
+  padding:11px 13px;
+  margin-right:10px;
+  font-weight:800;
+  font-size:15px;
+}
+.photo-input.invalid{border-color:var(--red)!important;background:#fff8f7!important}
 .photo-note{color:var(--muted);font-size:13px;margin-top:7px;line-height:1.35}.photo-count{font-weight:800;color:var(--blue)}
 .preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
 .preview{position:relative;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f4f6f8}
@@ -119,7 +140,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
   <div class="sec">COMPLETION PHOTOS<span class="section-note">At least 1 photo is required. Add up to 4 photos.</span></div>
   <div class="pad">
     <label id="photoPicker" class="photo-picker" for="photos">ADD PHOTOS / TAKE PHOTOS</label>
-    <input id="photos" class="photo-input" type="file" accept="image/*" multiple>
+    <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
     <div class="photo-note"><span id="photoCount" class="photo-count">0 of 4 photos added.</span> Photos will be placed clearly on separate PDF pages.</div>
     <div id="previewGrid" class="preview-grid"></div>
   </div>
@@ -145,7 +166,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Job Completion Checklist - PDF Edition</div>
+  <div class="footer">SSSECURE Job Completion Checklist - PDF Edition - Photo Fix</div>
 </div>
 
 <script>
@@ -293,7 +314,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
     if(!data.gearPickup) markGroup("gearPickupGroup","Select how the gear has been stacked.");
     if(!data.gearBlocking) markGroup("gearBlockingGroup","Answer whether the gear is blocking access.");
     if(data.gearBlocking === "Yes" && !data.comments) markField("comments","Explain why the gear is blocking access.");
-    if(!selectedPhotos.length) { $("photoPicker").classList.add("invalid"); errors.push({message:"Add at least one completion photo.",element:$("photoPicker")}); }
+    if(!selectedPhotos.length) { $("photos").classList.add("invalid"); errors.push({message:"Add at least one completion photo.",element:$("photos")}); }
     if(!data.printName) markField("printName","Print Name is required.");
     if(!hasSignature || signatureInk < 10) { $("sigWrap").classList.add("invalid"); errors.push({message:"A signature is required.",element:$("sigWrap")}); }
 
@@ -437,7 +458,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
       grid.appendChild(box);
     });
     $("photoCount").textContent = `${selectedPhotos.length} of ${MAX_PHOTOS} photos added.`;
-    if(selectedPhotos.length) $("photoPicker").classList.remove("invalid");
+    if(selectedPhotos.length) $("photos").classList.remove("invalid");
   }
 
   function movePhoto(from,to) {
@@ -461,6 +482,9 @@ button:disabled{opacity:.6;cursor:not-allowed}
     }
     e.target.value = "";
     renderPreviews();
+    if(selectedPhotos.length){
+      status(`${selectedPhotos.length} photo${selectedPhotos.length === 1 ? "" : "s"} selected and ready for the PDF.`,"ok");
+    }
   });
 
   function loadImageFile(file) {
