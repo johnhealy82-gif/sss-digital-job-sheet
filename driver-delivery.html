@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0A63C8">
-<title>SSSECURE Delivery Driver Completion Checklist — Tested Final</title>
+<title>SSSECURE Delivery Driver Completion Checklist — Dismantle Check</title>
 <style>
 :root{--blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;--line:#d8e0e8;--muted:#687586}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
@@ -91,6 +91,20 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     </div></div>
   </div>
 
+
+  <div id="dismantleAllSection" class="conditional" hidden>
+    <div class="sec">DISMANTLE ALL CHECK</div>
+    <div class="pad">
+      <div class="question">
+        <div class="question-title">Has A Full Site Check Been Completed To Ensure No Excess Gear Has Been Left Behind, Inside And Out?</div>
+        <div class="answer-row two">
+          <label><input type="radio" name="dismantleSiteCheck" value="Yes">Yes</label>
+          <label><input type="radio" name="dismantleSiteCheck" value="No">No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="sec">COMPLETION CHECKS</div>
   <div class="pad">
     <div class="question">
@@ -128,7 +142,7 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
 
   <div id="status" class="status"></div>
   <div class="share-area"><button type="button" id="shareBtn" class="share">SHARE COMPLETED FORM</button></div>
-  <div class="footer">SSSECURE Delivery Driver Completion Checklist — Tested Final</div>
+  <div class="footer">SSSECURE Delivery Driver Completion Checklist — Dismantle Check</div>
 </div>
 
 <script>
@@ -149,9 +163,11 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     const isDelivery = type === "Delivery";
     const showBaseOut = isDelivery && selected.includes("Base Out");
     const showThirdLift = isDelivery && (selected.includes("3rd Lift Up") || selected.includes("3rd Lift Down"));
+    const showDismantleAll = selected.includes("Dismantle All");
 
     $("baseOutSection").hidden = !showBaseOut;
     $("thirdLiftSection").hidden = !showThirdLift;
+    $("dismantleAllSection").hidden = !showDismantleAll;
     $("completedQuestion").textContent = type === "Delivery" ? "Is The Delivery Fully Completed?" : type === "Pickup" ? "Is The Pickup Fully Completed?" : "Is The Delivery Or Pickup Fully Completed?";
     $("photosQuestion").textContent = type === "Delivery" ? "Have Delivery Photos Been Taken?" : type === "Pickup" ? "Have Pickup Photos Been Taken?" : "Have Delivery Or Pickup Photos Been Taken?";
   }
@@ -188,6 +204,7 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
       slabGearUpTop:radioValue("slabGearUpTop"),
       baseOutClear:radioValue("baseOutClear"),
       thirdLiftGear:radioValue("thirdLiftGear"),
+      dismantleSiteCheck:radioValue("dismantleSiteCheck"),
       fullyCompleted:radioValue("fullyCompleted"),
       clearAccess:radioValue("clearAccess"),
       photosTaken:radioValue("photosTaken"),
@@ -232,7 +249,7 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     const photoImages = await Promise.all(selectedPhotos.map(loadImageFromFile));
     const photoRows = Math.ceil(photoImages.length/2);
     const W = 1240;
-    const H = 1260 + (photoRows ? photoRows*360 + 80 : 0);
+    const H = 1370 + (photoRows ? photoRows*360 + 80 : 0);
     const canvas = document.createElement("canvas");
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext("2d");
@@ -268,6 +285,11 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     if(data.movementType === "Delivery" && (data.jobTypes.includes("3rd Lift Up") || data.jobTypes.includes("3rd Lift Down"))){
       y += 8; section("THIRD LIFT DELIVERY CHECK");
       detail("Gear Lifted Onto Balcony Or Scaffold",data.thirdLiftGear);
+    }
+
+    if(data.jobTypes.includes("Dismantle All")){
+      y += 8; section("DISMANTLE ALL CHECK");
+      detail("Full Site Check Completed — Inside And Out",data.dismantleSiteCheck);
     }
 
     y += 8; section("COMPLETION CHECKS");
