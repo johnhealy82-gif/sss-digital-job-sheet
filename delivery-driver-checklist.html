@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A63C8">
+<meta property="og:title" content="SSSECURE Delivery Driver Completion Checklist">
+<meta property="og:description" content="Complete and share the SSSECURE delivery or pickup checklist.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SSSECURE Delivery Driver Completion Checklist">
+<meta name="twitter:description" content="Complete and share the SSSECURE delivery or pickup checklist.">
+
+<title>SSSECURE Delivery Driver Completion Checklist</title>
+<style>
+:root{--blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;--line:#d8e0e8;--muted:#687586}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:14px}
+.wrap{max-width:850px;margin:auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.16)}
+.head{background:var(--blue);color:#fff;padding:20px;text-align:center}.head h1{font-size:26px;margin:0 0 4px}.head h2{font-size:17px;margin:0}
+.sec{background:var(--green);color:#fff;padding:11px 15px;font-weight:800;letter-spacing:.2px}.pad{padding:15px}.field{margin-bottom:13px}.field:last-child{margin-bottom:0}
+.field-label{display:block;font-weight:800;margin-bottom:7px}
+input[type=text],input[type=date],textarea{width:100%;padding:12px;border:1.5px solid #b8c2ce;border-radius:9px;font-size:16px;background:#fff}
+textarea{height:88px;resize:vertical}
+.option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.work-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.option-grid label,.work-grid label,.answer-row label{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px;border:1.5px solid var(--line);border-radius:9px;font-weight:800;line-height:1.2;text-align:center}
+input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(--blue);flex:0 0 auto}
+.question{padding:14px 0;border-bottom:1px solid #e6ebf0}.question:last-child{border-bottom:none}.question-title{font-weight:800;line-height:1.35;margin-bottom:9px}.question-note{display:block;margin-top:3px;font-size:12px;font-weight:600;color:var(--muted)}
+.answer-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.answer-row.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.conditional{display:block}.conditional[hidden]{display:none!important}
+.photo-input{width:100%;border:1.5px dashed #8ca0b5;border-radius:10px;padding:13px;background:#f8fbfe;font-size:15px}.photo-note{color:var(--muted);font-size:13px;margin-top:7px}
+.preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.preview{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f4f6f8}.preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}.preview span{display:block;padding:6px 8px;font-size:12px;color:var(--muted)}
+.share-area{padding:16px;position:sticky;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid var(--line)}.share{width:100%;border:none;border-radius:9px;background:var(--blue);color:#fff;padding:16px;font-size:18px;font-weight:800}
+.status{display:none;margin:0 15px 15px;padding:12px;border-radius:9px;font-weight:700}.status.ok{display:block;background:#e7f6ec;color:#176b39}.status.err{display:block;background:#fdeaea;color:#9b2020}.footer{text-align:center;padding:0 15px 16px;color:var(--muted);font-size:12px}
+@media(max-width:720px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){body{padding:0}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:24px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><h1>SSSECURE</h1><h2>Delivery Driver Completion Checklist</h2></div>
+
+  <div class="sec">JOB DETAILS</div>
+  <div class="pad">
+    <div class="field"><label class="field-label" for="driverName">Driver Name</label><input id="driverName" type="text" autocomplete="name"></div>
+    <div class="field"><label class="field-label" for="siteAddress">Site Address</label><input id="siteAddress" type="text" autocomplete="street-address"></div>
+    <div class="field"><label class="field-label" for="date">Date</label><input id="date" type="date"></div>
+  </div>
+
+  <div class="sec">DELIVERY OR PICKUP</div>
+  <div class="pad"><div class="option-grid">
+    <label><input type="radio" name="movementType" value="Delivery">Delivery</label>
+    <label><input type="radio" name="movementType" value="Pickup">Pickup</label>
+  </div></div>
+
+  <div class="sec">WHAT IS BEING DELIVERED OR PICKED UP?</div>
+  <div class="pad"><div class="work-grid">
+    <label><input type="checkbox" name="jobType" value="Build-Up">Build-Up</label>
+    <label><input type="checkbox" name="jobType" value="Base Out">Base Out</label>
+    <label><input type="checkbox" name="jobType" value="3rd Lift Up">3rd Lift Up</label>
+    <label><input type="checkbox" name="jobType" value="3rd Lift Down">3rd Lift Down</label>
+    <label><input type="checkbox" name="jobType" value="Dismantle All">Dismantle All</label>
+    <label><input type="checkbox" name="jobType" value="Lower Roof Scaffold">Lower Roof Scaffold</label>
+    <label><input type="checkbox" name="jobType" value="Swimming Pool / Edge Protection">Swimming Pool / Edge Protection</label>
+    <label><input type="checkbox" name="jobType" value="Minimum Charge">Minimum Charge</label>
+  </div></div>
+
+  <div id="baseOutSection" class="conditional" hidden>
+    <div class="sec">BASE OUT DELIVERY CHECKS</div>
+    <div class="pad">
+      <div class="question">
+        <div class="question-title">Has The Slab Gear Been Lifted Up Top?<span class="question-note">(Steel Boards, Timbers, Mesh And Posts)</span></div>
+        <div class="answer-row">
+          <label><input type="radio" name="slabGearUpTop" value="Yes">Yes</label>
+          <label><input type="radio" name="slabGearUpTop" value="No">No</label>
+          <label><input type="radio" name="slabGearUpTop" value="N/A">N/A</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-title">Has The Base-Out Gear Been Placed Clear Of The Area Where The Scaffold Is To Be Built?</div>
+        <div class="answer-row">
+          <label><input type="radio" name="baseOutClear" value="Yes">Yes</label>
+          <label><input type="radio" name="baseOutClear" value="No">No</label>
+          <label><input type="radio" name="baseOutClear" value="N/A">N/A</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="thirdLiftSection" class="conditional" hidden>
+    <div class="sec">THIRD LIFT DELIVERY CHECK</div>
+    <div class="pad"><div class="question">
+      <div class="question-title">Has The Third-Lift Gear Been Lifted Onto The Balcony Or Scaffold?</div>
+      <div class="answer-row">
+        <label><input type="radio" name="thirdLiftGear" value="Yes">Yes</label>
+        <label><input type="radio" name="thirdLiftGear" value="No">No</label>
+        <label><input type="radio" name="thirdLiftGear" value="N/A">N/A</label>
+      </div>
+    </div></div>
+  </div>
+
+
+  <div id="dismantleAllSection" class="conditional" hidden>
+    <div class="sec">DISMANTLE ALL CHECK</div>
+    <div class="pad">
+      <div class="question">
+        <div class="question-title">Has A Full Site Check Been Completed To Ensure No Excess Gear Has Been Left Behind, Inside And Out?</div>
+        <div class="answer-row two">
+          <label><input type="radio" name="dismantleSiteCheck" value="Yes">Yes</label>
+          <label><input type="radio" name="dismantleSiteCheck" value="No">No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">COMPLETION CHECKS</div>
+  <div class="pad">
+    <div class="question">
+      <div id="completedQuestion" class="question-title">Is The Delivery Or Pickup Fully Completed?</div>
+      <div class="answer-row two">
+        <label><input type="radio" name="fullyCompleted" value="Yes">Yes</label>
+        <label><input type="radio" name="fullyCompleted" value="No">No</label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-title">Is The Gear Clear Of Driveways And Site Access?</div>
+      <div class="answer-row two">
+        <label><input type="radio" name="clearAccess" value="Yes">Yes</label>
+        <label><input type="radio" name="clearAccess" value="No">No</label>
+      </div>
+    </div>
+    <div class="question">
+      <div id="photosQuestion" class="question-title">Have Delivery Or Pickup Photos Been Taken?</div>
+      <div class="answer-row two">
+        <label><input type="radio" name="photosTaken" value="Yes">Yes</label>
+        <label><input type="radio" name="photosTaken" value="No">No</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">COMMENTS</div>
+  <div class="pad"><textarea id="comments" placeholder="Only add comments if something is incomplete or needs attention."></textarea></div>
+
+  <div class="sec">PHOTOS</div>
+  <div class="pad">
+    <input id="photos" class="photo-input" type="file" accept="image/*" multiple>
+    <div class="photo-note">Add up to 4 delivery or pickup photos.</div>
+    <div id="previewGrid" class="preview-grid"></div>
+  </div>
+
+  <div id="status" class="status"></div>
+  <div class="share-area"><button type="button" id="shareBtn" class="share">SHARE COMPLETED FORM</button></div>
+  <div class="footer">SSSECURE Delivery Driver Completion Checklist</div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const now = new Date();
+  const pad2 = n => String(n).padStart(2,"0");
+  $("date").value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
+  let selectedPhotos = [];
+
+  const movement = () => document.querySelector('input[name="movementType"]:checked')?.value || "";
+  const jobs = () => Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el => el.value);
+  const radioValue = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "";
+
+  function updateConditionalSections(){
+    const type = movement();
+    const selected = jobs();
+    const isDelivery = type === "Delivery";
+    const showBaseOut = isDelivery && selected.includes("Base Out");
+    const showThirdLift = isDelivery && (selected.includes("3rd Lift Up") || selected.includes("3rd Lift Down"));
+    const showDismantleAll = selected.includes("Dismantle All");
+
+    $("baseOutSection").hidden = !showBaseOut;
+    $("thirdLiftSection").hidden = !showThirdLift;
+    $("dismantleAllSection").hidden = !showDismantleAll;
+    $("completedQuestion").textContent = type === "Delivery" ? "Is The Delivery Fully Completed?" : type === "Pickup" ? "Is The Pickup Fully Completed?" : "Is The Delivery Or Pickup Fully Completed?";
+    $("photosQuestion").textContent = type === "Delivery" ? "Have Delivery Photos Been Taken?" : type === "Pickup" ? "Have Pickup Photos Been Taken?" : "Have Delivery Or Pickup Photos Been Taken?";
+  }
+
+  document.addEventListener("change", event => {
+    if(event.target.matches('input[name="movementType"], input[name="jobType"]')){
+      updateConditionalSections();
+    }
+  });
+
+  $("photos").addEventListener("change", e => {
+    selectedPhotos = Array.from(e.target.files || []).slice(0,4);
+    const grid = $("previewGrid");
+    grid.innerHTML = "";
+    selectedPhotos.forEach((file,index) => {
+      const url = URL.createObjectURL(file);
+      const box = document.createElement("div");
+      box.className = "preview";
+      box.innerHTML = `<img alt="Photo ${index+1}"><span>Photo ${index+1}</span>`;
+      const img = box.querySelector("img");
+      img.src = url;
+      img.onload = () => URL.revokeObjectURL(url);
+      grid.appendChild(box);
+    });
+  });
+
+  function collect(){
+    return {
+      driverName:$("driverName").value,
+      siteAddress:$("siteAddress").value,
+      date:$("date").value,
+      movementType:movement(),
+      jobTypes:jobs(),
+      slabGearUpTop:radioValue("slabGearUpTop"),
+      baseOutClear:radioValue("baseOutClear"),
+      thirdLiftGear:radioValue("thirdLiftGear"),
+      dismantleSiteCheck:radioValue("dismantleSiteCheck"),
+      fullyCompleted:radioValue("fullyCompleted"),
+      clearAccess:radioValue("clearAccess"),
+      photosTaken:radioValue("photosTaken"),
+      comments:$("comments").value
+    };
+  }
+
+  function status(message,type){
+    const el = $("status");
+    el.className = "status " + type;
+    el.textContent = message;
+    el.scrollIntoView({behavior:"smooth",block:"center"});
+  }
+
+  function loadImageFromFile(file){
+    return new Promise((resolve,reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  function drawWrapped(ctx,text,x,y,maxWidth,lineHeight,font){
+    ctx.font = font;
+    const words = String(text || "").split(/\s+/).filter(Boolean);
+    const lines = [];
+    let line = "";
+    words.forEach(word => {
+      const test = line ? line + " " + word : word;
+      if(ctx.measureText(test).width > maxWidth && line){ lines.push(line); line = word; }
+      else line = test;
+    });
+    if(line) lines.push(line);
+    if(!lines.length) lines.push("");
+    lines.forEach((l,i) => ctx.fillText(l,x,y+i*lineHeight));
+    return lines.length;
+  }
+
+  async function buildReport(data){
+    const photoImages = await Promise.all(selectedPhotos.map(loadImageFromFile));
+    const photoRows = Math.ceil(photoImages.length/2);
+    const W = 1240;
+    const H = 1370 + (photoRows ? photoRows*360 + 80 : 0);
+    const canvas = document.createElement("canvas");
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = "#0A63C8"; ctx.fillRect(0,0,W,150);
+    ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.font = "bold 48px Arial"; ctx.fillText("SSSECURE",W/2,62);
+    ctx.font = "bold 28px Arial"; ctx.fillText("DELIVERY DRIVER COMPLETION CHECKLIST",W/2,112); ctx.textAlign = "left";
+    let y = 185; const m = 55;
+
+    function section(title){
+      ctx.fillStyle = "#1F8F4D"; ctx.fillRect(m,y,W-m*2,42);
+      ctx.fillStyle = "#fff"; ctx.font = "bold 22px Arial"; ctx.fillText(title,m+14,y+29); y += 58;
+    }
+    function detail(label,value){
+      ctx.fillStyle = "#172033"; ctx.font = "bold 20px Arial"; ctx.fillText(label + ":",m,y);
+      ctx.font = "20px Arial";
+      const lines = drawWrapped(ctx,value,m+290,y,W-m*2-290,27,"20px Arial");
+      y += Math.max(34,lines*27+7);
+    }
+
+    section("JOB DETAILS");
+    detail("Driver Name",data.driverName);
+    detail("Site Address",data.siteAddress);
+    detail("Date",data.date);
+    detail("Delivery / Pickup",data.movementType);
+    detail("Work Type",data.jobTypes.join(", "));
+
+    if(data.movementType === "Delivery" && data.jobTypes.includes("Base Out")){
+      y += 8; section("BASE OUT DELIVERY CHECKS");
+      detail("Slab Gear Lifted Up Top",data.slabGearUpTop);
+      detail("Base-Out Gear Clear Of Build Area",data.baseOutClear);
+    }
+    if(data.movementType === "Delivery" && (data.jobTypes.includes("3rd Lift Up") || data.jobTypes.includes("3rd Lift Down"))){
+      y += 8; section("THIRD LIFT DELIVERY CHECK");
+      detail("Gear Lifted Onto Balcony Or Scaffold",data.thirdLiftGear);
+    }
+
+    if(data.jobTypes.includes("Dismantle All")){
+      y += 8; section("DISMANTLE ALL CHECK");
+      detail("Full Site Check Completed — Inside And Out",data.dismantleSiteCheck);
+    }
+
+    y += 8; section("COMPLETION CHECKS");
+    detail((data.movementType || "Delivery / Pickup") + " Fully Completed",data.fullyCompleted);
+    detail("Gear Clear Of Driveways And Site Access",data.clearAccess);
+    detail((data.movementType || "Delivery / Pickup") + " Photos Taken",data.photosTaken);
+
+    y += 8; section("COMMENTS");
+    ctx.fillStyle = "#172033"; ctx.font = "20px Arial";
+    const commentLines = drawWrapped(ctx,data.comments,m,y,W-m*2,28,"20px Arial");
+    y += Math.max(70,commentLines*28+20);
+
+    if(photoImages.length){
+      section("PHOTOS");
+      const gap = 20, photoW = (W-m*2-gap)/2, photoH = 330;
+      photoImages.forEach((img,index) => {
+        const col = index % 2, row = Math.floor(index/2);
+        const px = m + col*(photoW+gap), py = y + row*(photoH+25);
+        const scale = Math.min(photoW/img.width,photoH/img.height);
+        const drawW = img.width*scale, drawH = img.height*scale;
+        const dx = px + (photoW-drawW)/2, dy = py + (photoH-drawH)/2;
+        ctx.fillStyle = "#f3f5f7"; ctx.fillRect(px,py,photoW,photoH);
+        ctx.drawImage(img,dx,dy,drawW,drawH);
+        ctx.strokeStyle = "#d8e0e8"; ctx.strokeRect(px,py,photoW,photoH);
+      });
+    }
+
+    ctx.fillStyle = "#687586"; ctx.font = "16px Arial"; ctx.textAlign = "center";
+    ctx.fillText("SSSECURE Delivery Driver Completion Checklist",W/2,H-28);
+    return await new Promise(resolve => canvas.toBlob(resolve,"image/png",0.95));
+  }
+
+  $("shareBtn").addEventListener("click", async () => {
+    const data = collect();
+    status("Preparing completed form…","ok");
+    try{
+      const blob = await buildReport(data);
+      const safeAddress = (data.siteAddress || "Completed").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"").slice(0,45);
+      const file = new File([blob],`SSSECURE_Driver_${data.movementType || "Form"}_${safeAddress}.png`,{type:"image/png"});
+      if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+        await navigator.share({title:"SSSECURE Delivery Driver Completion Checklist",text:"Completed SSSECURE delivery driver checklist",files:[file]});
+        status("Completed form shared.","ok");
+      } else {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob); link.download = file.name; link.click();
+        setTimeout(() => URL.revokeObjectURL(link.href),1000);
+        status("Completed form downloaded. Use your phone's Share button to send it.","ok");
+      }
+    } catch(error){
+      if(error?.name !== "AbortError") status("The form could not be shared. Open it in Safari or Chrome and try again.","err");
+    }
+  });
+
+  updateConditionalSections();
+})();
+</script>
+</body>
+</html>
