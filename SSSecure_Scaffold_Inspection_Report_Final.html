@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A63C8">
+<title>SSSecure Scaffold Inspection Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;
+  --line:#d8e0e8;--muted:#687586;--red:#b42318
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:14px}
+.wrap{max-width:850px;margin:auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.16)}
+.head{background:var(--blue);color:#fff;padding:20px;text-align:center}
+.head h1{font-size:26px;margin:0 0 4px}.head h2{font-size:17px;margin:0}
+.sec{background:var(--green);color:#fff;padding:11px 15px;font-weight:800;letter-spacing:.2px}
+.section-note{display:block;margin-top:4px;font-size:11px;font-weight:600;font-style:italic;letter-spacing:0;opacity:.92}
+.pad{padding:15px}.field{margin-bottom:13px}.field:last-child{margin-bottom:0}
+.field-label{display:block;font-weight:800;margin-bottom:7px}
+.req{color:#fff;background:var(--red);border-radius:4px;padding:1px 5px;font-size:10px;vertical-align:2px;margin-left:5px}
+input[type=text],input[type=date],textarea{width:100%;padding:12px;border:1.5px solid #b8c2ce;border-radius:9px;font-size:16px;background:#fff;color:var(--ink)}
+textarea{font-family:Arial,Helvetica,sans-serif}.addr{height:68px;resize:vertical}.comments{height:120px;resize:vertical}
+input:focus,textarea:focus{outline:3px solid rgba(10,99,200,.18);border-color:var(--blue)}
+.invalid{border-color:var(--red)!important;background:#fff8f7!important}
+.group-invalid{outline:3px solid rgba(180,35,24,.15);border-radius:10px}
+.work-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.work-grid label{display:flex;align-items:center;gap:8px;min-height:54px;padding:10px;border:1.5px solid var(--line);border-radius:9px;font-weight:700;line-height:1.2}
+input[type=checkbox],input[type=radio]{width:21px;height:21px;accent-color:var(--blue);flex:0 0 auto}
+.inspection-list{display:grid;gap:11px}
+.inspection-item{border:1.5px solid var(--line);border-radius:10px;padding:12px;background:#fff}
+.inspection-item.invalid-question{outline:3px solid rgba(180,35,24,.15);border-color:var(--red)}
+.inspection-title{font-weight:800;line-height:1.35;margin-bottom:10px}
+.option-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.option-row label{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:9px;border:1.5px solid var(--line);border-radius:9px;font-weight:800}
+.photo-picker{display:block;font-weight:800;margin-bottom:8px;color:var(--ink)}
+.photo-input{display:block;width:100%;min-height:54px;padding:11px;border:1.5px dashed #8ca0b5;border-radius:10px;background:#f8fbfe;color:var(--ink);font-size:16px;cursor:pointer}
+.photo-input::file-selector-button{border:0;border-radius:8px;background:var(--blue);color:#fff;padding:11px 13px;margin-right:10px;font-weight:800;font-size:15px}
+.photo-input.invalid{border-color:var(--red)!important;background:#fff8f7!important}
+.photo-note{color:var(--muted);font-size:13px;margin-top:7px;line-height:1.35}.photo-count{font-weight:800;color:var(--blue)}
+.preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.preview{position:relative;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f4f6f8}
+.preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#eef1f4}
+.preview-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 8px;font-size:12px;color:var(--muted);background:#fff}
+.preview-actions{display:flex;gap:5px}.icon-btn{border:1px solid #c9d1da;background:#fff;color:var(--ink);padding:7px 9px;font-size:12px;border-radius:7px}.remove-photo{color:var(--red)}
+.declaration-text{background:#f5f8fb;border:1px solid var(--line);border-radius:10px;padding:13px;margin-bottom:14px;font-weight:700;line-height:1.45}
+.declaration-name{color:var(--blue);font-weight:900}
+.sig-wrap{border:2px solid #8d98a6;border-radius:10px;background:#fff;overflow:hidden}.sig-wrap.invalid{border-color:var(--red)!important}
+#signature{display:block;width:100%;height:170px;touch-action:none;background:#fff;-webkit-user-select:none;user-select:none}
+.sig-help{font-size:13px;color:var(--muted);margin-top:6px}.sig-actions{display:flex;justify-content:flex-end;margin-top:9px}
+button{border:none;border-radius:9px;font-weight:800;cursor:pointer}.clear{background:#c62828;color:#fff;padding:10px 14px}
+.action-area{padding:12px 16px calc(12px + env(safe-area-inset-bottom));position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(850px,100%);background:rgba(255,255,255,.98);border-top:1px solid var(--line);box-shadow:0 -3px 14px rgba(0,0,0,.12);display:grid;grid-template-columns:.7fr 1.25fr 1.45fr;gap:8px;z-index:1000}
+.share,.save,.reset{width:100%;padding:15px 8px;font-size:15px}.share{background:var(--blue);color:#fff}.save{background:var(--green);color:#fff}.reset{background:#e9eef4;color:#344054;border:1px solid #cbd5df}
+button:disabled{opacity:.6;cursor:not-allowed}
+.status{display:none;margin:15px;padding:12px;border-radius:9px;font-weight:700;line-height:1.4}.status.ok{display:block;background:#e7f6ec;color:#176b39}.status.err{display:block;background:#fdeaea;color:#9b2020}.status.info{display:block;background:#eef5ff;color:#184f8c}
+.error-summary{display:none;margin:15px;padding:13px;border-radius:10px;background:#fdeaea;color:#7a271a;border:1px solid #f3b7b2;font-weight:700;line-height:1.45}.error-summary.show{display:block}
+.draft-note{text-align:right;padding:0 15px 10px;color:var(--muted);font-size:11px;min-height:22px}.footer{text-align:center;padding:0 15px calc(110px + env(safe-area-inset-bottom));color:var(--muted);font-size:12px}
+@media(max-width:720px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){body{padding:0}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:24px}.preview-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:430px){.preview-grid{grid-template-columns:1fr}.action-area{grid-template-columns:1fr 1fr}.reset{grid-column:1/-1;order:3}.footer{padding-bottom:calc(165px + env(safe-area-inset-bottom))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head"><h1>SSSECURE</h1><h2>Scaffold Inspection Report</h2></div>
+  <div id="errorSummary" class="error-summary" role="alert"></div>
+
+  <div class="sec">JOB DETAILS</div>
+  <div class="pad">
+    <div class="field"><label class="field-label" for="client">Client / Builder <span class="req">REQUIRED</span></label><input id="client" type="text" autocomplete="organization" maxlength="120"></div>
+    <div class="field"><label class="field-label" for="address">Site Address <span class="req">REQUIRED</span></label><textarea id="address" class="addr" autocomplete="street-address" maxlength="300"></textarea></div>
+    <div class="field"><label class="field-label" for="crew">Subcontracting Crew <span class="req">REQUIRED</span></label><input id="crew" type="text" maxlength="120"></div>
+    <div class="field"><label class="field-label" for="scaffolder">Competent Scaffolder <span class="req">REQUIRED</span></label><input id="scaffolder" type="text" autocomplete="name" maxlength="120"></div>
+    <div class="field"><label class="field-label" for="date">Date <span class="req">REQUIRED</span></label><input id="date" type="date"></div>
+  </div>
+
+  <div class="sec">WORK COMPLETED ON SITE<span class="section-note">Select all that apply. Use comments to describe the work completed.</span></div>
+  <div class="pad">
+    <div id="workGroup" class="work-grid">
+      <label><input type="checkbox" name="jobType" value="Build-Up">Build-Up</label>
+      <label><input type="checkbox" name="jobType" value="Base Out">Base Out</label>
+      <label><input type="checkbox" name="jobType" value="3rd Lift Up">3rd Lift Up</label>
+      <label><input type="checkbox" name="jobType" value="3rd Lift Down">3rd Lift Down</label>
+      <label><input type="checkbox" name="jobType" value="Dismantle All">Dismantle All</label>
+      <label><input type="checkbox" name="jobType" value="Lower Roof Scaffold">Lower Roof Scaffold</label>
+      <label><input type="checkbox" name="jobType" value="Swimming Pool / Edge Protection">Swimming Pool / Edge Protection</label>
+      <label><input type="checkbox" name="jobType" value="Minimum Charge">Minimum Charge</label>
+    </div>
+  </div>
+
+  <div class="sec">SCAFFOLD INSPECTION CHECKLIST<span class="section-note">Every item must be marked Yes, No or N/A.</span></div>
+  <div class="pad"><div id="inspectionList" class="inspection-list"></div></div>
+
+  <div class="sec">COMMENTS / RECTIFICATION REQUIRED</div>
+  <div class="pad"><textarea id="comments" class="comments" maxlength="2000" placeholder="Record defects, missing gear, access issues, rectification required or any other relevant site information."></textarea></div>
+
+  <div class="sec">INSPECTION PHOTOS<span class="section-note">At least 1 photo is required. Add up to 8 photos.</span></div>
+  <div class="pad">
+    <label id="photoPicker" class="photo-picker" for="photos">ADD PHOTOS / TAKE PHOTOS</label>
+    <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+    <div class="photo-note"><span id="photoCount" class="photo-count">0 of 8 photos added.</span> Photos will be placed clearly on separate PDF pages.</div>
+    <div id="previewGrid" class="preview-grid"></div>
+  </div>
+
+  <div class="sec">DECLARATION</div>
+  <div class="pad">
+    <div class="declaration-text">I, <span id="declarationName" class="declaration-name">Inspector's Name</span>, have inspected this scaffold and recorded the inspection results accurately. Any item marked No has been detailed in the comments and reported for rectification.</div>
+    <div class="field"><label class="field-label" for="printName">Inspector's Name <span class="req">REQUIRED</span></label><input id="printName" type="text" autocomplete="name" maxlength="120"></div>
+    <div class="field"><label class="field-label">Signature <span class="req">REQUIRED</span></label>
+      <div id="sigWrap" class="sig-wrap"><canvas id="signature"></canvas></div>
+      <div class="sig-help">Sign above using your finger.</div>
+      <div class="sig-actions"><button type="button" id="clearSig" class="clear">Clear Signature</button></div>
+    </div>
+  </div>
+
+  <div id="status" class="status" role="status" aria-live="polite"></div>
+  <div id="draftNote" class="draft-note" aria-live="polite"></div>
+
+  <div class="action-area">
+    <button type="button" id="resetBtn" class="reset">RESET</button>
+    <button type="button" id="saveBtn" class="save">SAVE PDF</button>
+    <button type="button" id="shareBtn" class="share">SHARE PDF</button>
+  </div>
+  <div class="footer">SSSecure Scaffold Inspection Report - PDF Edition - Photo Fix</div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const STORAGE_KEY = "sssecureScaffoldInspectionPdfDraft";
+  const MAX_PHOTOS = 8;
+  const MAX_PHOTO_BYTES = 20 * 1024 * 1024;
+  const fieldIds = ["client","address","crew","scaffolder","date","comments","printName"];
+  const inspectionItems = [
+    "Base Jacks Centred",
+    "Scaffold Level And Plumb",
+    "Braces Engaged",
+    "All Fittings Tightened",
+    "Steel Boards Flush And Properly Seated",
+    "Lap Boards Secured And Lashed",
+    "Ties / Structural Ties Installed",
+    "Double Rail Complete",
+    "No Excessive Gaps",
+    "Ladder, Gates And Access Secured And Complete",
+    "Hop-Ups Correctly Installed With Check Fittings Where Applicable",
+    "Mesh And Open Edge Protection Complete",
+    "Scaffold Tag Updated",
+    "Materials Consolidated And Stacked Correctly",
+    "Site Left Clean Of All Access Gear",
+    "Completion / Inspection Photos Taken"
+  ];
+  let selectedPhotos = [], previewUrls = [], drawing = false, hasSignature = false, signatureInk = 0, signatureSnapshot = "", lastPoint = null, saveTimer = null, printNameWasManuallyEdited = false;
+
+  function buildInspectionQuestions(){
+    const list = $("inspectionList");
+    inspectionItems.forEach((text,index) => {
+      const item = document.createElement("div"); item.className="inspection-item"; item.id=`inspectionItem${index}`;
+      item.innerHTML = `<div class="inspection-title">${index+1}. ${text} <span class="req">REQUIRED</span></div><div class="option-row"><label><input type="radio" name="q${index}" value="Yes">Yes</label><label><input type="radio" name="q${index}" value="No">No</label><label><input type="radio" name="q${index}" value="N/A">N/A</label></div>`;
+      list.appendChild(item);
+    });
+  }
+  buildInspectionQuestions();
+
+  function perthDateISO(date = new Date()) { const parts = new Intl.DateTimeFormat("en-AU",{timeZone:"Australia/Perth",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date).reduce((a,p)=>{if(p.type!=="literal")a[p.type]=p.value;return a;},{}); return `${parts.year}-${parts.month}-${parts.day}`; }
+  function formatDateAU(value) { const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(value||""); return m?`${m[3]}/${m[2]}/${m[1]}`:value||""; }
+  function setDefaultDate(){ if(!$("date").value) $("date").value=perthDateISO(); }
+  function status(message,type="info",scroll=false){ const el=$("status");el.className=`status ${type}`;el.textContent=message;if(scroll)el.scrollIntoView({behavior:"smooth",block:"center"}); }
+  function clearStatus(){ $("status").className="status";$("status").textContent=""; }
+  function updateDeclarationName(){ const name=$("printName").value.trim();$("declarationName").textContent=name||"Inspector's Name"; }
+  function radioValue(name){ return document.querySelector(`input[name="${name}"]:checked`)?.value||""; }
+  function getSignatureData(){ return hasSignature?(signatureSnapshot||$("signature").toDataURL("image/png")):""; }
+  function collect(includeSignature=true){ return {client:$("client").value.trim(),address:$("address").value.trim(),crew:$("crew").value.trim(),scaffolder:$("scaffolder").value.trim(),date:$("date").value,jobTypes:Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el=>el.value),answers:inspectionItems.map((_,i)=>radioValue(`q${i}`)),comments:$("comments").value.trim(),printName:$("printName").value.trim(),signature:includeSignature?getSignatureData():""}; }
+  function scheduleSave(){ clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,250); }
+  function saveDraft(){ try{const d=collect(false);d.signature=getSignatureData();localStorage.setItem(STORAGE_KEY,JSON.stringify(d));$("draftNote").textContent="Draft saved on this device.";setTimeout(()=>{if($("draftNote").textContent==="Draft saved on this device.")$("draftNote").textContent="";},1400);}catch(_){}}
+  async function restoreDraft(){ try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return;const d=JSON.parse(raw);fieldIds.forEach(id=>{if(typeof d[id]==="string")$(id).value=d[id];});document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=Array.isArray(d.jobTypes)&&d.jobTypes.includes(el.value));if(Array.isArray(d.answers))d.answers.forEach((v,i)=>{const el=Array.from(document.querySelectorAll(`input[name="q${i}"]`)).find(x=>x.value===v);if(el)el.checked=true;});if(d.signature)await restoreSignature(d.signature);printNameWasManuallyEdited=Boolean(d.printName);updateDeclarationName();$("draftNote").textContent="Saved draft restored. Photos must be added again.";}catch(_){try{localStorage.removeItem(STORAGE_KEY);}catch(__){}} }
+  function clearValidation(){document.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));document.querySelectorAll(".group-invalid").forEach(el=>el.classList.remove("group-invalid"));document.querySelectorAll(".invalid-question").forEach(el=>el.classList.remove("invalid-question"));$("errorSummary").className="error-summary";$("errorSummary").textContent="";}
+  function validate(data){clearValidation();const errors=[];const markField=(id,msg)=>{$(id).classList.add("invalid");errors.push({message:msg,element:$(id)});};if(!data.client)markField("client","Client / Builder is required.");if(!data.address)markField("address","Site Address is required.");if(!data.crew)markField("crew","Subcontracting Crew is required.");if(!data.scaffolder)markField("scaffolder","Competent Scaffolder is required.");if(!data.date)markField("date","Date is required.");if(!data.jobTypes.length){$("workGroup").classList.add("group-invalid");errors.push({message:"Select at least one work / inspection type.",element:$("workGroup")});}data.answers.forEach((v,i)=>{if(!v){const el=$(`inspectionItem${i}`);el.classList.add("invalid-question");errors.push({message:`Inspection item ${i+1} must be answered.`,element:el});}});if(data.answers.includes("No")&&!data.comments)markField("comments","Comments are required when any inspection item is marked No.");if(!selectedPhotos.length){$("photos").classList.add("invalid");errors.push({message:"Add at least one inspection photo.",element:$("photos")});}if(!data.printName)markField("printName","Inspector's Name is required.");if(!hasSignature||signatureInk<10){$("sigWrap").classList.add("invalid");errors.push({message:"A signature is required.",element:$("sigWrap")});}if(errors.length){const s=$("errorSummary");s.className="error-summary show";s.textContent=`Please fix ${errors.length} item${errors.length===1?"":"s"}: ${errors.slice(0,5).map(e=>e.message).join(" ")}${errors.length>5?" Check the highlighted inspection items.":""}`;errors[0].element.scrollIntoView({behavior:"smooth",block:"center"});return false;}return true;}
+
+  const sig=$("signature"),sctx=sig.getContext("2d");
+  function configureSignatureContext(){sctx.lineWidth=2.6;sctx.lineCap="round";sctx.lineJoin="round";sctx.strokeStyle="#111";sctx.fillStyle="#111";}
+  function sizeSignatureCanvas(preserve=false){const rect=sig.getBoundingClientRect();const old=preserve&&hasSignature?getSignatureData():"";const ratio=Math.max(window.devicePixelRatio||1,1);sig.width=Math.max(1,Math.round(rect.width*ratio));sig.height=Math.round(170*ratio);sctx.setTransform(ratio,0,0,ratio,0,0);configureSignatureContext();if(old)restoreSignature(old);}
+  function restoreSignature(dataUrl){return new Promise(resolve=>{const img=new Image();img.onload=()=>{const rect=sig.getBoundingClientRect();sctx.clearRect(0,0,rect.width,170);sctx.drawImage(img,0,0,rect.width,170);hasSignature=true;signatureInk=100;signatureSnapshot=dataUrl;resolve();};img.onerror=resolve;img.src=dataUrl;});}
+  function point(x,y){const r=sig.getBoundingClientRect();return{x:x-r.left,y:y-r.top};}function beginStroke(x,y){drawing=true;hasSignature=true;$("sigWrap").classList.remove("invalid");lastPoint=point(x,y);sctx.beginPath();sctx.moveTo(lastPoint.x,lastPoint.y);}function continueStroke(x,y){if(!drawing)return;const p=point(x,y);if(lastPoint)signatureInk+=Math.hypot(p.x-lastPoint.x,p.y-lastPoint.y);sctx.lineTo(p.x,p.y);sctx.stroke();lastPoint=p;}function finishStroke(){if(!drawing)return;drawing=false;lastPoint=null;signatureSnapshot=sig.toDataURL("image/png");scheduleSave();}
+  sig.addEventListener("touchstart",e=>{const t=e.changedTouches[0];if(t){beginStroke(t.clientX,t.clientY);e.preventDefault();}},{passive:false});sig.addEventListener("touchmove",e=>{const t=e.changedTouches[0];if(t){continueStroke(t.clientX,t.clientY);e.preventDefault();}},{passive:false});sig.addEventListener("touchend",e=>{finishStroke();e.preventDefault();},{passive:false});sig.addEventListener("pointerdown",e=>{if(e.pointerType!=="touch"){beginStroke(e.clientX,e.clientY);e.preventDefault();}});sig.addEventListener("pointermove",e=>{if(e.pointerType!=="touch"&&drawing){continueStroke(e.clientX,e.clientY);e.preventDefault();}});["pointerup","pointercancel","pointerleave"].forEach(t=>sig.addEventListener(t,finishStroke));
+  $("clearSig").addEventListener("click",()=>{const r=sig.getBoundingClientRect();sctx.clearRect(0,0,r.width,170);hasSignature=false;signatureInk=0;signatureSnapshot="";scheduleSave();});
+
+  function photoKey(file){return`${file.name}|${file.size}|${file.lastModified}`;}function clearPreviewUrls(){previewUrls.forEach(u=>URL.revokeObjectURL(u));previewUrls=[];}
+  function renderPreviews(){clearPreviewUrls();const grid=$("previewGrid");grid.innerHTML="";selectedPhotos.forEach((file,index)=>{const url=URL.createObjectURL(file);previewUrls.push(url);const box=document.createElement("div");box.className="preview";const img=document.createElement("img");img.src=url;img.alt=`Inspection photo ${index+1}`;const meta=document.createElement("div");meta.className="preview-meta";const label=document.createElement("span");label.textContent=`Photo ${index+1}`;const actions=document.createElement("div");actions.className="preview-actions";const left=document.createElement("button");left.type="button";left.className="icon-btn";left.textContent="←";left.disabled=index===0;left.addEventListener("click",()=>movePhoto(index,index-1));const right=document.createElement("button");right.type="button";right.className="icon-btn";right.textContent="→";right.disabled=index===selectedPhotos.length-1;right.addEventListener("click",()=>movePhoto(index,index+1));const remove=document.createElement("button");remove.type="button";remove.className="icon-btn remove-photo";remove.textContent="Remove";remove.addEventListener("click",()=>{selectedPhotos.splice(index,1);renderPreviews();});actions.append(left,right,remove);meta.append(label,actions);box.append(img,meta);grid.appendChild(box);});$("photoCount").textContent=`${selectedPhotos.length} of ${MAX_PHOTOS} photos added.`;if(selectedPhotos.length)$("photos").classList.remove("invalid");}
+  function movePhoto(from,to){if(to<0||to>=selectedPhotos.length)return;const[file]=selectedPhotos.splice(from,1);selectedPhotos.splice(to,0,file);renderPreviews();}
+  $("photos").addEventListener("change",e=>{const incoming=Array.from(e.target.files||[]);const existing=new Set(selectedPhotos.map(photoKey));for(const file of incoming){if(selectedPhotos.length>=MAX_PHOTOS)break;if(file.size>MAX_PHOTO_BYTES)continue;if(!(file.type||"").startsWith("image/")&&!/\.(jpe?g|png|heic|heif|webp)$/i.test(file.name||""))continue;const key=photoKey(file);if(existing.has(key))continue;selectedPhotos.push(file);existing.add(key);}e.target.value="";renderPreviews();if(selectedPhotos.length)status(`${selectedPhotos.length} photo${selectedPhotos.length===1?"":"s"} selected and ready for the PDF.`,"ok");});
+  function loadImageFile(file){return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file);const img=new Image();img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error(`Could not read ${file.name}`));};img.src=url;});}
+  async function photoToJpeg(file,maxDimension=1800,quality=.86){const img=await loadImageFile(file);const sw=img.naturalWidth||img.width,sh=img.naturalHeight||img.height,scale=Math.min(1,maxDimension/Math.max(sw,sh)),width=Math.max(1,Math.round(sw*scale)),height=Math.max(1,Math.round(sh*scale)),canvas=document.createElement("canvas");canvas.width=width;canvas.height=height;const ctx=canvas.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,width,height);ctx.drawImage(img,0,0,width,height);return{dataUrl:canvas.toDataURL("image/jpeg",quality),width,height};}
+  function safeFilenamePart(v){return(v||"Completed").normalize("NFKD").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"").slice(0,55)||"Completed";}
+
+  async function buildPdf(data){if(!window.jspdf?.jsPDF)throw new Error("PDF engine did not load. Refresh the page and try again.");const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4",compress:true});const pageW=210,pageH=297,margin=13,contentW=184,BLUE=[10,99,200],GREEN=[31,143,77],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];let y=0;
+    function header(title="SCAFFOLD INSPECTION REPORT"){doc.setFillColor(...BLUE);doc.rect(0,0,pageW,28,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(17);doc.text("SSSECURE",pageW/2,11,{align:"center"});doc.setFontSize(10);doc.text(title,pageW/2,20,{align:"center"});y=35;}
+    function continuedPage(title="SCAFFOLD INSPECTION REPORT - CONTINUED"){doc.addPage();doc.setFillColor(...BLUE);doc.rect(0,0,pageW,19,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(11);doc.text(`SSSECURE - ${title}`,pageW/2,12,{align:"center"});y=26;}
+    function ensureSpace(required,title){if(y+required>pageH-14)continuedPage(title);}
+    function section(title){ensureSpace(10);doc.setFillColor(...GREEN);doc.rect(margin,y,contentW,8,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(8.5);doc.text(title,margin+3,y+5.4);y+=11;}
+    function detail(label,value){const text=String(value||"-");doc.setFont("helvetica","normal");doc.setFontSize(9.3);const lines=doc.splitTextToSize(text,contentW-6),h=Math.max(12,7+lines.length*4.2);ensureSpace(h+2);doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.7,1.7,"FD");doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(7.2);doc.text(label.toUpperCase(),margin+3,y+4);doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(9.3);doc.text(lines,margin+3,y+8.2);y+=h+2;}
+    function checkRow(index,label,value){doc.setFont("helvetica","normal");doc.setFontSize(8.8);const lines=doc.splitTextToSize(`${index+1}. ${label}`,142),h=Math.max(9,4.5+lines.length*4);ensureSpace(h+1,"SCAFFOLD INSPECTION CHECKLIST - CONTINUED");doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.4,1.4,"FD");doc.setTextColor(...INK);doc.text(lines,margin+3,y+5.2);const valueColor=value==="No"?[180,35,24]:value==="Yes"?[31,143,77]:MUTED;doc.setTextColor(...valueColor);doc.setFont("helvetica","bold");doc.text(value||"-",pageW-margin-4,y+5.2,{align:"right"});y+=h+1;}
+    function paragraph(text,minHeight=20){doc.setFont("helvetica","normal");doc.setFontSize(9);const lines=doc.splitTextToSize(text||"No additional comments.",contentW-6),h=Math.max(minHeight,6+lines.length*4.2);ensureSpace(h+2);doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.7,1.7,"FD");doc.setTextColor(...INK);doc.text(lines,margin+3,y+5.5);y+=h+2;}
+    header();section("JOB DETAILS");detail("Client / Builder",data.client);detail("Site Address",data.address);detail("Subcontracting Crew",data.crew);detail("Competent Scaffolder",data.scaffolder);detail("Date",formatDateAU(data.date));detail("Work Completed On Site",data.jobTypes.join(", "));
+    section("SCAFFOLD INSPECTION CHECKLIST");inspectionItems.forEach((item,i)=>checkRow(i,item,data.answers[i]));
+    section("COMMENTS / RECTIFICATION REQUIRED");paragraph(data.comments||"No defects or additional comments recorded.",22);
+    section("DECLARATION");paragraph(`I, ${data.printName}, have inspected this scaffold and recorded the inspection results accurately. Any item marked No has been detailed in the comments and reported for rectification.`,24);detail("Inspector's Name",data.printName);ensureSpace(31);doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(7.2);doc.text("SIGNATURE",margin,y+3);doc.setFillColor(255,255,255);doc.setDrawColor(141,152,166);doc.roundedRect(margin,y+5,94,25,1.7,1.7,"FD");if(data.signature)doc.addImage(data.signature,"PNG",margin+2,y+6,90,22,undefined,"FAST");y+=33;
+    const images=[];for(const file of selectedPhotos)images.push(await photoToJpeg(file));images.forEach((photo,index)=>{if(index%2===0){doc.addPage();doc.setFillColor(...BLUE);doc.rect(0,0,pageW,23,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("SSSECURE - INSPECTION PHOTOS",pageW/2,10,{align:"center"});doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.text(doc.splitTextToSize(data.address,180),pageW/2,16,{align:"center"});}const slot=index%2,boxX=15,boxY=30+slot*127,boxW=180,boxH=108;doc.setFillColor(243,245,247);doc.setDrawColor(...LINE);doc.roundedRect(boxX,boxY,boxW,boxH,2,2,"FD");const scale=Math.min((boxW-4)/photo.width,(boxH-4)/photo.height),drawW=photo.width*scale,drawH=photo.height*scale,drawX=boxX+(boxW-drawW)/2,drawY=boxY+(boxH-drawH)/2;doc.addImage(photo.dataUrl,"JPEG",drawX,drawY,drawW,drawH,undefined,"FAST");doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(8);doc.text(`Photo ${index+1}`,boxX,boxY+boxH+5);});
+    const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(7);doc.text(`SSSecure Scaffold Inspection Report | Page ${p} of ${pages}`,pageW/2,pageH-6,{align:"center"});}return doc.output("blob");}
+  function downloadBlob(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.style.display="none";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
+  async function generate(mode){clearStatus();const data=collect();if(!validate(data)){status("The PDF has not been created. Complete the highlighted items first.","err",true);return;}const buttons=[$("resetBtn"),$("saveBtn"),$("shareBtn")];buttons.forEach(b=>b.disabled=true);const oldSave=$("saveBtn").textContent,oldShare=$("shareBtn").textContent;$("saveBtn").textContent="BUILDING PDF...";$("shareBtn").textContent="BUILDING PDF...";status("Building a clear A4 PDF with the inspection photos included...","info");try{const blob=await buildPdf(data),filename=`SSSecure_Scaffold_Inspection_${safeFilenamePart(data.address)}.pdf`,file=new File([blob],filename,{type:"application/pdf"});if(mode==="share"&&navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share({title:"SSSecure Scaffold Inspection Report",text:"Completed SSSecure scaffold inspection report",files:[file]});status("PDF shared successfully.","ok",true);}catch(error){if(error?.name==="AbortError")status("Sharing was cancelled. The form is still here.","info");else{downloadBlob(blob,filename);status("PDF saved to Downloads because direct sharing was unavailable.","ok",true);}}}else{downloadBlob(blob,filename);status("Clear PDF saved to Downloads.","ok",true);}}catch(error){console.error(error);status(error?.message||"The PDF could not be created. Refresh the page and try again.","err",true);}finally{buttons.forEach(b=>b.disabled=false);$("saveBtn").textContent=oldSave;$("shareBtn").textContent=oldShare;}}
+  function resetForm(){if(!window.confirm("Clear every field, inspection answer, photo and signature from this form?"))return;try{localStorage.removeItem(STORAGE_KEY);}catch(_){}fieldIds.forEach(id=>$(id).value="");document.querySelectorAll('input[type="checkbox"],input[type="radio"]').forEach(el=>el.checked=false);selectedPhotos=[];renderPreviews();const r=sig.getBoundingClientRect();sctx.clearRect(0,0,r.width,170);hasSignature=false;signatureInk=0;signatureSnapshot="";printNameWasManuallyEdited=false;clearValidation();clearStatus();setDefaultDate();updateDeclarationName();$("client").scrollIntoView({behavior:"smooth",block:"center"});}
+  $("scaffolder").addEventListener("input",scheduleSave);$("printName").addEventListener("input",()=>{printNameWasManuallyEdited=true;updateDeclarationName();scheduleSave();});fieldIds.filter(id=>!["scaffolder","printName"].includes(id)).forEach(id=>$(id).addEventListener("input",scheduleSave));document.querySelectorAll('input[type="checkbox"],input[type="radio"]').forEach(el=>el.addEventListener("change",scheduleSave));document.addEventListener("input",e=>{if(e.target.matches("input,textarea"))e.target.classList.remove("invalid");});document.addEventListener("change",e=>{if(e.target.name==="jobType")$("workGroup").classList.remove("group-invalid");if(/^q\d+$/.test(e.target.name||""))e.target.closest(".inspection-item")?.classList.remove("invalid-question");});$("saveBtn").addEventListener("click",()=>generate("save"));$("shareBtn").addEventListener("click",()=>generate("share"));$("resetBtn").addEventListener("click",resetForm);window.addEventListener("resize",()=>sizeSignatureCanvas(true));window.addEventListener("beforeunload",clearPreviewUrls);requestAnimationFrame(()=>sizeSignatureCanvas(false));restoreDraft().then(()=>{setDefaultDate();updateDeclarationName();});
+})();
+</script>
+</body>
+</html>
