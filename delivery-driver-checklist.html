@@ -12,6 +12,7 @@
 <meta name="twitter:description" content="Complete and share the SSSECURE delivery or pickup checklist.">
 
 <title>SSSECURE Delivery Driver Completion Checklist</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;--line:#d8e0e8;--muted:#687586}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
@@ -158,8 +159,8 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
   </div>
 
   <div id="status" class="status"></div>
-  <div class="share-area"><button type="button" id="shareBtn" class="share">SHARE COMPLETED FORM</button></div>
-  <div class="footer">SSSECURE Delivery Driver Completion Checklist</div>
+  <div class="share-area"><button type="button" id="shareBtn" class="share">SHARE COMPLETED PDF</button></div>
+  <div class="footer">SSSECURE Delivery Driver Completion Checklist - PDF</div>
 </div>
 
 <script>
@@ -256,120 +257,325 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     });
   }
 
-  function drawWrapped(ctx,text,x,y,maxWidth,lineHeight,font){
-    ctx.font = font;
-    const words = String(text || "").split(/\s+/).filter(Boolean);
-    const lines = [];
-    let line = "";
-    words.forEach(word => {
-      const test = line ? line + " " + word : word;
-      if(ctx.measureText(test).width > maxWidth && line){ lines.push(line); line = word; }
-      else line = test;
-    });
-    if(line) lines.push(line);
-    if(!lines.length) lines.push("");
-    lines.forEach((l,i) => ctx.fillText(l,x,y+i*lineHeight));
-    return lines.length;
+  function formatDateAU(value){
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
+    return match ? `${match[3]}/${match[2]}/${match[1]}` : value || "";
   }
 
-  async function buildReport(data){
-    const photoImages = await Promise.all(selectedPhotos.map(loadImageFromFile));
-    const photoRows = Math.ceil(photoImages.length/2);
-    const W = 1240;
-    const H = 1470 + (photoRows ? photoRows*360 + 80 : 0);
+  function safeFilenamePart(value){
+    return (value || "Completed")
+      .normalize("NFKD")
+      .replace(/[^a-z0-9]+/gi,"_")
+      .replace(/^_+|_+$/g,"")
+      .slice(0,55) || "Completed";
+  }
+
+  async function photoToJpeg(file,maxDimension=1800,quality=.86){
+    const img = await loadImageFromFile(file);
+    const sourceW = img.naturalWidth || img.width;
+    const sourceH = img.naturalHeight || img.height;
+    const scale = Math.min(1,maxDimension / Math.max(sourceW,sourceH));
+    const width = Math.max(1,Math.round(sourceW*scale));
+    const height = Math.max(1,Math.round(sourceH*scale));
     const canvas = document.createElement("canvas");
-    canvas.width = W; canvas.height = H;
+    canvas.width = width;
+    canvas.height = height;
     const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#fff"; ctx.fillRect(0,0,W,H);
-    ctx.fillStyle = "#0A63C8"; ctx.fillRect(0,0,W,150);
-    ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.font = "bold 48px Arial"; ctx.fillText("SSSECURE",W/2,62);
-    ctx.font = "bold 28px Arial"; ctx.fillText("DELIVERY DRIVER COMPLETION CHECKLIST",W/2,112); ctx.textAlign = "left";
-    let y = 185; const m = 55;
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0,0,width,height);
+    ctx.drawImage(img,0,0,width,height);
+    return {
+      dataUrl: canvas.toDataURL("image/jpeg",quality),
+      width,
+      height
+    };
+  }
+
+  async function buildPdf(data){
+    if(!window.jspdf?.jsPDF){
+      throw new Error("PDF engine did not load. Refresh the page and try again.");
+    }
+
+    const {jsPDF} = window.jspdf;
+    const doc = new jsPDF({
+      orientation:"portrait",
+      unit:"mm",
+      format:"a4",
+      compress:true
+    });
+
+    const pageW = 210;
+    const pageH = 297;
+    const margin = 11;
+    const contentW = pageW - margin*2;
+    const BLUE = [10,99,200];
+    const GREEN = [31,143,77];
+    const INK = [23,32,51];
+    const MUTED = [90,101,116];
+    const LIGHT = [246,248,250];
+    const LINE = [216,224,232];
+    let y = 0;
+
+    function header(){
+      doc.setFillColor(...BLUE);
+      doc.rect(0,0,pageW,24,"F");
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(16);
+      doc.text("SSSECURE",pageW/2,10,{align:"center"});
+      doc.setFontSize(9.2);
+      doc.text("DELIVERY DRIVER COMPLETION CHECKLIST",pageW/2,18,{align:"center"});
+      y = 29;
+    }
 
     function section(title){
-      ctx.fillStyle = "#1F8F4D"; ctx.fillRect(m,y,W-m*2,42);
-      ctx.fillStyle = "#fff"; ctx.font = "bold 22px Arial"; ctx.fillText(title,m+14,y+29); y += 58;
-    }
-    function detail(label,value){
-      ctx.fillStyle = "#172033"; ctx.font = "bold 20px Arial"; ctx.fillText(label + ":",m,y);
-      ctx.font = "20px Arial";
-      const lines = drawWrapped(ctx,value,m+290,y,W-m*2-290,27,"20px Arial");
-      y += Math.max(34,lines*27+7);
-    }
-
-    section("JOB DETAILS");
-    detail("Driver Name",data.driverName);
-    detail("Site Address",data.siteAddress);
-    detail("Date",data.date);
-    detail("Delivery / Pickup",data.movementType);
-    detail("Work Type",data.jobTypes.join(", "));
-
-    if(data.movementType === "Delivery" && data.jobTypes.includes("Base Out")){
-      y += 8; section("BASE OUT DELIVERY CHECKS");
-      detail("Slab Gear Lifted Up Top",data.slabGearUpTop);
-      detail("Base-Out Gear Clear Of Build Area",data.baseOutClear);
-    }
-    if(data.movementType === "Delivery" && (data.jobTypes.includes("3rd Lift Up") || data.jobTypes.includes("3rd Lift Down"))){
-      y += 8; section("THIRD LIFT DELIVERY CHECK");
-      detail("Gear Lifted Onto Balcony Or Scaffold",data.thirdLiftGear);
+      doc.setFillColor(...GREEN);
+      doc.rect(margin,y,contentW,7,"F");
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(8);
+      doc.text(title,margin+3,y+4.9);
+      y += 9;
     }
 
-    if(data.jobTypes.includes("Dismantle All")){
-      y += 8; section("DISMANTLE ALL CHECK");
-      detail("Full Site Check Completed — Inside And Out",data.dismantleSiteCheck);
+    function fitLines(value,maxWidth,maxHeight,startSize=8.4,minSize=5.7){
+      const text = String(value || "-");
+      let size = startSize;
+      let lines = [];
+      let lineHeight = 0;
+
+      while(size >= minSize){
+        doc.setFont("helvetica","normal");
+        doc.setFontSize(size);
+        lines = doc.splitTextToSize(text,maxWidth);
+        lineHeight = size * 0.3528 * 1.16;
+        if(lines.length * lineHeight <= maxHeight){
+          return {lines,size,lineHeight};
+        }
+        size -= .25;
+      }
+
+      doc.setFontSize(minSize);
+      lines = doc.splitTextToSize(text,maxWidth);
+      lineHeight = minSize * 0.3528 * 1.16;
+      const maxLines = Math.max(1,Math.floor(maxHeight/lineHeight));
+      if(lines.length > maxLines){
+        lines = lines.slice(0,maxLines);
+        let last = lines[maxLines-1];
+        while(doc.getTextWidth(last+"...") > maxWidth && last.length > 1){
+          last = last.slice(0,-1);
+        }
+        lines[maxLines-1] = last+"...";
+      }
+      return {lines,size:minSize,lineHeight};
     }
 
-    y += 8; section("COMPLETION CHECKS");
-    detail((data.movementType || "Delivery / Pickup") + " Fully Completed",data.fullyCompleted);
-    detail("Gear Clear Of Driveways And Site Access",data.clearAccess);
-    detail((data.movementType || "Delivery / Pickup") + " Photos Taken",data.photosTaken);
-    if(data.photosTaken === "Yes"){
-      detail("Photos Show Full Elevation, Verge, Site Access And Delivery / Pickup Area",data.photoDistance);
-    }
+    function box(label,value,x,boxY,w,h,options={}){
+      const labelSize = options.labelSize || 6.1;
+      const valueSize = options.valueSize || 8.2;
+      const minValueSize = options.minValueSize || 5.7;
+      const labelH = 4.7;
+      const innerX = x+2.4;
+      const maxW = w-4.8;
+      const maxH = h-labelH-2.2;
 
-    y += 8; section("COMMENTS");
-    ctx.fillStyle = "#172033"; ctx.font = "20px Arial";
-    const commentLines = drawWrapped(ctx,data.comments,m,y,W-m*2,28,"20px Arial");
-    y += Math.max(70,commentLines*28+20);
+      doc.setFillColor(...LIGHT);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(x,boxY,w,h,1.4,1.4,"FD");
 
-    if(photoImages.length){
-      section("PHOTOS");
-      const gap = 20, photoW = (W-m*2-gap)/2, photoH = 330;
-      photoImages.forEach((img,index) => {
-        const col = index % 2, row = Math.floor(index/2);
-        const px = m + col*(photoW+gap), py = y + row*(photoH+25);
-        const scale = Math.min(photoW/img.width,photoH/img.height);
-        const drawW = img.width*scale, drawH = img.height*scale;
-        const dx = px + (photoW-drawW)/2, dy = py + (photoH-drawH)/2;
-        ctx.fillStyle = "#f3f5f7"; ctx.fillRect(px,py,photoW,photoH);
-        ctx.drawImage(img,dx,dy,drawW,drawH);
-        ctx.strokeStyle = "#d8e0e8"; ctx.strokeRect(px,py,photoW,photoH);
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(labelSize);
+      doc.text(String(label).toUpperCase(),innerX,boxY+3.6);
+
+      const fitted = fitLines(value,maxW,maxH,valueSize,minValueSize);
+      doc.setTextColor(...INK);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(fitted.size);
+      const startY = boxY+labelH+2.2;
+      fitted.lines.forEach((line,index) => {
+        doc.text(line,innerX,startY+index*fitted.lineHeight);
       });
     }
 
-    ctx.fillStyle = "#687586"; ctx.font = "16px Arial"; ctx.textAlign = "center";
-    ctx.fillText("SSSECURE Delivery Driver Completion Checklist",W/2,H-28);
-    return await new Promise(resolve => canvas.toBlob(resolve,"image/png",0.95));
+    function commentPanel(value,h=31){
+      doc.setFillColor(...LIGHT);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(margin,y,contentW,h,1.4,1.4,"FD");
+      const fitted = fitLines(value || "No additional comments.",contentW-5,h-5,8.1,5.7);
+      doc.setTextColor(...INK);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(fitted.size);
+      const startY = y+4;
+      fitted.lines.forEach((line,index) => {
+        doc.text(line,margin+2.5,startY+index*fitted.lineHeight);
+      });
+      y += h+2;
+    }
+
+    function resultValue(value){
+      return value || "-";
+    }
+
+    header();
+
+    // PAGE 1 - compact driver summary.
+    section("JOB DETAILS");
+    const gap = 3;
+    const half = (contentW-gap)/2;
+
+    box("Driver Name",data.driverName,margin,y,half,14);
+    box("Date",formatDateAU(data.date),margin+half+gap,y,half,14);
+    y += 16;
+
+    box("Site Address",data.siteAddress,margin,y,contentW,15);
+    y += 17;
+
+    box("Delivery / Pickup",data.movementType,margin,y,half,14);
+    box("Work Type",data.jobTypes.join(", "),margin+half+gap,y,half,14,{valueSize:7.8,minValueSize:5.6});
+    y += 16;
+
+    if(data.movementType === "Delivery" && data.jobTypes.includes("Base Out")){
+      section("BASE OUT DELIVERY CHECKS");
+      box("Slab Gear Lifted Up Top",resultValue(data.slabGearUpTop),margin,y,half,14);
+      box("Base-Out Gear Clear Of Build Area",resultValue(data.baseOutClear),margin+half+gap,y,half,14,{valueSize:7.8});
+      y += 16;
+    }
+
+    if(data.movementType === "Delivery" &&
+       (data.jobTypes.includes("3rd Lift Up") || data.jobTypes.includes("3rd Lift Down"))){
+      section("THIRD LIFT DELIVERY CHECK");
+      box("Gear Lifted Onto Balcony Or Scaffold",resultValue(data.thirdLiftGear),margin,y,contentW,14);
+      y += 16;
+    }
+
+    if(data.jobTypes.includes("Dismantle All")){
+      section("DISMANTLE ALL CHECK");
+      box("Full Site Check Completed - Inside And Out",resultValue(data.dismantleSiteCheck),margin,y,contentW,14);
+      y += 16;
+    }
+
+    section("COMPLETION CHECKS");
+    box(`${data.movementType || "Delivery / Pickup"} Fully Completed`,resultValue(data.fullyCompleted),margin,y,half,14);
+    box("Gear Clear Of Driveways And Site Access",resultValue(data.clearAccess),margin+half+gap,y,half,14);
+    y += 16;
+
+    box(`${data.movementType || "Delivery / Pickup"} Photos Taken`,resultValue(data.photosTaken),margin,y,half,14);
+    box("Photos Show Full Elevation, Verge And Site Access",
+        data.photosTaken === "Yes" ? resultValue(data.photoDistance) : "N/A",
+        margin+half+gap,y,half,14,{valueSize:7.5,minValueSize:5.5});
+    y += 16;
+
+    section("COMMENTS");
+    commentPanel(data.comments || "No additional comments.",31);
+
+    const photos = [];
+    for(const file of selectedPhotos){
+      photos.push(await photoToJpeg(file));
+    }
+
+    // PAGE 2 ONWARD - delivery / pickup photos only.
+    photos.forEach((photo,index) => {
+      if(index % 2 === 0){
+        doc.addPage();
+        doc.setFillColor(...BLUE);
+        doc.rect(0,0,pageW,23,"F");
+        doc.setTextColor(255,255,255);
+        doc.setFont("helvetica","bold");
+        doc.setFontSize(12.5);
+        doc.text(`SSSECURE - ${(data.movementType || "DELIVERY / PICKUP").toUpperCase()} PHOTOS`,pageW/2,9.5,{align:"center"});
+        doc.setFont("helvetica","normal");
+        doc.setFontSize(8);
+        const addressLines = doc.splitTextToSize(data.siteAddress || "Site address not entered",180);
+        doc.text(addressLines,pageW/2,15.5,{align:"center"});
+      }
+
+      const slot = index % 2;
+      const boxX = 15;
+      const boxY = 29 + slot*128;
+      const boxW = 180;
+      const boxH = 109;
+
+      doc.setFillColor(243,245,247);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(boxX,boxY,boxW,boxH,2,2,"FD");
+
+      const scale = Math.min((boxW-4)/photo.width,(boxH-4)/photo.height);
+      const drawW = photo.width*scale;
+      const drawH = photo.height*scale;
+      const drawX = boxX+(boxW-drawW)/2;
+      const drawY = boxY+(boxH-drawH)/2;
+      doc.addImage(photo.dataUrl,"JPEG",drawX,drawY,drawW,drawH,undefined,"FAST");
+
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
+      doc.text(`Photo ${index+1}`,boxX,boxY+boxH+5);
+    });
+
+    const pages = doc.getNumberOfPages();
+    for(let p=1;p<=pages;p++){
+      doc.setPage(p);
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(7);
+      doc.text(`SSSECURE Delivery Driver Completion Checklist | Page ${p} of ${pages}`,
+               pageW/2,pageH-5.5,{align:"center"});
+    }
+
+    return doc.output("blob");
+  }
+
+  function downloadBlob(blob,filename){
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url),60000);
   }
 
   $("shareBtn").addEventListener("click", async () => {
     const data = collect();
-    status("Preparing completed form…","ok");
+    const oldText = $("shareBtn").textContent;
+    $("shareBtn").disabled = true;
+    $("shareBtn").textContent = "BUILDING PDF...";
+    status("Building clear A4 PDF...","ok");
+
     try{
-      const blob = await buildReport(data);
-      const safeAddress = (data.siteAddress || "Completed").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"").slice(0,45);
-      const file = new File([blob],`SSSECURE_Driver_${data.movementType || "Form"}_${safeAddress}.png`,{type:"image/png"});
+      const blob = await buildPdf(data);
+      const filename = `SSSECURE_Driver_${data.movementType || "Completion"}_${safeFilenamePart(data.siteAddress)}.pdf`;
+      const file = new File([blob],filename,{type:"application/pdf"});
+
       if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
-        await navigator.share({title:"SSSECURE Delivery Driver Completion Checklist",text:"Completed SSSECURE delivery driver checklist",files:[file]});
-        status("Completed form shared.","ok");
+        try{
+          await navigator.share({
+            title:"SSSECURE Delivery Driver Completion Checklist",
+            text:"Completed SSSECURE delivery driver checklist",
+            files:[file]
+          });
+          status("PDF shared successfully.","ok");
+        } catch(error){
+          if(error?.name === "AbortError"){
+            status("Sharing was cancelled. The completed form is still here.","ok");
+          } else {
+            downloadBlob(blob,filename);
+            status("PDF saved to Downloads because direct sharing was unavailable.","ok");
+          }
+        }
       } else {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob); link.download = file.name; link.click();
-        setTimeout(() => URL.revokeObjectURL(link.href),1000);
-        status("Completed form downloaded. Use your phone's Share button to send it.","ok");
+        downloadBlob(blob,filename);
+        status("PDF saved to Downloads. Use the phone Share button to send it.","ok");
       }
     } catch(error){
-      if(error?.name !== "AbortError") status("The form could not be shared. Open it in Safari or Chrome and try again.","err");
+      console.error(error);
+      status(error?.message || "The PDF could not be created. Refresh the live page and try again.","err");
+    } finally {
+      $("shareBtn").disabled = false;
+      $("shareBtn").textContent = oldText;
     }
   });
 
