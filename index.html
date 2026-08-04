@@ -166,7 +166,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Job Completion Checklist - PDF Edition - Photo Fix</div>
+  <div class="footer">SSSECURE Job Completion Checklist - PAGE 1 SIGNATURE LOCK - BUILD 20260804-1215</div>
 </div>
 
 <script>
@@ -520,118 +520,211 @@ button:disabled{opacity:.6;cursor:not-allowed}
     if(!window.jspdf?.jsPDF) throw new Error("PDF engine did not load. Refresh the page and try again.");
     const {jsPDF} = window.jspdf;
     const doc = new jsPDF({orientation:"portrait",unit:"mm",format:"a4",compress:true});
-    const pageW=210,pageH=297,margin=13,contentW=pageW-margin*2;
-    const BLUE=[10,99,200],GREEN=[31,143,77],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];
+    doc.setProperties({title:"SSSECURE Job Completion Checklist - Page 1 Signature Lock"});
+
+    const pageW=210,pageH=297,margin=11,contentW=pageW-margin*2;
+    const BLUE=[10,99,200],GREEN=[31,143,77],INK=[23,32,51];
+    const MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];
     let y=0;
 
-    function header(title="JOB COMPLETION CHECKLIST") {
-      doc.setFillColor(...BLUE);doc.rect(0,0,pageW,28,"F");
-      doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(17);
-      doc.text("SSSECURE",pageW/2,11,{align:"center"});
-      doc.setFontSize(10);doc.text(title,pageW/2,20,{align:"center"});
-      y=35;
-    }
-
-    function continuedPage(title) {
-      doc.addPage();
-      doc.setFillColor(...BLUE);doc.rect(0,0,pageW,19,"F");
-      doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(11);
-      doc.text(`SSSECURE - ${title}`,pageW/2,12,{align:"center"});
-      y=26;
-    }
-
-    function ensureSpace(required,title="JOB COMPLETION CHECKLIST - CONTINUED") {
-      if(y+required>pageH-14) continuedPage(title);
+    function drawHeader() {
+      doc.setFillColor(...BLUE);
+      doc.rect(0,0,pageW,24,"F");
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(16);
+      doc.text("SSSECURE",pageW/2,10,{align:"center"});
+      doc.setFontSize(9.5);
+      doc.text("JOB COMPLETION CHECKLIST",pageW/2,18,{align:"center"});
+      y=29;
     }
 
     function section(title) {
-      ensureSpace(10);
-      doc.setFillColor(...GREEN);doc.rect(margin,y,contentW,8,"F");
-      doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(8.5);
-      doc.text(title,margin+3,y+5.4);
-      y+=11;
+      doc.setFillColor(...GREEN);
+      doc.rect(margin,y,contentW,7,"F");
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(8);
+      doc.text(title,margin+3,y+4.9);
+      y+=9;
     }
 
-    function detail(label,value) {
-      const text=String(value || "-");
-      doc.setFont("helvetica","normal");doc.setFontSize(9.5);
-      const lines=doc.splitTextToSize(text,contentW-6);
-      const h=Math.max(12,7+lines.length*4.3);
-      ensureSpace(h+2);
-      doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.7,1.7,"FD");
-      doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(7.2);
-      doc.text(label.toUpperCase(),margin+3,y+4);
-      doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(9.5);
-      doc.text(lines,margin+3,y+8.2);
-      y+=h+2;
+    function fittedLines(text,maxWidth,maxHeight,startSize=8.5,minSize=5.8,lineFactor=1.18) {
+      const value=String(text || "-");
+      let size=startSize;
+      let lines=[];
+      let lineHeight=0;
+
+      while(size>=minSize) {
+        doc.setFont("helvetica","normal");
+        doc.setFontSize(size);
+        lines=doc.splitTextToSize(value,maxWidth);
+        lineHeight=size*0.3528*lineFactor;
+        if(lines.length*lineHeight<=maxHeight) return {lines,size,lineHeight};
+        size-=0.25;
+      }
+
+      doc.setFontSize(minSize);
+      lines=doc.splitTextToSize(value,maxWidth);
+      lineHeight=minSize*0.3528*lineFactor;
+      const maxLines=Math.max(1,Math.floor(maxHeight/lineHeight));
+      if(lines.length>maxLines) {
+        lines=lines.slice(0,maxLines);
+        let last=lines[maxLines-1];
+        while(doc.getTextWidth(last+"...")>maxWidth && last.length>1) last=last.slice(0,-1);
+        lines[maxLines-1]=last+"...";
+      }
+      return {lines,size:minSize,lineHeight};
     }
 
-    function paragraph(text,minHeight=20) {
-      doc.setFont("helvetica","normal");doc.setFontSize(9);
-      const lines=doc.splitTextToSize(text || "No additional comments.",contentW-6);
-      const h=Math.max(minHeight,6+lines.length*4.2);
-      ensureSpace(h+2);
-      doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.7,1.7,"FD");
-      doc.setTextColor(...INK);doc.text(lines,margin+3,y+5.5);
-      y+=h+2;
+    function box(label,value,x,boxY,w,h,options={}) {
+      const labelSize=options.labelSize || 6.2;
+      const valueSize=options.valueSize || 8.3;
+      const minValueSize=options.minValueSize || 5.8;
+      const labelH=4.8;
+      const innerX=x+2.4;
+      const maxW=w-4.8;
+      const maxH=h-labelH-2.2;
+
+      doc.setFillColor(...LIGHT);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(x,boxY,w,h,1.5,1.5,"FD");
+
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(labelSize);
+      doc.text(String(label).toUpperCase(),innerX,boxY+3.6);
+
+      const fitted=fittedLines(value,maxW,maxH,valueSize,minValueSize);
+      doc.setTextColor(...INK);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(fitted.size);
+      const startY=boxY+labelH+2.2;
+      fitted.lines.forEach((line,index) => {
+        doc.text(line,innerX,startY+index*fitted.lineHeight);
+      });
     }
 
-    header();
+    function textPanel(text,x,panelY,w,h,startSize=8,minSize=5.8) {
+      doc.setFillColor(...LIGHT);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(x,panelY,w,h,1.5,1.5,"FD");
+      const fitted=fittedLines(text,w-5,h-5,startSize,minSize,1.16);
+      doc.setTextColor(...INK);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(fitted.size);
+      const startY=panelY+3.9;
+      fitted.lines.forEach((line,index) => {
+        doc.text(line,x+2.5,startY+index*fitted.lineHeight);
+      });
+    }
+
+    drawHeader();
+
+    // PAGE 1 - fixed compact layout. Signature is deliberately kept on this page.
     section("JOB DETAILS");
-    detail("Client / Builder",data.client);
-    detail("Site Address",data.address);
-    detail("Subcontracting Crew",data.crew);
-    detail("Competent Scaffolder",data.scaffolder);
-    detail("Date",formatDateAU(data.date));
-    detail("Work Completed",data.jobTypes.join(", "));
+    const gap=3;
+    const half=(contentW-gap)/2;
+
+    box("Client / Builder",data.client,margin,y,half,14);
+    box("Date",formatDateAU(data.date),margin+half+gap,y,half,14);
+    y+=16;
+
+    box("Site Address",data.address,margin,y,contentW,15,{valueSize:8.2,minValueSize:6});
+    y+=17;
+
+    box("Subcontracting Crew",data.crew,margin,y,half,14);
+    box("Competent Scaffolder",data.scaffolder,margin+half+gap,y,half,14);
+    y+=16;
+
+    box("Work Completed",data.jobTypes.join(", "),margin,y,contentW,17,{valueSize:8.1,minValueSize:5.8});
+    y+=19;
 
     section("COMMENTS");
-    paragraph(data.comments || "No additional comments.",20);
+    textPanel(data.comments || "No additional comments.",margin,y,contentW,38,8.2,5.8);
+    y+=40;
 
     section("GEAR STACKING");
-    detail("Gear Stacked Correctly For",data.gearPickup);
-    detail("Gear Blocking Driveway Or Entrance To Site",data.gearBlocking);
+    box("Gear Stacked Correctly For",data.gearPickup,margin,y,half,15,{valueSize:8});
+    box("Gear Blocking Driveway / Entrance",data.gearBlocking,margin+half+gap,y,half,15,{valueSize:8});
+    y+=17;
 
     section("DECLARATION");
     const declaration=`I, ${data.scaffolder}, confirm that the work completed by my crew has been checked. I understand that any incomplete work, or any work that does not comply with Australian and New Zealand Standards and requires a return visit for rectification, will be completed at the crew's own expense.`;
-    paragraph(declaration,24);
-    detail("Print Name",data.printName);
-    ensureSpace(31);
-    doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(7.2);doc.text("SIGNATURE",margin,y+3);
-    doc.setFillColor(255,255,255);doc.setDrawColor(141,152,166);doc.roundedRect(margin,y+5,94,25,1.7,1.7,"FD");
-    if(data.signature) doc.addImage(data.signature,"PNG",margin+2,y+6,90,22,undefined,"FAST");
-    y+=33;
+    textPanel(declaration,margin,y,contentW,43,7.8,5.8);
+    y+=45;
+
+    const nameW=82;
+    const signatureX=margin+nameW+gap;
+    const signatureW=contentW-nameW-gap;
+    const signatureY=235; // hard-locked to page 1
+    const signatureBottom=signatureY+29;
+    if(signatureBottom>pageH-12 || doc.getNumberOfPages()!==1) {
+      throw new Error("Page 1 layout check failed before signature was added.");
+    }
+
+    box("Print Name",data.printName,margin,signatureY,nameW,29,{valueSize:8.4,minValueSize:6});
+    doc.setFillColor(255,255,255);
+    doc.setDrawColor(141,152,166);
+    doc.roundedRect(signatureX,signatureY,signatureW,29,1.5,1.5,"FD");
+    doc.setTextColor(...MUTED);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(6.2);
+    doc.text("SIGNATURE",signatureX+2.4,signatureY+3.6);
+    if(data.signature) {
+      doc.addImage(data.signature,"PNG",signatureX+3,signatureY+5,signatureW-6,21.5,undefined,"FAST");
+    }
+    if(doc.getNumberOfPages()!==1) {
+      throw new Error("Signature was not kept on page 1.");
+    }
 
     const images=[];
     for(const file of selectedPhotos) images.push(await photoToJpeg(file));
 
+    // PAGE 2 ONWARD - completion photos only.
     images.forEach((photo,index) => {
       if(index%2===0) {
         doc.addPage();
-        doc.setFillColor(...BLUE);doc.rect(0,0,pageW,23,"F");
-        doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(13);
-        doc.text("SSSECURE - COMPLETION PHOTOS",pageW/2,10,{align:"center"});
-        doc.setFont("helvetica","normal");doc.setFontSize(8.5);
-        const address=doc.splitTextToSize(data.address,180);
-        doc.text(address,pageW/2,16,{align:"center"});
+        doc.setFillColor(...BLUE);
+        doc.rect(0,0,pageW,23,"F");
+        doc.setTextColor(255,255,255);
+        doc.setFont("helvetica","bold");
+        doc.setFontSize(13);
+        doc.text("SSSECURE - COMPLETION PHOTOS",pageW/2,9.5,{align:"center"});
+        doc.setFont("helvetica","normal");
+        doc.setFontSize(8);
+        const addressLines=doc.splitTextToSize(data.address,180);
+        doc.text(addressLines,pageW/2,15.5,{align:"center"});
       }
+
       const slot=index%2;
-      const boxX=15,boxY=30+slot*127,boxW=180,boxH=108;
-      doc.setFillColor(243,245,247);doc.setDrawColor(...LINE);doc.roundedRect(boxX,boxY,boxW,boxH,2,2,"FD");
+      const boxX=15,boxY=29+slot*128,boxW=180,boxH=109;
+      doc.setFillColor(243,245,247);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(boxX,boxY,boxW,boxH,2,2,"FD");
+
       const scale=Math.min((boxW-4)/photo.width,(boxH-4)/photo.height);
-      const drawW=photo.width*scale,drawH=photo.height*scale;
-      const drawX=boxX+(boxW-drawW)/2,drawY=boxY+(boxH-drawH)/2;
+      const drawW=photo.width*scale;
+      const drawH=photo.height*scale;
+      const drawX=boxX+(boxW-drawW)/2;
+      const drawY=boxY+(boxH-drawH)/2;
       doc.addImage(photo.dataUrl,"JPEG",drawX,drawY,drawW,drawH,undefined,"FAST");
-      doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(8);
+
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
       doc.text(`Photo ${index+1}`,boxX,boxY+boxH+5);
     });
 
     const pages=doc.getNumberOfPages();
     for(let p=1;p<=pages;p++) {
       doc.setPage(p);
-      doc.setTextColor(...MUTED);doc.setFont("helvetica","normal");doc.setFontSize(7);
-      doc.text(`SSSECURE Job Completion Checklist | Page ${p} of ${pages}`,pageW/2,pageH-6,{align:"center"});
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(7);
+      doc.text(`SSSECURE Job Completion Checklist | P1-Signature-Lock | Page ${p} of ${pages}`,pageW/2,pageH-5.5,{align:"center"});
     }
+
     return doc.output("blob");
   }
 
