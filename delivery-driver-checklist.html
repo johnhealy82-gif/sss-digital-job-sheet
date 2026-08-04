@@ -31,7 +31,32 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
 .conditional{display:block}.conditional[hidden]{display:none!important}
 .photo-input{width:100%;border:1.5px dashed #8ca0b5;border-radius:10px;padding:13px;background:#f8fbfe;font-size:15px}.photo-note{color:var(--muted);font-size:13px;margin-top:7px}
 .preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.preview{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f4f6f8}.preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}.preview span{display:block;padding:6px 8px;font-size:12px;color:var(--muted)}
-.share-area{padding:16px;position:sticky;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid var(--line)}.share{width:100%;border:none;border-radius:9px;background:var(--blue);color:#fff;padding:16px;font-size:18px;font-weight:800}
+.share-area{
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  position:sticky;
+  bottom:0;
+  background:rgba(255,255,255,.97);
+  border-top:1px solid var(--line);
+  display:grid;
+  grid-template-columns:.8fr 1.25fr 1.45fr;
+  gap:8px;
+}
+.share,.save,.reset{
+  width:100%;
+  border:none;
+  border-radius:9px;
+  padding:15px 8px;
+  font-size:15px;
+  font-weight:800;
+}
+.share{background:var(--blue);color:#fff}
+.save{background:var(--green);color:#fff}
+.reset{background:#e9eef4;color:#344054;border:1px solid #cbd5df}
+button:disabled{opacity:.6;cursor:not-allowed}
+@media(max-width:430px){
+  .share-area{grid-template-columns:1fr 1fr}
+  .reset{grid-column:1/-1;order:3}
+}
 .status{display:none;margin:0 15px 15px;padding:12px;border-radius:9px;font-weight:700}.status.ok{display:block;background:#e7f6ec;color:#176b39}.status.err{display:block;background:#fdeaea;color:#9b2020}.footer{text-align:center;padding:0 15px 16px;color:var(--muted);font-size:12px}
 @media(max-width:720px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){body{padding:0}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:24px}}
 </style>
@@ -159,7 +184,11 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
   </div>
 
   <div id="status" class="status"></div>
-  <div class="share-area"><button type="button" id="shareBtn" class="share">SHARE COMPLETED PDF</button></div>
+  <div class="share-area">
+    <button type="button" id="resetBtn" class="reset">RESET</button>
+    <button type="button" id="saveBtn" class="save">SAVE PDF</button>
+    <button type="button" id="shareBtn" class="share">SHARE PDF</button>
+  </div>
   <div class="footer">SSSECURE Delivery Driver Completion Checklist - PDF</div>
 </div>
 
@@ -538,10 +567,14 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
     setTimeout(() => URL.revokeObjectURL(url),60000);
   }
 
-  $("shareBtn").addEventListener("click", async () => {
+  async function generatePdf(mode){
     const data = collect();
-    const oldText = $("shareBtn").textContent;
-    $("shareBtn").disabled = true;
+    const buttons = [$("resetBtn"),$("saveBtn"),$("shareBtn")];
+    const oldSaveText = $("saveBtn").textContent;
+    const oldShareText = $("shareBtn").textContent;
+
+    buttons.forEach(button => button.disabled = true);
+    $("saveBtn").textContent = "BUILDING PDF...";
     $("shareBtn").textContent = "BUILDING PDF...";
     status("Building clear A4 PDF...","ok");
 
@@ -550,7 +583,7 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
       const filename = `SSSECURE_Driver_${data.movementType || "Completion"}_${safeFilenamePart(data.siteAddress)}.pdf`;
       const file = new File([blob],filename,{type:"application/pdf"});
 
-      if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+      if(mode === "share" && navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
         try{
           await navigator.share({
             title:"SSSECURE Delivery Driver Completion Checklist",
@@ -568,16 +601,44 @@ input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(-
         }
       } else {
         downloadBlob(blob,filename);
-        status("PDF saved to Downloads. Use the phone Share button to send it.","ok");
+        status("PDF saved to Downloads.","ok");
       }
     } catch(error){
       console.error(error);
       status(error?.message || "The PDF could not be created. Refresh the live page and try again.","err");
     } finally {
-      $("shareBtn").disabled = false;
-      $("shareBtn").textContent = oldText;
+      buttons.forEach(button => button.disabled = false);
+      $("saveBtn").textContent = oldSaveText;
+      $("shareBtn").textContent = oldShareText;
     }
-  });
+  }
+
+  function resetForm(){
+    if(!window.confirm("Clear every field, selection, comment and photo from this form?")) return;
+
+    $("driverName").value = "";
+    $("siteAddress").value = "";
+    $("comments").value = "";
+
+    document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(input => {
+      input.checked = false;
+    });
+
+    selectedPhotos = [];
+    $("photos").value = "";
+    $("previewGrid").innerHTML = "";
+
+    const fresh = new Date();
+    $("date").value = `${fresh.getFullYear()}-${pad2(fresh.getMonth()+1)}-${pad2(fresh.getDate())}`;
+
+    updateConditionalSections();
+    status("Form reset.","ok");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  $("saveBtn").addEventListener("click", () => generatePdf("save"));
+  $("shareBtn").addEventListener("click", () => generatePdf("share"));
+  $("resetBtn").addEventListener("click", resetForm);
 
   updateConditionalSections();
 })();
