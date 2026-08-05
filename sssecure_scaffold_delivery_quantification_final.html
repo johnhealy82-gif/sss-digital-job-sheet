@@ -15,7 +15,7 @@
 
 .pdf-preview-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
 .pdf-preview-details-grid .wide{grid-column:1/-1}
-.pdf-preview-quant-grid{columns:3 210px;column-gap:8px}
+.pdf-preview-quant-grid{columns:2 210px;column-gap:10px}
 .pdf-preview-quant-grid .pdf-preview-category{break-inside:avoid;display:inline-block;width:100%;margin:0 0 8px}
 @media(max-width:650px){.pdf-preview-quant-grid{columns:2 145px}.pdf-preview-details-grid{grid-template-columns:1fr}}
 
@@ -247,7 +247,7 @@ function renderPdfPreview() {
   const groups=selectedItems();
   const field=(label,value,wide=false)=>`<div class="pdf-preview-field${wide?' wide':''}"><small>${escapeHtml(label)}</small><div>${escapeHtml(value||'-')}</div></div>`;
   const categories=groups.map(group=>`<div class="pdf-preview-category"><h5>${escapeHtml(group.category)}</h5>${group.items.map(entry=>`<div class="pdf-preview-line"><span>${escapeHtml(entry.item)}</span><strong>${escapeHtml(formatQty(entry.qty,entry.unit))}</strong></div>`).join('')}</div>`).join('');
-  $('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION - ONE-PAGE PACKING LIST</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div><div class="pdf-preview-details-grid">${field('Client',data.client)}${field('Prepared By',data.preparedBy)}${field('Site Address',data.siteAddress,true)}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}</div><div class="pdf-preview-section">QUANTITIES REQUIRED</div><div class="pdf-preview-quant-grid">${categories}</div></div></div><div class="preview-help">The emailed PDF is condensed into a single A4 landscape packing list. Equipment is grouped into balanced columns and only entered quantities are shown.</div>`;
+  $('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION - ONE-PAGE YARD PACKING LIST</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div><div class="pdf-preview-details-grid">${field('Client',data.client)}${field('Prepared By',data.preparedBy)}${field('Site Address',data.siteAddress,true)}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}</div><div class="pdf-preview-section">QUANTITIES REQUIRED</div><div class="pdf-preview-quant-grid">${categories}</div></div></div><div class="preview-help">The emailed PDF is condensed into a single A4 portrait packing list using the same two-column category-card layout shown above.</div>`;
   $('pdfPreviewModal').classList.add('show');
   return true;
 }
@@ -300,15 +300,15 @@ function pdfFilename(data) {
 async function buildPdf(data) {
   await loadJsPdf();
   const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({unit:'mm',format:'a4',orientation:'landscape',compress:true});
-  const W=297,H=210,M=7,CW=W-(M*2);
-  const BLUE=[10,99,200],NAVY=[18,58,118],GREEN=[31,143,77],INK=[23,32,51],MUTED=[92,103,118],LINE=[210,219,228],SOFT=[247,250,252],PALE=[232,240,252];
+  const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
+  const W=210,H=297,M=7,CW=W-(M*2);
+  const BLUE=[10,99,200],NAVY=[18,58,118],GREEN=[31,143,77],INK=[23,32,51],MUTED=[92,103,118],LINE=[207,217,228],SOFT=[247,250,252],PALE=[232,240,252],ALT=[250,252,254];
   const groups=selectedItems();
 
-  function fitOneLine(text,maxWidth,startSize=6.4,minSize=4.8) {
+  function fitOneLine(text,maxWidth,startSize=6.2,minSize=4.5,bold=false) {
     let value=safeText(text||'-');
     let size=startSize;
-    doc.setFont('helvetica','normal');
+    doc.setFont('helvetica',bold?'bold':'normal');
     while(size>minSize) {
       doc.setFontSize(size);
       if(doc.getTextWidth(value)<=maxWidth) return {text:value,size};
@@ -322,123 +322,136 @@ async function buildPdf(data) {
 
   function drawDetail(label,value,x,y,w,h) {
     doc.setFillColor(...SOFT);doc.setDrawColor(...LINE);doc.roundedRect(x,y,w,h,1.2,1.2,'FD');
-    doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(5.5);
-    doc.text(safeText(label).toUpperCase(),x+2,y+3.2);
+    doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(5.3);
+    doc.text(safeText(label).toUpperCase(),x+2,y+3.1);
     doc.setTextColor(...INK);doc.setFont('helvetica','normal');
     const lines=doc.splitTextToSize(safeText(value)||'-',w-4).slice(0,2);
-    const size=lines.length>1?6.2:6.8;
-    doc.setFontSize(size);
-    doc.text(lines,x+2,y+7.2);
+    doc.setFontSize(lines.length>1?6.0:6.6);
+    doc.text(lines,x+2,y+7.1);
   }
 
-  // Compact header and delivery details.
-  doc.setFillColor(...BLUE);doc.rect(0,0,W,15,'F');
-  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(14);
-  doc.text('SSSECURE',M,7.1);
-  doc.setFontSize(8.5);doc.text('SCAFFOLD DELIVERY QUANTIFICATION - YARD PACKING LIST',W-M,6.9,{align:'right'});
-  doc.setFont('helvetica','normal');doc.setFontSize(6.2);doc.text('Only equipment with entered quantities is shown',W-M,11.1,{align:'right'});
+  // Compact portrait header.
+  doc.setFillColor(...BLUE);doc.rect(0,0,W,16,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(13.5);
+  doc.text('SSSECURE',M,7.3);
+  doc.setFontSize(7.5);doc.text('SCAFFOLD DELIVERY QUANTIFICATION',W-M,6.4,{align:'right'});
+  doc.setFont('helvetica','normal');doc.setFontSize(5.7);doc.text('ONE-PAGE YARD PACKING LIST',W-M,10.4,{align:'right'});
 
-  let y=18;
-  doc.setFillColor(...GREEN);doc.rect(M,y,CW,4.8,'F');
-  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.4);doc.text('DELIVERY DETAILS',M+2,y+3.35);
-  y+=6.2;
+  let y=19;
+  doc.setFillColor(...GREEN);doc.rect(M,y,CW,5,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.text('DELIVERY DETAILS',M+2,y+3.45);
+  y+=6.5;
 
   const gap=2.2;
-  const row1Widths=[56,52,CW-56-52-(gap*2)];
+  const row1Widths=[45,42,CW-45-42-(gap*2)];
   drawDetail('Client',data.client,M,y,row1Widths[0],11.5);
   drawDetail('Prepared By',data.preparedBy,M+row1Widths[0]+gap,y,row1Widths[1],11.5);
   drawDetail('Site Address',data.siteAddress,M+row1Widths[0]+row1Widths[1]+(gap*2),y,row1Widths[2],11.5);
-  y+=13.3;
+  y+=13.2;
   const half=(CW-gap)/2;
   drawDetail('Job Description',data.jobDescription,M,y,half,12.5);
   drawDetail('Special Delivery Instructions',data.specialInstructions,M+half+gap,y,half,12.5);
-  y+=14.4;
+  y+=14.3;
 
-  doc.setFillColor(...GREEN);doc.rect(M,y,CW,4.8,'F');
-  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.4);doc.text('QUANTITIES REQUIRED',M+2,y+3.35);
+  doc.setFillColor(...GREEN);doc.rect(M,y,CW,5,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.text('QUANTITIES REQUIRED',M+2,y+3.45);
   const itemCount=groups.reduce((sum,group)=>sum+group.items.length,0);
-  doc.text(`${itemCount} selected item${itemCount===1?'':'s'}`,W-M-2,y+3.35,{align:'right'});
-  y+=6.1;
+  doc.text(`${itemCount} selected item${itemCount===1?'':'s'}`,W-M-2,y+3.45,{align:'right'});
+  y+=6.5;
 
   const listTop=y;
-  const listBottom=H-7.5;
+  const listBottom=H-8;
   const availableHeight=listBottom-listTop;
-  const categoryH=4.4,itemH=3.7;
 
-  function columnsNeeded(columnCount) {
-    let column=0,cy=listTop;
-    for(const group of groups) {
-      let itemIndex=0;
-      let continued=false;
-      while(itemIndex<group.items.length) {
-        if(cy+categoryH+itemH>listBottom) { column++;cy=listTop; }
-        if(column>=columnCount) return column+1;
-        cy+=categoryH;
-        while(itemIndex<group.items.length && cy+itemH<=listBottom+0.01) {
-          cy+=itemH;
-          itemIndex++;
-        }
-        if(itemIndex<group.items.length) { column++;cy=listTop;continued=true; }
-      }
-    }
-    return column+1;
+  function metrics(columnCount) {
+    if(columnCount===2) return {columnCount,colGap:3.0,cardGap:2.2,headerH:5.8,rowH:4.55,nameSize:6.25,qtySize:6.25,minSize:4.8};
+    return {columnCount,colGap:2.2,cardGap:1.7,headerH:5.0,rowH:3.95,nameSize:5.45,qtySize:5.45,minSize:4.15};
   }
 
-  let columnCount=2;
-  while(columnCount<4 && columnsNeeded(columnCount)>columnCount) columnCount++;
-  const colGap=2.3;
-  const colW=(CW-(colGap*(columnCount-1)))/columnCount;
-  const qtyW=Math.min(18,colW*0.30);
-  const nameW=colW-qtyW-3.5;
+  function makePlan(columnCount) {
+    const m=metrics(columnCount);
+    const heights=groups.map(group=>m.headerH+(group.items.length*m.rowH)+m.cardGap);
+    if(heights.some(height=>height>availableHeight+0.01)) return null;
+    const n=groups.length;
+    if(n===0) return {columns:Array.from({length:columnCount},()=>[]),m};
+    if(columnCount===1) return {columns:[groups.map(group=>({category:group.category,items:group.items,continued:false}))],m};
 
-  let columnIndex=0;
-  let x=M;
-  let cy=listTop;
-  const nextColumn=()=>{
-    columnIndex++;
-    x=M+columnIndex*(colW+colGap);
-    cy=listTop;
-    if(columnIndex>0) {
-      doc.setDrawColor(...LINE);doc.line(x-(colGap/2),listTop,x-(colGap/2),listBottom);
+    const prefix=[0];
+    heights.forEach(height=>prefix.push(prefix[prefix.length-1]+height));
+    const range=(a,b)=>prefix[b]-prefix[a];
+    let best=null;
+
+    if(columnCount===2) {
+      for(let i=1;i<n;i++) {
+        const hs=[range(0,i),range(i,n)];
+        const max=Math.max(...hs),min=Math.min(...hs);
+        if(max>availableHeight+0.01) continue;
+        const score=max+(max-min)*0.35;
+        if(!best||score<best.score) best={cuts:[i],score};
+      }
+    } else if(columnCount===3) {
+      for(let i=1;i<n-1;i++) for(let j=i+1;j<n;j++) {
+        const hs=[range(0,i),range(i,j),range(j,n)];
+        const max=Math.max(...hs),min=Math.min(...hs);
+        if(max>availableHeight+0.01) continue;
+        const score=max+(max-min)*0.35;
+        if(!best||score<best.score) best={cuts:[i,j],score};
+      }
     }
-  };
+    if(!best) return null;
+    const bounds=[0,...best.cuts,n];
+    const columns=[];
+    for(let c=0;c<columnCount;c++) {
+      columns.push(groups.slice(bounds[c],bounds[c+1]).map(group=>({category:group.category,items:group.items,continued:false})));
+    }
+    return {columns,m};
+  }
 
-  groups.forEach(group=>{
-    let itemIndex=0;
-    let continued=false;
-    while(itemIndex<group.items.length) {
-      if(cy+categoryH+itemH>listBottom && columnIndex<columnCount-1) nextColumn();
-      doc.setFillColor(...PALE);doc.setDrawColor(...LINE);doc.rect(x,cy,colW,categoryH,'FD');
+  // Use a balanced two-column card layout for normal jobs. Only move to three columns for exceptionally large orders.
+  const plan=makePlan(2)||makePlan(3);
+  if(!plan) throw new Error('Too many selected items to fit on one page.');
+  const {columns,m}=plan;
+  const baseMaxHeight=Math.max(...columns.map(column=>column.reduce((sum,segment)=>sum+m.headerH+(segment.items.length*m.rowH)+m.cardGap,0)));
+  const scale=Math.min(m.columnCount===2?1.28:1.08,(availableHeight/baseMaxHeight)*0.985);
+  if(scale>1) {
+    m.headerH*=scale;m.rowH*=scale;m.cardGap*=scale;
+    m.nameSize*=scale;m.qtySize*=scale;m.minSize*=Math.min(scale,1.15);
+  }
+  const colW=(CW-(m.colGap*(m.columnCount-1)))/m.columnCount;
+  const qtyW=m.columnCount===2?20:15;
+  const nameW=colW-qtyW-4;
+
+  columns.forEach((segments,columnIndex)=>{
+    const x=M+columnIndex*(colW+m.colGap);
+    let cy=listTop;
+    segments.forEach(segment=>{
+      const cardH=m.headerH+(segment.items.length*m.rowH);
+      doc.setFillColor(255,255,255);doc.setDrawColor(...LINE);doc.roundedRect(x,cy,colW,cardH,1.6,1.6,'FD');
+      doc.setFillColor(...PALE);doc.roundedRect(x,cy,colW,m.headerH+0.9,1.6,1.6,'F');
+      doc.rect(x,cy+m.headerH-1,colW,1.9,'F');
       doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');
-      const categoryLabel=continued?`${group.category} (cont.)`:group.category;
-      const heading=fitOneLine(categoryLabel,colW-4,6.3,5.1);
-      doc.setFontSize(heading.size);doc.text(heading.text,x+1.8,cy+3.05);
-      cy+=categoryH;
+      const categoryLabel=segment.continued?`${segment.category} (cont.)`:segment.category;
+      const heading=fitOneLine(categoryLabel,colW-4,m.columnCount===2?7.0:5.9,m.minSize,true);
+      doc.setFontSize(heading.size);doc.text(heading.text,x+2,cy+3.9);
 
-      let localRow=0;
-      while(itemIndex<group.items.length && cy+itemH<=listBottom+0.01) {
-        const entry=group.items[itemIndex];
-        if(localRow%2===1){doc.setFillColor(250,252,254);doc.rect(x,cy,colW,itemH,'F');}
-        doc.setDrawColor(...LINE);doc.line(x,cy+itemH,x+colW,cy+itemH);
+      let ry=cy+m.headerH;
+      segment.items.forEach((entry,rowIndex)=>{
+        if(rowIndex%2===1){doc.setFillColor(...ALT);doc.rect(x,ry,colW,m.rowH,'F');}
+        doc.setDrawColor(...LINE);doc.line(x,ry+m.rowH,x+colW,ry+m.rowH);
         doc.setTextColor(...INK);doc.setFont('helvetica','normal');
-        const fitted=fitOneLine(entry.item,nameW,6.0,4.7);
-        doc.setFontSize(fitted.size);doc.text(fitted.text,x+1.6,cy+2.62);
+        const name=fitOneLine(entry.item,nameW,m.nameSize,m.minSize,false);
+        doc.setFontSize(name.size);doc.text(name.text,x+2,ry+(m.rowH*0.68));
         doc.setFont('helvetica','bold');
-        const qty=fitOneLine(formatQty(entry.qty,entry.unit),qtyW,6.0,4.7);
-        doc.setFontSize(qty.size);doc.text(qty.text,x+colW-1.5,cy+2.62,{align:'right'});
-        cy+=itemH;
-        itemIndex++;
-        localRow++;
-      }
-      if(itemIndex<group.items.length && columnIndex<columnCount-1) {
-        nextColumn();
-        continued=true;
-      }
-    }
+        const qty=fitOneLine(formatQty(entry.qty,entry.unit),qtyW,m.qtySize,m.minSize,true);
+        doc.setFontSize(qty.size);doc.text(qty.text,x+colW-2,ry+(m.rowH*0.68),{align:'right'});
+        ry+=m.rowH;
+      });
+      cy+=cardH+m.cardGap;
+    });
   });
 
-  doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');doc.setFontSize(5.6);
-  doc.text('SSSECURE Scaffold Delivery Quantification | One-page yard packing list',M,H-3.5);
+  doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');doc.setFontSize(5.4);
+  doc.text('SSSECURE Scaffold Delivery Quantification | One-page portrait yard packing list',M,H-3.5);
   doc.text('Page 1 of 1',W-M,H-3.5,{align:'right'});
 
   return doc.output('blob');
