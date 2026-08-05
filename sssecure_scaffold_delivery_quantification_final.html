@@ -12,6 +12,13 @@
 @media(max-width:650px){body{padding:0 0 245px}.app{border-radius:0;min-height:100vh}.grid2{grid-template-columns:1fr}.item-row{grid-template-columns:minmax(0,1fr) 110px}.qty-control{display:block}.tool-row{grid-template-columns:1fr 1fr}.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.action-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:410px){.action-grid{grid-template-columns:1fr 1fr}.clear-btn{order:4}.item-row{grid-template-columns:minmax(0,1fr) 122px}.qty-control{grid-template-columns:36px 1fr 36px}}
+
+.pdf-preview-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.pdf-preview-details-grid .wide{grid-column:1/-1}
+.pdf-preview-quant-grid{columns:3 210px;column-gap:8px}
+.pdf-preview-quant-grid .pdf-preview-category{break-inside:avoid;display:inline-block;width:100%;margin:0 0 8px}
+@media(max-width:650px){.pdf-preview-quant-grid{columns:2 145px}.pdf-preview-details-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -238,9 +245,9 @@ function renderPdfPreview() {
   const data=validate();
   if(!data) return false;
   const groups=selectedItems();
-  const field=(label,value)=>value ? `<div class="pdf-preview-field"><small>${escapeHtml(label)}</small><div>${escapeHtml(value)}</div></div>` : '';
+  const field=(label,value,wide=false)=>`<div class="pdf-preview-field${wide?' wide':''}"><small>${escapeHtml(label)}</small><div>${escapeHtml(value||'-')}</div></div>`;
   const categories=groups.map(group=>`<div class="pdf-preview-category"><h5>${escapeHtml(group.category)}</h5>${group.items.map(entry=>`<div class="pdf-preview-line"><span>${escapeHtml(entry.item)}</span><strong>${escapeHtml(formatQty(entry.qty,entry.unit))}</strong></div>`).join('')}</div>`).join('');
-  $('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div>${field('Client',data.client)}${field('Site Address',data.siteAddress)}${field('Prepared By',data.preparedBy)}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}<div class="pdf-preview-section" style="margin-top:14px">QUANTITIES REQUIRED</div>${categories}</div></div><div class="preview-help">This mirrors the information and grouping in the PDF attachment. On the hosted Safari version, EMAIL / SHARE PDF opens the iPhone share sheet so Mail can be selected.</div>`;
+  $('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION - ONE-PAGE PACKING LIST</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div><div class="pdf-preview-details-grid">${field('Client',data.client)}${field('Prepared By',data.preparedBy)}${field('Site Address',data.siteAddress,true)}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}</div><div class="pdf-preview-section">QUANTITIES REQUIRED</div><div class="pdf-preview-quant-grid">${categories}</div></div></div><div class="preview-help">The emailed PDF is condensed into a single A4 landscape packing list. Equipment is grouped into balanced columns and only entered quantities are shown.</div>`;
   $('pdfPreviewModal').classList.add('show');
   return true;
 }
@@ -293,65 +300,147 @@ function pdfFilename(data) {
 async function buildPdf(data) {
   await loadJsPdf();
   const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
-  const W=210,H=297,M=12,CW=186;
-  let y=0;
-  const BLUE=[10,99,200],GREEN=[31,143,77],INK=[23,32,51],MUTED=[92,103,118],LINE=[216,224,232],SOFT=[247,250,252];
+  const doc=new jsPDF({unit:'mm',format:'a4',orientation:'landscape',compress:true});
+  const W=297,H=210,M=7,CW=W-(M*2);
+  const BLUE=[10,99,200],NAVY=[18,58,118],GREEN=[31,143,77],INK=[23,32,51],MUTED=[92,103,118],LINE=[210,219,228],SOFT=[247,250,252],PALE=[232,240,252];
+  const groups=selectedItems();
 
-  const header=()=>{
-    doc.setFillColor(...BLUE);doc.rect(0,0,W,24,'F');
-    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(16);
-    doc.text('SSSECURE',W/2,10,{align:'center'});
-    doc.setFontSize(9);doc.text('SCAFFOLD DELIVERY QUANTIFICATION',W/2,18,{align:'center'});
-    y=29;
-  };
-  const footer=()=>{
-    const pages=doc.getNumberOfPages();
-    for(let p=1;p<=pages;p++){
-      doc.setPage(p);doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');doc.setFontSize(7);
-      doc.text(`SSSECURE Delivery Quantification | Page ${p} of ${pages}`,W/2,H-5.5,{align:'center'});
+  function fitOneLine(text,maxWidth,startSize=6.4,minSize=4.8) {
+    let value=safeText(text||'-');
+    let size=startSize;
+    doc.setFont('helvetica','normal');
+    while(size>minSize) {
+      doc.setFontSize(size);
+      if(doc.getTextWidth(value)<=maxWidth) return {text:value,size};
+      size-=0.2;
+    }
+    doc.setFontSize(minSize);
+    if(doc.getTextWidth(value)<=maxWidth) return {text:value,size:minSize};
+    while(value.length>2 && doc.getTextWidth(value+'...')>maxWidth) value=value.slice(0,-1);
+    return {text:value+'...',size:minSize};
+  }
+
+  function drawDetail(label,value,x,y,w,h) {
+    doc.setFillColor(...SOFT);doc.setDrawColor(...LINE);doc.roundedRect(x,y,w,h,1.2,1.2,'FD');
+    doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(5.5);
+    doc.text(safeText(label).toUpperCase(),x+2,y+3.2);
+    doc.setTextColor(...INK);doc.setFont('helvetica','normal');
+    const lines=doc.splitTextToSize(safeText(value)||'-',w-4).slice(0,2);
+    const size=lines.length>1?6.2:6.8;
+    doc.setFontSize(size);
+    doc.text(lines,x+2,y+7.2);
+  }
+
+  // Compact header and delivery details.
+  doc.setFillColor(...BLUE);doc.rect(0,0,W,15,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(14);
+  doc.text('SSSECURE',M,7.1);
+  doc.setFontSize(8.5);doc.text('SCAFFOLD DELIVERY QUANTIFICATION - YARD PACKING LIST',W-M,6.9,{align:'right'});
+  doc.setFont('helvetica','normal');doc.setFontSize(6.2);doc.text('Only equipment with entered quantities is shown',W-M,11.1,{align:'right'});
+
+  let y=18;
+  doc.setFillColor(...GREEN);doc.rect(M,y,CW,4.8,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.4);doc.text('DELIVERY DETAILS',M+2,y+3.35);
+  y+=6.2;
+
+  const gap=2.2;
+  const row1Widths=[56,52,CW-56-52-(gap*2)];
+  drawDetail('Client',data.client,M,y,row1Widths[0],11.5);
+  drawDetail('Prepared By',data.preparedBy,M+row1Widths[0]+gap,y,row1Widths[1],11.5);
+  drawDetail('Site Address',data.siteAddress,M+row1Widths[0]+row1Widths[1]+(gap*2),y,row1Widths[2],11.5);
+  y+=13.3;
+  const half=(CW-gap)/2;
+  drawDetail('Job Description',data.jobDescription,M,y,half,12.5);
+  drawDetail('Special Delivery Instructions',data.specialInstructions,M+half+gap,y,half,12.5);
+  y+=14.4;
+
+  doc.setFillColor(...GREEN);doc.rect(M,y,CW,4.8,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.4);doc.text('QUANTITIES REQUIRED',M+2,y+3.35);
+  const itemCount=groups.reduce((sum,group)=>sum+group.items.length,0);
+  doc.text(`${itemCount} selected item${itemCount===1?'':'s'}`,W-M-2,y+3.35,{align:'right'});
+  y+=6.1;
+
+  const listTop=y;
+  const listBottom=H-7.5;
+  const availableHeight=listBottom-listTop;
+  const categoryH=4.4,itemH=3.7;
+
+  function columnsNeeded(columnCount) {
+    let column=0,cy=listTop;
+    for(const group of groups) {
+      let itemIndex=0;
+      let continued=false;
+      while(itemIndex<group.items.length) {
+        if(cy+categoryH+itemH>listBottom) { column++;cy=listTop; }
+        if(column>=columnCount) return column+1;
+        cy+=categoryH;
+        while(itemIndex<group.items.length && cy+itemH<=listBottom+0.01) {
+          cy+=itemH;
+          itemIndex++;
+        }
+        if(itemIndex<group.items.length) { column++;cy=listTop;continued=true; }
+      }
+    }
+    return column+1;
+  }
+
+  let columnCount=2;
+  while(columnCount<4 && columnsNeeded(columnCount)>columnCount) columnCount++;
+  const colGap=2.3;
+  const colW=(CW-(colGap*(columnCount-1)))/columnCount;
+  const qtyW=Math.min(18,colW*0.30);
+  const nameW=colW-qtyW-3.5;
+
+  let columnIndex=0;
+  let x=M;
+  let cy=listTop;
+  const nextColumn=()=>{
+    columnIndex++;
+    x=M+columnIndex*(colW+colGap);
+    cy=listTop;
+    if(columnIndex>0) {
+      doc.setDrawColor(...LINE);doc.line(x-(colGap/2),listTop,x-(colGap/2),listBottom);
     }
   };
-  const ensure=height=>{if(y+height>H-13){doc.addPage();header();}};
-  const section=title=>{
-    ensure(10);doc.setFillColor(...GREEN);doc.rect(M,y,CW,7,'F');
-    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(8);
-    doc.text(title,M+3,y+4.9);y+=9;
-  };
-  const box=(label,value,x,yy,w,h=14)=>{
-    doc.setFillColor(...SOFT);doc.setDrawColor(...LINE);doc.roundedRect(x,yy,w,h,1.3,1.3,'FD');
-    doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(6.1);
-    doc.text(safeText(label).toUpperCase(),x+2.4,yy+3.7);
-    doc.setTextColor(...INK);doc.setFont('helvetica','normal');doc.setFontSize(8);
-    const lines=doc.splitTextToSize(safeText(value)||'-',w-4.8).slice(0,4);
-    doc.text(lines,x+2.4,yy+8);
-  };
 
-  header();
-  section('DELIVERY DETAILS');
-  box('Client',data.client,M,y,CW,14);y+=16;
-  box('Site Address',data.siteAddress,M,y,CW,15);y+=17;
-  box('Prepared By',data.preparedBy,M,y,CW,14);y+=16;
-  if(data.jobDescription){box('Job Description',data.jobDescription,M,y,CW,20);y+=22;}
-  if(data.specialInstructions){box('Special Delivery Instructions',data.specialInstructions,M,y,CW,22);y+=24;}
+  groups.forEach(group=>{
+    let itemIndex=0;
+    let continued=false;
+    while(itemIndex<group.items.length) {
+      if(cy+categoryH+itemH>listBottom && columnIndex<columnCount-1) nextColumn();
+      doc.setFillColor(...PALE);doc.setDrawColor(...LINE);doc.rect(x,cy,colW,categoryH,'FD');
+      doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');
+      const categoryLabel=continued?`${group.category} (cont.)`:group.category;
+      const heading=fitOneLine(categoryLabel,colW-4,6.3,5.1);
+      doc.setFontSize(heading.size);doc.text(heading.text,x+1.8,cy+3.05);
+      cy+=categoryH;
 
-  section('QUANTITIES REQUIRED');
-  selectedItems().forEach(group=>{
-    ensure(12);
-    doc.setFillColor(232,240,252);doc.setTextColor(18,58,118);doc.setFont('helvetica','bold');doc.setFontSize(8);
-    doc.rect(M,y,CW,7,'F');doc.text(safeText(group.category),M+2.5,y+4.8);y+=8;
-    group.items.forEach(entry=>{
-      ensure(8);
-      doc.setDrawColor(...LINE);doc.line(M,y+6.6,M+CW,y+6.6);
-      doc.setTextColor(...INK);doc.setFont('helvetica','normal');doc.setFontSize(7.7);
-      doc.text(safeText(entry.item),M+2,y+4.5);
-      doc.setFont('helvetica','bold');
-      doc.text(formatQty(entry.qty,entry.unit),M+CW-3,y+4.5,{align:'right'});
-      y+=7;
-    });
-    y+=2;
+      let localRow=0;
+      while(itemIndex<group.items.length && cy+itemH<=listBottom+0.01) {
+        const entry=group.items[itemIndex];
+        if(localRow%2===1){doc.setFillColor(250,252,254);doc.rect(x,cy,colW,itemH,'F');}
+        doc.setDrawColor(...LINE);doc.line(x,cy+itemH,x+colW,cy+itemH);
+        doc.setTextColor(...INK);doc.setFont('helvetica','normal');
+        const fitted=fitOneLine(entry.item,nameW,6.0,4.7);
+        doc.setFontSize(fitted.size);doc.text(fitted.text,x+1.6,cy+2.62);
+        doc.setFont('helvetica','bold');
+        const qty=fitOneLine(formatQty(entry.qty,entry.unit),qtyW,6.0,4.7);
+        doc.setFontSize(qty.size);doc.text(qty.text,x+colW-1.5,cy+2.62,{align:'right'});
+        cy+=itemH;
+        itemIndex++;
+        localRow++;
+      }
+      if(itemIndex<group.items.length && columnIndex<columnCount-1) {
+        nextColumn();
+        continued=true;
+      }
+    }
   });
-  footer();
+
+  doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');doc.setFontSize(5.6);
+  doc.text('SSSECURE Scaffold Delivery Quantification | One-page yard packing list',M,H-3.5);
+  doc.text('Page 1 of 1',W-M,H-3.5,{align:'right'});
+
   return doc.output('blob');
 }
 
