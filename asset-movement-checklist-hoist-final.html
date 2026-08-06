@@ -104,11 +104,45 @@ button:disabled{opacity:.6;cursor:not-allowed}
   .reset{grid-column:1/-1;order:3}
   .footer{padding-bottom:calc(165px + env(safe-area-inset-bottom))}
 }
+
+
+/* SSSECURE BLUE READABILITY STANDARD V2 */
+:root{--navy:#123A76;--blue:#0A63C8;--green:#0A63C8;--pale:#DCEBFA;--softblue:#F3F8FD;--bluegrey:#B7CBE1;--ink:#172033}
+body{font-size:17px;line-height:1.42}
+.head{background:var(--navy)!important}.head h1{font-size:31px!important;font-weight:900!important}.head h2{font-size:20px!important;font-weight:800!important}
+.sec{background:var(--blue)!important;font-size:19px!important;padding:14px 16px!important;font-weight:900!important;letter-spacing:.25px!important}
+.section-note{font-size:14px!important;line-height:1.3!important;font-weight:700!important}
+.field-label,.question-title,.gear-title,.inspection-title,.photo-picker{font-size:17px!important;font-weight:900!important}
+input[type=text],input[type=date],textarea,.photo-input{font-size:18px!important;font-weight:700!important;padding:14px!important;line-height:1.35!important;border-color:var(--bluegrey)!important}
+textarea{min-height:100px}
+.work-grid label,.option-grid label,.option-row label,.answer-row label{font-size:16px!important;font-weight:850!important;min-height:58px!important;background:#fff;border-color:var(--bluegrey)!important}
+.inspection-item,.question,.declaration-text{background:var(--softblue)!important;border-color:var(--bluegrey)!important}
+.inspection-item{padding:15px!important}.question{padding:16px 0!important}
+input[type=checkbox],input[type=radio]{width:25px!important;height:25px!important}
+.photo-note,.sig-help,.question-note{font-size:15px!important;font-weight:700!important;line-height:1.4!important}
+.declaration-text{font-size:16.5px!important;font-weight:800!important;line-height:1.55!important}
+.share,.save,.reset,.clear{font-size:17px!important;font-weight:900!important;min-height:54px!important}
+.save{background:var(--blue)!important;color:#fff!important}.share{background:var(--navy)!important;color:#fff!important}
+.preview-meta,.preview span{font-size:14px!important}.footer,.draft-note{font-size:13px!important}
+.large-print-strip{display:flex;justify-content:flex-end;padding:10px 14px;background:var(--pale);border-bottom:1px solid var(--bluegrey)}
+.large-print-toggle{border:2px solid var(--blue);border-radius:10px;padding:12px 16px;background:#fff;color:var(--navy);font-size:16px;font-weight:900;cursor:pointer;min-height:48px}
+.large-print-toggle.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+body.large-print{font-size:20px}
+body.large-print .head h1{font-size:36px!important}body.large-print .head h2{font-size:24px!important}
+body.large-print .sec{font-size:22px!important;padding:17px!important}
+body.large-print .field-label,body.large-print .question-title,body.large-print .gear-title,body.large-print .inspection-title,body.large-print .photo-picker{font-size:20px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print textarea,body.large-print .photo-input{font-size:21px!important;padding:16px!important}
+body.large-print .work-grid label,body.large-print .option-grid label,body.large-print .option-row label,body.large-print .answer-row label{font-size:19px!important;min-height:66px!important}
+body.large-print input[type=checkbox],body.large-print input[type=radio]{width:29px!important;height:29px!important}
+body.large-print .photo-note,body.large-print .sig-help,body.large-print .question-note{font-size:18px!important}
+body.large-print .declaration-text{font-size:19px!important}
+body.large-print .share,body.large-print .save,body.large-print .reset,body.large-print .clear,body.large-print .large-print-toggle{font-size:19px!important;min-height:60px!important}
+
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="head"><h1>SSSECURE</h1><h2>Asset Movement Checklist</h2></div>
+  <div class="head"><h1>SSSECURE</h1><h2>Asset Movement Checklist</h2></div><div class="large-print-strip"><button type="button" id="largePrintToggle" class="large-print-toggle" aria-pressed="false">LARGE PRINT: OFF</button></div>
   <div id="errorSummary" class="error-summary" role="alert"></div>
 
   <div class="sec">DRIVER DETAILS</div>
@@ -913,7 +947,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
     const {jsPDF} = window.jspdf;
     const doc = new jsPDF({orientation:"portrait",unit:"mm",format:"a4",compress:true});
     const pageW=210,pageH=297,margin=11,contentW=188;
-    const BLUE=[10,99,200],GREEN=[31,143,77],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];
+    const BLUE=[18,58,118],GREEN=[10,99,200],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];
     let y=0;
 
     function header() {
@@ -933,7 +967,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
       doc.rect(margin,y,contentW,7,"F");
       doc.setTextColor(255,255,255);
       doc.setFont("helvetica","bold");
-      doc.setFontSize(8);
+      doc.setFontSize(9.2);
       doc.text(title,margin+3,y+4.9);
       y+=9;
     }
@@ -965,9 +999,9 @@ button:disabled{opacity:.6;cursor:not-allowed}
     }
 
     function box(label,value,x,boxY,w,h=14,options={}) {
-      const labelSize=options.labelSize || 6.1;
-      const valueSize=options.valueSize || 8.1;
-      const minValueSize=options.minValueSize || 5.7;
+      const labelSize=options.labelSize || 7.1;
+      const valueSize=options.valueSize || 9.2;
+      const minValueSize=options.minValueSize || 6.3;
       const labelH=4.7;
       const innerX=x+2.4;
       const maxW=w-4.8;
@@ -1005,11 +1039,11 @@ button:disabled{opacity:.6;cursor:not-allowed}
       doc.roundedRect(margin,y,contentW,h,1.2,1.2,"FD");
       doc.setTextColor(...INK);
       doc.setFont("helvetica","normal");
-      doc.setFontSize(6.9);
+      doc.setFontSize(7.8);
       doc.text(lines,margin+2.5,y+4.2);
-      doc.setTextColor(...(value === "No" ? [180,35,24] : [31,143,77]));
+      doc.setTextColor(...(value === "No" ? [180,35,24] : [18,58,118]));
       doc.setFont("helvetica","bold");
-      doc.setFontSize(7.2);
+      doc.setFontSize(8.2);
       doc.text(String(value || "-"),pageW-margin-3,y+4.2,{align:"right"});
       y+=h+1;
     }
@@ -1273,5 +1307,29 @@ button:disabled{opacity:.6;cursor:not-allowed}
   updateForm();
 })();
 </script>
+
+<script>
+(() => {
+  'use strict';
+  const key='sssecure_large_print_standard_v2';
+  const button=document.getElementById('largePrintToggle');
+  if(!button) return;
+  const apply=enabled=>{
+    document.body.classList.toggle('large-print',enabled);
+    button.classList.toggle('active',enabled);
+    button.setAttribute('aria-pressed',enabled?'true':'false');
+    button.textContent=enabled?'LARGE PRINT: ON':'LARGE PRINT: OFF';
+  };
+  let enabled=false;
+  try{enabled=localStorage.getItem(key)==='1';}catch(_){ }
+  apply(enabled);
+  button.addEventListener('click',()=>{
+    enabled=!document.body.classList.contains('large-print');
+    apply(enabled);
+    try{localStorage.setItem(key,enabled?'1':'0');}catch(_){ }
+  });
+})();
+</script>
+
 </body>
 </html>
