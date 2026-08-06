@@ -58,6 +58,7 @@ button:disabled{opacity:.6;cursor:not-allowed}
   .reset{grid-column:1/-1;order:3}
 }
 .status{display:none;margin:0 15px 15px;padding:12px;border-radius:9px;font-weight:700}.status.ok{display:block;background:#e7f6ec;color:#176b39}.status.err{display:block;background:#fdeaea;color:#9b2020}.footer{text-align:center;padding:0 15px 16px;color:var(--muted);font-size:12px}
+.invalid{border-color:#b42318!important;background:#fff8f7!important}.group-invalid{outline:3px solid rgba(180,35,24,.18)!important;outline-offset:3px;border-radius:10px}.status.err{line-height:1.45}
 @media(max-width:720px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){body{padding:0}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:24px}}
 
 
@@ -417,6 +418,57 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     };
   }
 
+  function clearValidation(){
+    document.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));
+    document.querySelectorAll(".group-invalid").forEach(el=>el.classList.remove("group-invalid"));
+  }
+
+  function validate(data){
+    clearValidation();
+    const errors=[];
+    const markField=(id,message)=>{const el=$(id);el.classList.add("invalid");errors.push({message,element:el});};
+    const markGroup=(selector,message)=>{
+      const input=document.querySelector(selector);
+      const el=input?.closest(".question,.pad")||input;
+      if(el) el.classList.add("group-invalid");
+      errors.push({message,element:el||document.body});
+    };
+    if(!data.driverName.trim()) markField("driverName","Driver Name is required.");
+    if(!data.siteAddress.trim()) markField("siteAddress","Site Address is required.");
+    if(!data.date) markField("date","Date is required.");
+    if(!data.movementType) markGroup('input[name="movementType"]',"Select Delivery or Pickup.");
+    if(!data.jobTypes.length) markGroup('input[name="jobType"]',"Select at least one work type.");
+
+    const isDelivery=data.movementType==="Delivery";
+    if(isDelivery && data.jobTypes.includes("Base Out")){
+      if(!data.slabGearUpTop) markGroup('input[name="slabGearUpTop"]',"Answer the slab gear question.");
+      if(!data.baseOutClear) markGroup('input[name="baseOutClear"]',"Answer the base-out placement question.");
+    }
+    if(isDelivery && (data.jobTypes.includes("3rd Lift Up")||data.jobTypes.includes("3rd Lift Down")) && !data.thirdLiftGear){
+      markGroup('input[name="thirdLiftGear"]',"Answer the third-lift gear question.");
+    }
+    if(data.jobTypes.includes("Dismantle All") && !data.dismantleSiteCheck){
+      markGroup('input[name="dismantleSiteCheck"]',"Answer the full-site dismantle check.");
+    }
+    if(!data.fullyCompleted) markGroup('input[name="fullyCompleted"]',"Answer whether the job is fully completed.");
+    if(!data.clearAccess) markGroup('input[name="clearAccess"]',"Answer whether access is clear.");
+    if(!data.photosTaken) markGroup('input[name="photosTaken"]',"Answer whether photos were taken.");
+    if(data.photosTaken==="Yes"){
+      if(!data.photoDistance) markGroup('input[name="photoDistance"]',"Answer the photo-distance question.");
+      if(!selectedPhotos.length) markField("photos","Add at least one delivery or pickup photo.");
+    }
+
+    const relevantAnswers=[data.slabGearUpTop,data.baseOutClear,data.thirdLiftGear,data.dismantleSiteCheck,data.fullyCompleted,data.clearAccess,data.photosTaken,data.photoDistance];
+    if(relevantAnswers.includes("No") && !data.comments.trim()) markField("comments","Comments are required whenever any answer is No.");
+
+    if(errors.length){
+      status(`Complete ${errors.length} highlighted item${errors.length===1?"":"s"}: ${errors.slice(0,5).map(e=>e.message).join(" ")}${errors.length>5?" Check the remaining highlighted sections.":""}`,"err");
+      errors[0].element?.scrollIntoView?.({behavior:"smooth",block:"center"});
+      return false;
+    }
+    return true;
+  }
+
   function status(message,type){
     const el = $("status");
     el.className = "status " + type;
@@ -720,6 +772,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 
   async function generatePdf(mode){
     const data = collect();
+    if(!validate(data)) return;
     const buttons = [$("resetBtn"),$("saveBtn"),$("shareBtn")];
     const oldSaveText = $("saveBtn").textContent;
     const oldShareText = $("shareBtn").textContent;
@@ -783,9 +836,18 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     $("date").value = `${fresh.getFullYear()}-${pad2(fresh.getMonth()+1)}-${pad2(fresh.getDate())}`;
 
     updateConditionalSections();
+    clearValidation();
     status("Form reset.","ok");
     window.scrollTo({top:0,behavior:"smooth"});
   }
+
+  document.addEventListener("input",event=>{
+    if(event.target.matches("input,textarea")){event.target.classList.remove("invalid");event.target.closest(".group-invalid")?.classList.remove("group-invalid");}
+  });
+  document.addEventListener("change",event=>{
+    if(event.target.matches('input[type="radio"],input[type="checkbox"]')) event.target.closest(".group-invalid")?.classList.remove("group-invalid");
+    if(event.target.id==="photos" && selectedPhotos.length) event.target.classList.remove("invalid");
+  });
 
   $("saveBtn").addEventListener("click", () => generatePdf("save"));
   $("shareBtn").addEventListener("click", () => generatePdf("share"));
