@@ -108,6 +108,107 @@ label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for
 body.large-print label[for="address"],body.large-print label[for="siteAddress"],body.large-print label[for="fromAddress"],body.large-print label[for="toAddress"]{font-size:22px!important}
 body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:24px!important;padding:18px!important}
 
+
+
+/* SSSECURE UNIVERSAL READABILITY & HIGHLIGHT STANDARD V4 */
+:root{
+  --navy:#123A76;--blue:#0A63C8;--pale:#DCEBFA;--softblue:#F3F8FD;
+  --bluegrey:#B7CBE1;--amber:#D89A00;--yellow:#FFF3BF;--ink:#172033
+}
+body{font-size:18px!important;line-height:1.48!important}
+.head{background:var(--navy)!important;padding:24px 18px!important}
+.head h1{font-size:34px!important;font-weight:900!important;letter-spacing:.3px!important}
+.head h2{font-size:22px!important;font-weight:900!important;line-height:1.25!important}
+.sec{
+  background:var(--blue)!important;color:#fff!important;font-size:20px!important;
+  padding:15px 17px!important;font-weight:900!important;letter-spacing:.35px!important;
+  border-top:1px solid rgba(255,255,255,.2)!important
+}
+.section-note{font-size:15px!important;line-height:1.35!important;font-weight:800!important;margin-top:5px!important}
+.pad{padding:18px!important}
+.field{margin-bottom:16px!important}
+.field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title,.confirm-label{
+  font-size:18px!important;font-weight:900!important;line-height:1.35!important;color:var(--ink)
+}
+.req{font-size:11px!important;font-weight:900!important;padding:2px 6px!important}
+input[type=text],input[type=date],input[type=number],textarea,.photo-input{
+  font-size:20px!important;font-weight:800!important;line-height:1.35!important;
+  min-height:56px!important;padding:15px!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;color:var(--ink)!important
+}
+textarea{min-height:112px!important}
+.addr{min-height:92px!important}
+.work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+.asset-grid label,.size-grid label,.hoist-grid label{
+  font-size:17.5px!important;font-weight:900!important;line-height:1.25!important;
+  min-height:64px!important;padding:12px!important;background:#fff!important;
+  border:2px solid var(--bluegrey)!important;border-radius:10px!important
+}
+input[type=checkbox],input[type=radio]{width:27px!important;height:27px!important;flex:0 0 auto!important}
+.question,.inspection-item,.gear-question,.evidence-card,.missing-row{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:12px!important;padding:16px!important;margin-bottom:13px!important
+}
+.inspection-list,.missing-list{padding:15px!important;background:#fff!important}
+.inspection-item:last-child,.question:last-child,.gear-question:last-child,.missing-row:last-child{margin-bottom:0!important}
+.question-note,.photo-note,.photo-instruction,.sig-help,.evidence-instruction,.qty-wrap label{
+  font-size:16px!important;font-weight:800!important;line-height:1.45!important
+}
+.photo-instruction{
+  background:var(--pale)!important;color:var(--navy)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;padding:13px 14px!important
+}
+.photo-input{background:#F8FBFE!important;border-style:dashed!important}
+.photo-input::file-selector-button{
+  font-size:16px!important;font-weight:900!important;padding:12px 14px!important;background:var(--blue)!important
+}
+.declaration-text{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  font-size:17.5px!important;font-weight:800!important;line-height:1.58!important;padding:16px!important
+}
+.preview-meta,.preview span{font-size:15px!important;font-weight:800!important}
+.share,.save,.reset,.clear,.action-area button,.share-area button{
+  font-size:17px!important;font-weight:900!important;min-height:56px!important
+}
+.save{background:var(--blue)!important;color:#fff!important}.share{background:var(--navy)!important;color:#fff!important}
+.footer,.draft-note{font-size:13.5px!important;font-weight:700!important}
+.large-print-strip{padding:12px 15px!important;background:var(--pale)!important}
+.large-print-toggle{font-size:17px!important;min-height:50px!important;padding:12px 17px!important}
+/* Address is the only yellow exception across the forms. */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"],#singleAddressLabel{
+  color:#7A4B00!important;font-size:20px!important;font-weight:900!important;letter-spacing:.2px!important
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:var(--yellow)!important;border:3px solid var(--amber)!important;color:var(--navy)!important;
+  font-size:22px!important;font-weight:900!important;line-height:1.38!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.14)!important
+}
+.evidence-card{padding:17px!important}.evidence-title{font-size:19px!important;color:var(--navy)!important}
+.evidence-instruction{font-size:16px!important}
+.declaration-lock{font-size:20px!important;font-weight:900!important;line-height:1.45!important}
+body.large-print{font-size:21px!important}
+body.large-print .head h1{font-size:39px!important}body.large-print .head h2{font-size:26px!important}
+body.large-print .sec{font-size:23px!important;padding:18px!important}
+body.large-print .field-label,body.large-print .question-title,body.large-print .gear-title,
+body.large-print .inspection-title,body.large-print .photo-picker,body.large-print .evidence-title{font-size:21px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print input[type=number],
+body.large-print textarea,body.large-print .photo-input{font-size:23px!important;min-height:64px!important;padding:18px!important}
+body.large-print .work-grid label,body.large-print .option-grid label,body.large-print .option-row label,
+body.large-print .answer-row label,body.large-print .choice-grid label,body.large-print .asset-grid label,
+body.large-print .size-grid label,body.large-print .hoist-grid label{font-size:20px!important;min-height:72px!important}
+body.large-print .question-note,body.large-print .photo-note,body.large-print .photo-instruction,
+body.large-print .sig-help,body.large-print .evidence-instruction{font-size:19px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:26px!important;padding:20px!important}
+@media(max-width:650px){
+  .head h1{font-size:31px!important}.head h2{font-size:20px!important}.sec{font-size:19px!important}
+  .pad{padding:15px!important}
+  .field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title{font-size:17px!important}
+  input[type=text],input[type=date],input[type=number],textarea,.photo-input{font-size:18px!important}
+  #address,#siteAddress,#fromAddress,#toAddress{font-size:21px!important}
+  .work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+  .asset-grid label,.size-grid label,.hoist-grid label{font-size:16px!important}
+}
+
 </style>
 </head>
 <body>
@@ -171,7 +272,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSecure Scaffold Inspection Report - PDF Edition - Photo Fix</div>
+  <div class="footer">SSSecure Scaffold Inspection Report - PDF Edition - Photo Fix - READABILITY V4</div>
 </div>
 
 <script>
@@ -247,10 +348,10 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     function header(title="SCAFFOLD INSPECTION REPORT"){doc.setFillColor(...BLUE);doc.rect(0,0,pageW,28,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(17);doc.text("SSSECURE",pageW/2,11,{align:"center"});doc.setFontSize(10);doc.text(title,pageW/2,20,{align:"center"});y=35;}
     function continuedPage(title="SCAFFOLD INSPECTION REPORT - CONTINUED"){doc.addPage();doc.setFillColor(...BLUE);doc.rect(0,0,pageW,19,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(11);doc.text(`SSSECURE - ${title}`,pageW/2,12,{align:"center"});y=26;}
     function ensureSpace(required,title){if(y+required>pageH-14)continuedPage(title);}
-    function section(title){ensureSpace(10);doc.setFillColor(...GREEN);doc.rect(margin,y,contentW,8,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(9.6);doc.text(title,margin+3,y+5.4);y+=11;}
+    function section(title){ensureSpace(10);doc.setFillColor(...GREEN);doc.rect(margin,y,contentW,8,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(10.4);doc.text(title,margin+3,y+5.4);y+=11;}
     function detail(label,value,highlight=false){const text=String(value||"-");const valueSize=highlight?12:10.4;doc.setFont("helvetica","bold");doc.setFontSize(valueSize);const lines=doc.splitTextToSize(text,contentW-6),h=Math.max(highlight?15:12,7+lines.length*(highlight?4.8:4.2));ensureSpace(h+2);doc.setFillColor(...(highlight?[255,243,191]:LIGHT));doc.setDrawColor(...(highlight?[216,154,0]:LINE));doc.setLineWidth(highlight?.6:.2);doc.roundedRect(margin,y,contentW,h,1.7,1.7,"FD");doc.setTextColor(...(highlight?[122,75,0]:MUTED));doc.setFont("helvetica","bold");doc.setFontSize(highlight?8.8:8.3);doc.text(label.toUpperCase(),margin+3,y+4);doc.setTextColor(...(highlight?[18,58,118]:INK));doc.setFont("helvetica","bold");doc.setFontSize(valueSize);doc.text(lines,margin+3,y+8.5);y+=h+2;}
-    function checkRow(index,label,value){doc.setFont("helvetica","normal");doc.setFontSize(9.7);const lines=doc.splitTextToSize(`${index+1}. ${label}`,142),h=Math.max(9,4.5+lines.length*4);ensureSpace(h+1,"SCAFFOLD INSPECTION CHECKLIST - CONTINUED");doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.4,1.4,"FD");doc.setTextColor(...INK);doc.text(lines,margin+3,y+5.2);const valueColor=value==="No"?[180,35,24]:value==="Yes"?[18,58,118]:MUTED;doc.setTextColor(...valueColor);doc.setFont("helvetica","bold");doc.text(value||"-",pageW-margin-4,y+5.2,{align:"right"});y+=h+1;}
-    function paragraph(text,minHeight=20){doc.setFont("helvetica","normal");doc.setFontSize(10);const lines=doc.splitTextToSize(text||"No additional comments.",contentW-6),h=Math.max(minHeight,6+lines.length*4.2);ensureSpace(h+2);doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.7,1.7,"FD");doc.setTextColor(...INK);doc.text(lines,margin+3,y+5.5);y+=h+2;}
+    function checkRow(index,label,value){doc.setFont("helvetica","normal");doc.setFontSize(10.3);const lines=doc.splitTextToSize(`${index+1}. ${label}`,142),h=Math.max(9,4.5+lines.length*4);ensureSpace(h+1,"SCAFFOLD INSPECTION CHECKLIST - CONTINUED");doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.4,1.4,"FD");doc.setTextColor(...INK);doc.text(lines,margin+3,y+5.2);const valueColor=value==="No"?[180,35,24]:value==="Yes"?[18,58,118]:MUTED;doc.setTextColor(...valueColor);doc.setFont("helvetica","bold");doc.text(value||"-",pageW-margin-4,y+5.2,{align:"right"});y+=h+1;}
+    function paragraph(text,minHeight=20){doc.setFont("helvetica","normal");doc.setFontSize(10.6);const lines=doc.splitTextToSize(text||"No additional comments.",contentW-6),h=Math.max(minHeight,6+lines.length*4.2);ensureSpace(h+2);doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(margin,y,contentW,h,1.7,1.7,"FD");doc.setTextColor(...INK);doc.text(lines,margin+3,y+5.5);y+=h+2;}
     header();section("JOB DETAILS");detail("Client / Builder",data.client);detail("Site Address",data.address,true);detail("Subcontracting Crew",data.crew);detail("Competent Scaffolder",data.scaffolder);detail("Date",formatDateAU(data.date));detail("Work Completed On Site",data.jobTypes.join(", "));
     section("SCAFFOLD INSPECTION CHECKLIST");inspectionItems.forEach((item,i)=>checkRow(i,item,data.answers[i]));
     section("COMMENTS / RECTIFICATION REQUIRED");paragraph(data.comments||"No defects or additional comments recorded.",22);
