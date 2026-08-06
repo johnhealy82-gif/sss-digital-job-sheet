@@ -116,6 +116,137 @@ body.large-print .photo-note,body.large-print .sig-help,body.large-print .questi
 body.large-print .declaration-text{font-size:19px!important}
 body.large-print .share,body.large-print .save,body.large-print .reset,body.large-print .clear,body.large-print .large-print-toggle{font-size:19px!important;min-height:60px!important}
 
+
+/* SSSECURE CRITICAL INFORMATION READABILITY V3 */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"]{
+  color:#7A4B00!important;font-size:19px!important;font-weight:900!important;letter-spacing:.2px!important;
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:#FFF3BF!important;border:2.5px solid #D89A00!important;color:#123A76!important;
+  font-size:21px!important;font-weight:900!important;line-height:1.35!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.13)!important;
+}
+body.large-print label[for="address"],body.large-print label[for="siteAddress"],body.large-print label[for="fromAddress"],body.large-print label[for="toAddress"]{font-size:22px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:24px!important;padding:18px!important}
+
+
+/* JOB COMPLETION MANDATORY EVIDENCE V3 */
+.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.evidence-card{background:#F3F8FD;border:2px solid #B7CBE1;border-radius:12px;padding:14px}
+.evidence-card.complete{background:#EAF4FF;border-color:#0A63C8}
+.evidence-title{font-size:18px;font-weight:900;color:#123A76;line-height:1.3;margin-bottom:7px}
+.evidence-instruction{font-size:15px;font-weight:700;line-height:1.4;color:#394B63;margin-bottom:10px}
+.evidence-preview{margin-top:10px}
+.evidence-preview .preview img{aspect-ratio:4/3;object-fit:contain}
+.declaration-pad{position:relative}
+.declaration-pad.locked{background:#EEF2F6;filter:grayscale(.15)}
+.declaration-pad.locked .declaration-content{opacity:.42;pointer-events:none;user-select:none}
+.declaration-lock{display:none;position:absolute;inset:10px;z-index:5;align-items:center;justify-content:center;text-align:center;background:rgba(255,243,191,.96);border:2px solid #D89A00;border-radius:12px;color:#6B4300;font-size:19px;font-weight:900;line-height:1.45;padding:22px}
+.declaration-pad.locked .declaration-lock{display:flex}
+@media(max-width:650px){.evidence-grid{grid-template-columns:1fr}}
+body.large-print .evidence-title{font-size:21px}body.large-print .evidence-instruction{font-size:18px}body.large-print .declaration-lock{font-size:22px}
+
+
+
+/* SSSECURE UNIVERSAL READABILITY & HIGHLIGHT STANDARD V4 */
+:root{
+  --navy:#123A76;--blue:#0A63C8;--pale:#DCEBFA;--softblue:#F3F8FD;
+  --bluegrey:#B7CBE1;--amber:#D89A00;--yellow:#FFF3BF;--ink:#172033
+}
+body{font-size:18px!important;line-height:1.48!important}
+.head{background:var(--navy)!important;padding:24px 18px!important}
+.head h1{font-size:34px!important;font-weight:900!important;letter-spacing:.3px!important}
+.head h2{font-size:22px!important;font-weight:900!important;line-height:1.25!important}
+.sec{
+  background:var(--blue)!important;color:#fff!important;font-size:20px!important;
+  padding:15px 17px!important;font-weight:900!important;letter-spacing:.35px!important;
+  border-top:1px solid rgba(255,255,255,.2)!important
+}
+.section-note{font-size:15px!important;line-height:1.35!important;font-weight:800!important;margin-top:5px!important}
+.pad{padding:18px!important}
+.field{margin-bottom:16px!important}
+.field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title,.confirm-label{
+  font-size:18px!important;font-weight:900!important;line-height:1.35!important;color:var(--ink)
+}
+.req{font-size:11px!important;font-weight:900!important;padding:2px 6px!important}
+input[type=text],input[type=date],input[type=number],textarea,.photo-input{
+  font-size:20px!important;font-weight:800!important;line-height:1.35!important;
+  min-height:56px!important;padding:15px!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;color:var(--ink)!important
+}
+textarea{min-height:112px!important}
+.addr{min-height:92px!important}
+.work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+.asset-grid label,.size-grid label,.hoist-grid label{
+  font-size:17.5px!important;font-weight:900!important;line-height:1.25!important;
+  min-height:64px!important;padding:12px!important;background:#fff!important;
+  border:2px solid var(--bluegrey)!important;border-radius:10px!important
+}
+input[type=checkbox],input[type=radio]{width:27px!important;height:27px!important;flex:0 0 auto!important}
+.question,.inspection-item,.gear-question,.evidence-card,.missing-row{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:12px!important;padding:16px!important;margin-bottom:13px!important
+}
+.inspection-list,.missing-list{padding:15px!important;background:#fff!important}
+.inspection-item:last-child,.question:last-child,.gear-question:last-child,.missing-row:last-child{margin-bottom:0!important}
+.question-note,.photo-note,.photo-instruction,.sig-help,.evidence-instruction,.qty-wrap label{
+  font-size:16px!important;font-weight:800!important;line-height:1.45!important
+}
+.photo-instruction{
+  background:var(--pale)!important;color:var(--navy)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;padding:13px 14px!important
+}
+.photo-input{background:#F8FBFE!important;border-style:dashed!important}
+.photo-input::file-selector-button{
+  font-size:16px!important;font-weight:900!important;padding:12px 14px!important;background:var(--blue)!important
+}
+.declaration-text{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  font-size:17.5px!important;font-weight:800!important;line-height:1.58!important;padding:16px!important
+}
+.preview-meta,.preview span{font-size:15px!important;font-weight:800!important}
+.share,.save,.reset,.clear,.action-area button,.share-area button{
+  font-size:17px!important;font-weight:900!important;min-height:56px!important
+}
+.save{background:var(--blue)!important;color:#fff!important}.share{background:var(--navy)!important;color:#fff!important}
+.footer,.draft-note{font-size:13.5px!important;font-weight:700!important}
+.large-print-strip{padding:12px 15px!important;background:var(--pale)!important}
+.large-print-toggle{font-size:17px!important;min-height:50px!important;padding:12px 17px!important}
+/* Address is the only yellow exception across the forms. */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"],#singleAddressLabel{
+  color:#7A4B00!important;font-size:20px!important;font-weight:900!important;letter-spacing:.2px!important
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:var(--yellow)!important;border:3px solid var(--amber)!important;color:var(--navy)!important;
+  font-size:22px!important;font-weight:900!important;line-height:1.38!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.14)!important
+}
+.evidence-card{padding:17px!important}.evidence-title{font-size:19px!important;color:var(--navy)!important}
+.evidence-instruction{font-size:16px!important}
+.declaration-lock{font-size:20px!important;font-weight:900!important;line-height:1.45!important}
+body.large-print{font-size:21px!important}
+body.large-print .head h1{font-size:39px!important}body.large-print .head h2{font-size:26px!important}
+body.large-print .sec{font-size:23px!important;padding:18px!important}
+body.large-print .field-label,body.large-print .question-title,body.large-print .gear-title,
+body.large-print .inspection-title,body.large-print .photo-picker,body.large-print .evidence-title{font-size:21px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print input[type=number],
+body.large-print textarea,body.large-print .photo-input{font-size:23px!important;min-height:64px!important;padding:18px!important}
+body.large-print .work-grid label,body.large-print .option-grid label,body.large-print .option-row label,
+body.large-print .answer-row label,body.large-print .choice-grid label,body.large-print .asset-grid label,
+body.large-print .size-grid label,body.large-print .hoist-grid label{font-size:20px!important;min-height:72px!important}
+body.large-print .question-note,body.large-print .photo-note,body.large-print .photo-instruction,
+body.large-print .sig-help,body.large-print .evidence-instruction{font-size:19px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:26px!important;padding:20px!important}
+@media(max-width:650px){
+  .head h1{font-size:31px!important}.head h2{font-size:20px!important}.sec{font-size:19px!important}
+  .pad{padding:15px!important}
+  .field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title{font-size:17px!important}
+  input[type=text],input[type=date],input[type=number],textarea,.photo-input{font-size:18px!important}
+  #address,#siteAddress,#fromAddress,#toAddress{font-size:21px!important}
+  .work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+  .asset-grid label,.size-grid label,.hoist-grid label{font-size:16px!important}
+}
+
 </style>
 </head>
 <body>
@@ -171,24 +302,45 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     </div>
   </div>
 
-  <div class="sec">COMPLETION PHOTOS<span class="section-note">At least 1 photo is required. Add up to 4 photos.</span></div>
+  <div class="sec">MANDATORY COMPLETION EVIDENCE<span class="section-note">Both photos are required before the declaration and signature are unlocked.</span></div>
   <div class="pad">
-    <label id="photoPicker" class="photo-picker" for="photos">ADD PHOTOS / TAKE PHOTOS</label>
+    <div class="evidence-grid">
+      <div id="tagEvidenceCard" class="evidence-card">
+        <div class="evidence-title">1. SCAFFOLD TAG PHOTO <span class="req">REQUIRED</span></div>
+        <div class="evidence-instruction">Upload one clear, close photo showing the current scaffold tag is readable and up to date.</div>
+        <input id="tagPhoto" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp">
+        <div id="tagPhotoPreview" class="evidence-preview"></div>
+      </div>
+      <div id="excessEvidenceCard" class="evidence-card">
+        <div class="evidence-title">2. EXCESS GEAR PHOTO <span class="req">REQUIRED</span></div>
+        <div class="evidence-instruction">Upload one clear, wide photo showing all excess gear has been removed from the scaffold and stacked correctly for pickup.</div>
+        <input id="excessGearPhoto" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp">
+        <div id="excessGearPhotoPreview" class="evidence-preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">ADDITIONAL COMPLETION PHOTOS<span class="section-note">Optional. Add up to 4 additional photos.</span></div>
+  <div class="pad">
+    <label id="photoPicker" class="photo-picker" for="photos">ADD ADDITIONAL PHOTOS / TAKE PHOTOS</label>
     <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
-    <div class="photo-note"><span id="photoCount" class="photo-count">0 of 4 photos added.</span> Photos will be placed clearly on separate PDF pages.</div>
+    <div class="photo-note"><span id="photoCount" class="photo-count">0 of 4 additional photos added.</span> All evidence photos will be clearly labelled in the PDF.</div>
     <div id="previewGrid" class="preview-grid"></div>
   </div>
 
   <div class="sec">DECLARATION</div>
-  <div class="pad">
-    <div class="declaration-text">
-      I, <span id="declarationName" class="declaration-name">Competent Scaffolder's Name</span>, confirm that the work completed by my crew has been checked. I understand that any incomplete work, or any work that does not comply with Australian and New Zealand Standards and requires a return visit for rectification, will be completed at the crew's own expense.
-    </div>
-    <div class="field"><label class="field-label" for="printName">Print Name <span class="req">REQUIRED</span></label><input id="printName" type="text" autocomplete="name" maxlength="120"></div>
-    <div class="field"><label class="field-label">Signature <span class="req">REQUIRED</span></label>
-      <div id="sigWrap" class="sig-wrap"><canvas id="signature"></canvas></div>
-      <div class="sig-help">Sign above using your finger.</div>
-      <div class="sig-actions"><button type="button" id="clearSig" class="clear">Clear Signature</button></div>
+  <div id="declarationPad" class="pad declaration-pad locked">
+    <div class="declaration-lock">Upload both mandatory photos above to unlock the declaration and signature.</div>
+    <div class="declaration-content">
+      <div class="declaration-text">
+        I, <span id="declarationName" class="declaration-name">Competent Scaffolder's Name</span>, confirm that the work completed by my crew has been checked. I understand that any incomplete work, or any work that does not comply with Australian and New Zealand Standards and requires a return visit for rectification, will be completed at the crew's own expense.
+      </div>
+      <div class="field"><label class="field-label" for="printName">Print Name <span class="req">REQUIRED</span></label><input id="printName" type="text" autocomplete="name" maxlength="120" disabled></div>
+      <div class="field"><label class="field-label">Signature <span class="req">REQUIRED</span></label>
+        <div id="sigWrap" class="sig-wrap"><canvas id="signature"></canvas></div>
+        <div class="sig-help">Sign above using your finger.</div>
+        <div class="sig-actions"><button type="button" id="clearSig" class="clear" disabled>Clear Signature</button></div>
+      </div>
     </div>
   </div>
 
@@ -200,7 +352,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Job Completion Checklist - PAGE 1 SIGNATURE LOCK - BUILD 20260804-1215</div>
+  <div class="footer">SSSECURE Job Completion Checklist - PAGE 1 SIGNATURE LOCK - BUILD 20260804-1215 - READABILITY V4</div>
 </div>
 
 <script>
@@ -211,7 +363,9 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
   const MAX_PHOTOS = 4;
   const MAX_PHOTO_BYTES = 20 * 1024 * 1024;
   const fieldIds = ["client","address","crew","scaffolder","date","comments","printName"];
-  let selectedPhotos = [];
+  let additionalPhotos = [];
+  let tagPhoto = null;
+  let excessGearPhoto = null;
   let previewUrls = [];
   let drawing = false;
   let hasSignature = false;
@@ -317,7 +471,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
           if(match) match.checked = true;
         }
       });
-      if(data.signature) await restoreSignature(data.signature);
+      hasSignature=false;signatureInk=0;signatureSnapshot="";
       printNameWasManuallyEdited = Boolean(data.printName && data.printName !== data.scaffolder);
       updateDeclarationName();
       $("draftNote").textContent = "Saved draft restored. Photos must be added again.";
@@ -348,7 +502,8 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     if(!data.gearPickup) markGroup("gearPickupGroup","Select how the gear has been stacked.");
     if(!data.gearBlocking) markGroup("gearBlockingGroup","Answer whether the gear is blocking access.");
     if(data.gearBlocking === "Yes" && !data.comments) markField("comments","Explain why the gear is blocking access.");
-    if(!selectedPhotos.length) { $("photos").classList.add("invalid"); errors.push({message:"Add at least one completion photo.",element:$("photos")}); }
+    if(!tagPhoto) { $("tagPhoto").classList.add("invalid"); errors.push({message:"Upload a clear scaffold tag photo.",element:$("tagPhoto")}); }
+    if(!excessGearPhoto) { $("excessGearPhoto").classList.add("invalid"); errors.push({message:"Upload a clear excess gear photo.",element:$("excessGearPhoto")}); }
     if(!data.printName) markField("printName","Print Name is required.");
     if(!hasSignature || signatureInk < 10) { $("sigWrap").classList.add("invalid"); errors.push({message:"A signature is required.",element:$("sigWrap")}); }
 
@@ -407,6 +562,10 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
   }
 
   function beginStroke(clientX,clientY) {
+    if(!mandatoryEvidenceReady()) {
+      status("Upload both mandatory photos before signing.","err",true);
+      return;
+    }
     drawing = true;
     hasSignature = true;
     $("sigWrap").classList.remove("invalid");
@@ -450,75 +609,115 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     return `${file.name}|${file.size}|${file.lastModified}`;
   }
 
+  function isValidImage(file) {
+    return Boolean(file && file.size <= MAX_PHOTO_BYTES && ((file.type || "").startsWith("image/") || /\.(jpe?g|png|heic|heif|webp)$/i.test(file.name || "")));
+  }
+
   function clearPreviewUrls() {
     previewUrls.forEach(url => URL.revokeObjectURL(url));
     previewUrls = [];
   }
 
-  function renderPreviews() {
-    clearPreviewUrls();
+  function mandatoryEvidenceReady() {
+    return Boolean(tagPhoto && excessGearPhoto);
+  }
+
+  function clearSignatureData() {
+    const rect=sig.getBoundingClientRect();
+    sctx.clearRect(0,0,rect.width,170);
+    hasSignature=false;signatureInk=0;signatureSnapshot="";
+  }
+
+  function updateDeclarationLock() {
+    const ready=mandatoryEvidenceReady();
+    $("declarationPad").classList.toggle("locked",!ready);
+    $("printName").disabled=!ready;
+    $("clearSig").disabled=!ready;
+    if(!ready) clearSignatureData();
+  }
+
+  function renderMandatoryPreview(type) {
+    const isTag=type==="tag";
+    const file=isTag?tagPhoto:excessGearPhoto;
+    const target=$(isTag?"tagPhotoPreview":"excessGearPhotoPreview");
+    const card=$(isTag?"tagEvidenceCard":"excessEvidenceCard");
+    target.innerHTML="";
+    card.classList.toggle("complete",Boolean(file));
+    if(!file) return;
+    const url=URL.createObjectURL(file);previewUrls.push(url);
+    const box=document.createElement("div");box.className="preview";
+    const img=document.createElement("img");img.src=url;img.alt=isTag?"Scaffold tag photo":"Excess gear photo";
+    const meta=document.createElement("div");meta.className="preview-meta";
+    const label=document.createElement("span");label.textContent=isTag?"Tag photo ready":"Excess gear photo ready";
+    const remove=document.createElement("button");remove.type="button";remove.className="icon-btn remove-photo";remove.textContent="Remove";
+    remove.addEventListener("click",()=>{
+      if(isTag){tagPhoto=null;$("tagPhoto").value="";}else{excessGearPhoto=null;$("excessGearPhoto").value="";}
+      renderAllPreviews();updateDeclarationLock();
+    });
+    meta.append(label,remove);box.append(img,meta);target.appendChild(box);
+  }
+
+  function renderAdditionalPreviews() {
     const grid = $("previewGrid");
     grid.innerHTML = "";
-    selectedPhotos.forEach((file,index) => {
-      const url = URL.createObjectURL(file);
-      previewUrls.push(url);
-      const box = document.createElement("div");
-      box.className = "preview";
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = `Completion photo ${index+1}`;
-      const meta = document.createElement("div");
-      meta.className = "preview-meta";
-      const label = document.createElement("span");
-      label.textContent = `Photo ${index+1}`;
-      const actions = document.createElement("div");
-      actions.className = "preview-actions";
-
-      const left = document.createElement("button");
-      left.type="button";left.className="icon-btn";left.textContent="←";left.disabled=index===0;
-      left.addEventListener("click",() => movePhoto(index,index-1));
-
-      const right = document.createElement("button");
-      right.type="button";right.className="icon-btn";right.textContent="→";right.disabled=index===selectedPhotos.length-1;
-      right.addEventListener("click",() => movePhoto(index,index+1));
-
-      const remove = document.createElement("button");
-      remove.type="button";remove.className="icon-btn remove-photo";remove.textContent="Remove";
-      remove.addEventListener("click",() => {selectedPhotos.splice(index,1);renderPreviews();});
-
-      actions.append(left,right,remove);
-      meta.append(label,actions);
-      box.append(img,meta);
-      grid.appendChild(box);
+    additionalPhotos.forEach((file,index) => {
+      const url = URL.createObjectURL(file);previewUrls.push(url);
+      const box = document.createElement("div");box.className = "preview";
+      const img = document.createElement("img");img.src = url;img.alt = `Additional completion photo ${index+1}`;
+      const meta = document.createElement("div");meta.className = "preview-meta";
+      const label = document.createElement("span");label.textContent = `Additional Photo ${index+1}`;
+      const actions = document.createElement("div");actions.className = "preview-actions";
+      const left = document.createElement("button");left.type="button";left.className="icon-btn";left.textContent="←";left.disabled=index===0;left.addEventListener("click",() => movePhoto(index,index-1));
+      const right = document.createElement("button");right.type="button";right.className="icon-btn";right.textContent="→";right.disabled=index===additionalPhotos.length-1;right.addEventListener("click",() => movePhoto(index,index+1));
+      const remove = document.createElement("button");remove.type="button";remove.className="icon-btn remove-photo";remove.textContent="Remove";remove.addEventListener("click",() => {additionalPhotos.splice(index,1);renderAllPreviews();});
+      actions.append(left,right,remove);meta.append(label,actions);box.append(img,meta);grid.appendChild(box);
     });
-    $("photoCount").textContent = `${selectedPhotos.length} of ${MAX_PHOTOS} photos added.`;
-    if(selectedPhotos.length) $("photos").classList.remove("invalid");
+    $("photoCount").textContent = `${additionalPhotos.length} of ${MAX_PHOTOS} additional photos added.`;
+  }
+
+  function renderAllPreviews() {
+    clearPreviewUrls();
+    renderMandatoryPreview("tag");
+    renderMandatoryPreview("excess");
+    renderAdditionalPreviews();
+    if(tagPhoto) $("tagPhoto").classList.remove("invalid");
+    if(excessGearPhoto) $("excessGearPhoto").classList.remove("invalid");
   }
 
   function movePhoto(from,to) {
-    if(to<0 || to>=selectedPhotos.length) return;
-    const [file] = selectedPhotos.splice(from,1);
-    selectedPhotos.splice(to,0,file);
-    renderPreviews();
+    if(to<0 || to>=additionalPhotos.length) return;
+    const [file] = additionalPhotos.splice(from,1);
+    additionalPhotos.splice(to,0,file);
+    renderAllPreviews();
   }
+
+  function setMandatoryPhoto(type,file) {
+    if(!isValidImage(file)) {
+      status("That photo could not be used. Choose a JPG, PNG, HEIC or WebP image under 20 MB.","err",true);
+      return;
+    }
+    if(type==="tag") tagPhoto=file; else excessGearPhoto=file;
+    renderAllPreviews();
+    updateDeclarationLock();
+    status(mandatoryEvidenceReady()?"Both mandatory photos are ready. Declaration and signature unlocked.":"Mandatory photo added. Add the second evidence photo to unlock signing.","ok");
+  }
+
+  $("tagPhoto").addEventListener("change",e=>{const file=e.target.files?.[0]||null;if(file)setMandatoryPhoto("tag",file);});
+  $("excessGearPhoto").addEventListener("change",e=>{const file=e.target.files?.[0]||null;if(file)setMandatoryPhoto("excess",file);});
 
   $("photos").addEventListener("change",e => {
     const incoming = Array.from(e.target.files || []);
-    const existing = new Set(selectedPhotos.map(photoKey));
+    const existing = new Set(additionalPhotos.map(photoKey));
     for(const file of incoming) {
-      if(selectedPhotos.length >= MAX_PHOTOS) break;
-      if(file.size > MAX_PHOTO_BYTES) continue;
-      if(!(file.type || "").startsWith("image/") && !/\.(jpe?g|png|heic|heif|webp)$/i.test(file.name || "")) continue;
+      if(additionalPhotos.length >= MAX_PHOTOS) break;
+      if(!isValidImage(file)) continue;
       const key = photoKey(file);
       if(existing.has(key)) continue;
-      selectedPhotos.push(file);
-      existing.add(key);
+      additionalPhotos.push(file);existing.add(key);
     }
     e.target.value = "";
-    renderPreviews();
-    if(selectedPhotos.length){
-      status(`${selectedPhotos.length} photo${selectedPhotos.length === 1 ? "" : "s"} selected and ready for the PDF.`,"ok");
-    }
+    renderAllPreviews();
+    if(additionalPhotos.length) status(`${additionalPhotos.length} additional photo${additionalPhotos.length===1?"":"s"} ready for the PDF.`,"ok");
   });
 
   function loadImageFile(file) {
@@ -568,7 +767,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
       doc.setFont("helvetica","bold");
       doc.setFontSize(16);
       doc.text("SSSECURE",pageW/2,10,{align:"center"});
-      doc.setFontSize(9.5);
+      doc.setFontSize(10.3);
       doc.text("JOB COMPLETION CHECKLIST",pageW/2,18,{align:"center"});
       y=29;
     }
@@ -578,7 +777,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
       doc.rect(margin,y,contentW,7,"F");
       doc.setTextColor(255,255,255);
       doc.setFont("helvetica","bold");
-      doc.setFontSize(9.2);
+      doc.setFontSize(10.0);
       doc.text(title,margin+3,y+4.9);
       y+=9;
     }
@@ -620,18 +819,20 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
       const maxW=w-4.8;
       const maxH=h-labelH-2.2;
 
-      doc.setFillColor(...LIGHT);
-      doc.setDrawColor(...LINE);
+      const highlight=Boolean(options.highlight);
+      doc.setFillColor(...(highlight?[255,243,191]:LIGHT));
+      doc.setDrawColor(...(highlight?[216,154,0]:LINE));
+      doc.setLineWidth(highlight?.6:.2);
       doc.roundedRect(x,boxY,w,h,1.5,1.5,"FD");
 
-      doc.setTextColor(...MUTED);
+      doc.setTextColor(...(highlight?[122,75,0]:MUTED));
       doc.setFont("helvetica","bold");
-      doc.setFontSize(labelSize);
+      doc.setFontSize(highlight?8.1:labelSize);
       doc.text(String(label).toUpperCase(),innerX,boxY+3.6);
 
-      const fitted=fittedLines(value,maxW,maxH,valueSize,minValueSize);
-      doc.setTextColor(...INK);
-      doc.setFont("helvetica","normal");
+      const fitted=fittedLines(value,maxW,maxH,highlight?11.5:valueSize,highlight?8.5:minValueSize);
+      doc.setTextColor(...(highlight?[18,58,118]:INK));
+      doc.setFont("helvetica","bold");
       doc.setFontSize(fitted.size);
       const startY=boxY+labelH+2.2;
       fitted.lines.forEach((line,index) => {
@@ -664,8 +865,8 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     box("Date",formatDateAU(data.date),margin+half+gap,y,half,14);
     y+=16;
 
-    box("Site Address",data.address,margin,y,contentW,15,{valueSize:8.2,minValueSize:6});
-    y+=17;
+    box("Site Address",data.address,margin,y,contentW,17,{valueSize:11.5,minValueSize:8.5,highlight:true});
+    y+=19;
 
     box("Subcontracting Crew",data.crew,margin,y,half,14);
     box("Competent Scaffolder",data.scaffolder,margin+half+gap,y,half,14);
@@ -713,9 +914,11 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     }
 
     const images=[];
-    for(const file of selectedPhotos) images.push(await photoToJpeg(file));
+    if(tagPhoto) images.push({...await photoToJpeg(tagPhoto),label:"SCAFFOLD TAG PHOTO"});
+    if(excessGearPhoto) images.push({...await photoToJpeg(excessGearPhoto),label:"EXCESS GEAR / STACKING PHOTO"});
+    for(let i=0;i<additionalPhotos.length;i++) images.push({...await photoToJpeg(additionalPhotos[i]),label:`ADDITIONAL COMPLETION PHOTO ${i+1}`});
 
-    // PAGE 2 ONWARD - completion photos only.
+    // PAGE 2 ONWARD - mandatory evidence first, then additional completion photos.
     images.forEach((photo,index) => {
       if(index%2===0) {
         doc.addPage();
@@ -725,10 +928,11 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
         doc.setFont("helvetica","bold");
         doc.setFontSize(13);
         doc.text("SSSECURE - COMPLETION PHOTOS",pageW/2,9.5,{align:"center"});
-        doc.setFont("helvetica","normal");
-        doc.setFontSize(8);
+        doc.setFont("helvetica","bold");
+        doc.setFontSize(10.2);
+        doc.setTextColor(255,243,191);
         const addressLines=doc.splitTextToSize(data.address,180);
-        doc.text(addressLines,pageW/2,15.5,{align:"center"});
+        doc.text(addressLines,pageW/2,16.2,{align:"center"});
       }
 
       const slot=index%2;
@@ -746,8 +950,8 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
 
       doc.setTextColor(...MUTED);
       doc.setFont("helvetica","normal");
-      doc.setFontSize(8);
-      doc.text(`Photo ${index+1}`,boxX,boxY+boxH+5);
+      doc.setFontSize(9);
+      doc.setFont("helvetica","bold");doc.setTextColor(...(index<2?[18,58,118]:MUTED));doc.text(photo.label,boxX,boxY+boxH+5);
     });
 
     const pages=doc.getNumberOfPages();
@@ -816,7 +1020,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     try {localStorage.removeItem(STORAGE_KEY);} catch(_){}
     fieldIds.forEach(id => $(id).value="");
     document.querySelectorAll('input[type="checkbox"],input[type="radio"]').forEach(el => el.checked=false);
-    selectedPhotos=[];renderPreviews();
+    additionalPhotos=[];tagPhoto=null;excessGearPhoto=null;$("tagPhoto").value="";$("excessGearPhoto").value="";renderAllPreviews();updateDeclarationLock();
     const rect=sig.getBoundingClientRect();sctx.clearRect(0,0,rect.width,170);
     hasSignature=false;signatureInk=0;signatureSnapshot="";printNameWasManuallyEdited=false;
     clearValidation();clearStatus();setDefaultDate();updateDeclarationName();
@@ -840,7 +1044,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
   window.addEventListener("beforeunload",clearPreviewUrls);
 
   requestAnimationFrame(() => sizeSignatureCanvas(false));
-  restoreDraft().then(() => {setDefaultDate();updateDeclarationName();});
+  restoreDraft().then(() => {setDefaultDate();updateDeclarationName();renderAllPreviews();updateDeclarationLock();});
 })();
 </script>
 
