@@ -100,6 +100,31 @@ body.large-print .pdf-preview-line strong{font-size:22px}
   body.large-print .item-name{font-size:20px}
 }
 
+
+/* SSSECURE CRITICAL INFORMATION READABILITY V3 */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"]{
+  color:#7A4B00!important;font-size:19px!important;font-weight:900!important;letter-spacing:.2px!important;
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:#FFF3BF!important;border:2.5px solid #D89A00!important;color:#123A76!important;
+  font-size:21px!important;font-weight:900!important;line-height:1.35!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.13)!important;
+}
+body.large-print label[for="address"],body.large-print label[for="siteAddress"],body.large-print label[for="fromAddress"],body.large-print label[for="toAddress"]{font-size:22px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:24px!important;padding:18px!important}
+
+
+/* QUANTIFICATION CATEGORY EMPHASIS V3 */
+.category summary{background:#0A63C8!important;color:#fff!important;border-bottom:2px solid #123A76!important;font-size:21px!important;letter-spacing:.2px!important}
+.category summary::after{color:#fff!important}
+.category-count{background:#DCEBFA!important;color:#123A76!important;border:1px solid #fff!important;font-size:13px!important;font-weight:900!important}
+.category[open] summary{background:#123A76!important}
+.pdf-preview-category h5{background:#0A63C8!important;color:#fff!important;border-bottom:2px solid #123A76!important;font-size:19px!important}
+.pdf-preview-field.wide,.pdf-preview-field.address-highlight{background:#FFF3BF!important;border:2px solid #D89A00!important}
+.pdf-preview-field.wide small,.pdf-preview-field.address-highlight small{color:#7A4B00!important;font-size:12px!important}
+.pdf-preview-field.wide div,.pdf-preview-field.address-highlight div{color:#123A76!important;font-size:20px!important;font-weight:900!important}
+body.large-print .category summary{font-size:24px!important}
+
 </style>
 </head>
 <body>
@@ -342,7 +367,7 @@ function renderPdfPreview() {
   const data=validate();
   if(!data) return false;
   const groups=selectedItems();
-  const field=(label,value,wide=false)=>`<div class="pdf-preview-field${wide?' wide':''}"><small>${escapeHtml(label)}</small><div>${escapeHtml(value||'-')}</div></div>`;
+  const field=(label,value,wide=false)=>`<div class="pdf-preview-field${wide?' wide address-highlight':''}"><small>${escapeHtml(label)}</small><div>${escapeHtml(value||'-')}</div></div>`;
   const categories=groups.map(group=>`<div class="pdf-preview-category"><h5>${escapeHtml(group.category)}</h5>${group.items.map(entry=>`<div class="pdf-preview-line"><span>${escapeHtml(entry.item)}</span><strong>${escapeHtml(formatQty(entry.qty,entry.unit))}</strong></div>`).join('')}</div>`).join('');
   $('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION - ONE-PAGE YARD PACKING LIST</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div><div class="pdf-preview-details-grid">${field('Client',data.client)}${field('Prepared By',data.preparedBy)}${field('Site Address',data.siteAddress,true)}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}</div><div class="pdf-preview-section">QUANTITIES REQUIRED</div><div class="pdf-preview-quant-grid">${categories}</div></div></div><div class="preview-help">The emailed PDF uses larger bold delivery details, stronger category headings and enlarged quantities. Normal orders remain a one-page A4 portrait packing list.</div>`;
   $('pdfPreviewModal').classList.add('show');
@@ -434,12 +459,14 @@ async function buildPdf(data) {
     return {lines:kept,size:minSize};
   }
 
-  function drawDetail(label,value,x,y,w,h,maxLines=2) {
-    doc.setFillColor(...SOFT);doc.setDrawColor(...LINE);doc.setLineWidth(.35);doc.roundedRect(x,y,w,h,1.4,1.4,'FD');
-    doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(6.8);
+  function drawDetail(label,value,x,y,w,h,maxLines=2,highlight=false) {
+    const fill=highlight?[255,243,191]:SOFT;
+    const border=highlight?[216,154,0]:LINE;
+    doc.setFillColor(...fill);doc.setDrawColor(...border);doc.setLineWidth(highlight?.6:.35);doc.roundedRect(x,y,w,h,1.4,1.4,'FD');
+    doc.setTextColor(...(highlight?[122,75,0]:MUTED));doc.setFont('helvetica','bold');doc.setFontSize(highlight?7.8:6.8);
     doc.text(safeText(label).toUpperCase(),x+2.2,y+3.8);
-    doc.setTextColor(...INK);
-    const fitted=fitWrappedText(value,w-4.4,maxLines,maxLines>2?8.6:9.2,6.5);
+    doc.setTextColor(...(highlight?NAVY:INK));
+    const fitted=fitWrappedText(value,w-4.4,maxLines,highlight?11.2:(maxLines>2?8.6:9.2),highlight?8.2:6.5);
     doc.setFont('helvetica','bold');doc.setFontSize(fitted.size);
     const lineHeight=fitted.size*0.39;
     doc.text(fitted.lines,x+2.2,y+8.2,{lineHeightFactor:1.15});
@@ -461,7 +488,7 @@ async function buildPdf(data) {
   const row1Widths=[44,43,CW-44-43-(gap*2)];
   drawDetail('Client',data.client,M,y,row1Widths[0],14.5,2);
   drawDetail('Prepared By',data.preparedBy,M+row1Widths[0]+gap,y,row1Widths[1],14.5,2);
-  drawDetail('Site Address',data.siteAddress,M+row1Widths[0]+row1Widths[1]+(gap*2),y,row1Widths[2],14.5,2);
+  drawDetail('Site Address',data.siteAddress,M+row1Widths[0]+row1Widths[1]+(gap*2),y,row1Widths[2],14.5,2,true);
   y+=16.2;
   const half=(CW-gap)/2;
   drawDetail('Job Description',data.jobDescription,M,y,half,17.5,3);
@@ -479,8 +506,8 @@ async function buildPdf(data) {
   const availableHeight=listBottom-listTop;
 
   function metrics(columnCount) {
-    if(columnCount===2) return {columnCount,colGap:3.0,cardGap:2.0,headerH:6.8,rowH:5.15,nameSize:8.0,qtySize:9.0,minSize:6.4};
-    return {columnCount,colGap:2.2,cardGap:1.4,headerH:5.2,rowH:4.15,nameSize:6.9,qtySize:7.7,minSize:5.6};
+    if(columnCount===2) return {columnCount,colGap:3.0,cardGap:2.0,headerH:7.5,rowH:5.35,nameSize:8.35,qtySize:9.5,minSize:6.6};
+    return {columnCount,colGap:2.2,cardGap:1.4,headerH:5.7,rowH:4.25,nameSize:7.1,qtySize:8.0,minSize:5.8};
   }
 
   function makePlan(columnCount) {
@@ -542,10 +569,10 @@ async function buildPdf(data) {
     segments.forEach(segment=>{
       const cardH=m.headerH+(segment.items.length*m.rowH);
       doc.setFillColor(255,255,255);doc.setDrawColor(...LINE);doc.setLineWidth(.32);doc.roundedRect(x,cy,colW,cardH,1.7,1.7,'FD');
-      doc.setFillColor(...PALE);doc.roundedRect(x,cy,colW,m.headerH+1,1.7,1.7,'F');
+      doc.setFillColor(...BLUE);doc.roundedRect(x,cy,colW,m.headerH+1,1.7,1.7,'F');
       doc.rect(x,cy+m.headerH-1,colW,2,'F');
-      doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');
-      const heading=fitOneLine(segment.category,colW-4.4,m.columnCount===2?9.1:7.7,m.minSize,true);
+      doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');
+      const heading=fitOneLine(segment.category,colW-4.4,m.columnCount===2?9.8:8.1,m.minSize,true);
       doc.setFontSize(heading.size);doc.text(heading.text,x+2.2,cy+(m.headerH*0.70));
 
       let ry=cy+m.headerH;
