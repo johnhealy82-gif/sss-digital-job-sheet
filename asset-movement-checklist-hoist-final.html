@@ -138,6 +138,120 @@ body.large-print .photo-note,body.large-print .sig-help,body.large-print .questi
 body.large-print .declaration-text{font-size:19px!important}
 body.large-print .share,body.large-print .save,body.large-print .reset,body.large-print .clear,body.large-print .large-print-toggle{font-size:19px!important;min-height:60px!important}
 
+
+/* SSSECURE CRITICAL INFORMATION READABILITY V3 */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"]{
+  color:#7A4B00!important;font-size:19px!important;font-weight:900!important;letter-spacing:.2px!important;
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:#FFF3BF!important;border:2.5px solid #D89A00!important;color:#123A76!important;
+  font-size:21px!important;font-weight:900!important;line-height:1.35!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.13)!important;
+}
+body.large-print label[for="address"],body.large-print label[for="siteAddress"],body.large-print label[for="fromAddress"],body.large-print label[for="toAddress"]{font-size:22px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:24px!important;padding:18px!important}
+
+
+
+/* SSSECURE UNIVERSAL READABILITY & HIGHLIGHT STANDARD V4 */
+:root{
+  --navy:#123A76;--blue:#0A63C8;--pale:#DCEBFA;--softblue:#F3F8FD;
+  --bluegrey:#B7CBE1;--amber:#D89A00;--yellow:#FFF3BF;--ink:#172033
+}
+body{font-size:18px!important;line-height:1.48!important}
+.head{background:var(--navy)!important;padding:24px 18px!important}
+.head h1{font-size:34px!important;font-weight:900!important;letter-spacing:.3px!important}
+.head h2{font-size:22px!important;font-weight:900!important;line-height:1.25!important}
+.sec{
+  background:var(--blue)!important;color:#fff!important;font-size:20px!important;
+  padding:15px 17px!important;font-weight:900!important;letter-spacing:.35px!important;
+  border-top:1px solid rgba(255,255,255,.2)!important
+}
+.section-note{font-size:15px!important;line-height:1.35!important;font-weight:800!important;margin-top:5px!important}
+.pad{padding:18px!important}
+.field{margin-bottom:16px!important}
+.field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title,.confirm-label{
+  font-size:18px!important;font-weight:900!important;line-height:1.35!important;color:var(--ink)
+}
+.req{font-size:11px!important;font-weight:900!important;padding:2px 6px!important}
+input[type=text],input[type=date],input[type=number],textarea,.photo-input{
+  font-size:20px!important;font-weight:800!important;line-height:1.35!important;
+  min-height:56px!important;padding:15px!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;color:var(--ink)!important
+}
+textarea{min-height:112px!important}
+.addr{min-height:92px!important}
+.work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+.asset-grid label,.size-grid label,.hoist-grid label{
+  font-size:17.5px!important;font-weight:900!important;line-height:1.25!important;
+  min-height:64px!important;padding:12px!important;background:#fff!important;
+  border:2px solid var(--bluegrey)!important;border-radius:10px!important
+}
+input[type=checkbox],input[type=radio]{width:27px!important;height:27px!important;flex:0 0 auto!important}
+.question,.inspection-item,.gear-question,.evidence-card,.missing-row{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:12px!important;padding:16px!important;margin-bottom:13px!important
+}
+.inspection-list,.missing-list{padding:15px!important;background:#fff!important}
+.inspection-item:last-child,.question:last-child,.gear-question:last-child,.missing-row:last-child{margin-bottom:0!important}
+.question-note,.photo-note,.photo-instruction,.sig-help,.evidence-instruction,.qty-wrap label{
+  font-size:16px!important;font-weight:800!important;line-height:1.45!important
+}
+.photo-instruction{
+  background:var(--pale)!important;color:var(--navy)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;padding:13px 14px!important
+}
+.photo-input{background:#F8FBFE!important;border-style:dashed!important}
+.photo-input::file-selector-button{
+  font-size:16px!important;font-weight:900!important;padding:12px 14px!important;background:var(--blue)!important
+}
+.declaration-text{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  font-size:17.5px!important;font-weight:800!important;line-height:1.58!important;padding:16px!important
+}
+.preview-meta,.preview span{font-size:15px!important;font-weight:800!important}
+.share,.save,.reset,.clear,.action-area button,.share-area button{
+  font-size:17px!important;font-weight:900!important;min-height:56px!important
+}
+.save{background:var(--blue)!important;color:#fff!important}.share{background:var(--navy)!important;color:#fff!important}
+.footer,.draft-note{font-size:13.5px!important;font-weight:700!important}
+.large-print-strip{padding:12px 15px!important;background:var(--pale)!important}
+.large-print-toggle{font-size:17px!important;min-height:50px!important;padding:12px 17px!important}
+/* Address is the only yellow exception across the forms. */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"],#singleAddressLabel{
+  color:#7A4B00!important;font-size:20px!important;font-weight:900!important;letter-spacing:.2px!important
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:var(--yellow)!important;border:3px solid var(--amber)!important;color:var(--navy)!important;
+  font-size:22px!important;font-weight:900!important;line-height:1.38!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.14)!important
+}
+.evidence-card{padding:17px!important}.evidence-title{font-size:19px!important;color:var(--navy)!important}
+.evidence-instruction{font-size:16px!important}
+.declaration-lock{font-size:20px!important;font-weight:900!important;line-height:1.45!important}
+body.large-print{font-size:21px!important}
+body.large-print .head h1{font-size:39px!important}body.large-print .head h2{font-size:26px!important}
+body.large-print .sec{font-size:23px!important;padding:18px!important}
+body.large-print .field-label,body.large-print .question-title,body.large-print .gear-title,
+body.large-print .inspection-title,body.large-print .photo-picker,body.large-print .evidence-title{font-size:21px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print input[type=number],
+body.large-print textarea,body.large-print .photo-input{font-size:23px!important;min-height:64px!important;padding:18px!important}
+body.large-print .work-grid label,body.large-print .option-grid label,body.large-print .option-row label,
+body.large-print .answer-row label,body.large-print .choice-grid label,body.large-print .asset-grid label,
+body.large-print .size-grid label,body.large-print .hoist-grid label{font-size:20px!important;min-height:72px!important}
+body.large-print .question-note,body.large-print .photo-note,body.large-print .photo-instruction,
+body.large-print .sig-help,body.large-print .evidence-instruction{font-size:19px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:26px!important;padding:20px!important}
+@media(max-width:650px){
+  .head h1{font-size:31px!important}.head h2{font-size:20px!important}.sec{font-size:19px!important}
+  .pad{padding:15px!important}
+  .field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title{font-size:17px!important}
+  input[type=text],input[type=date],input[type=number],textarea,.photo-input{font-size:18px!important}
+  #address,#siteAddress,#fromAddress,#toAddress{font-size:21px!important}
+  .work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+  .asset-grid label,.size-grid label,.hoist-grid label{font-size:16px!important}
+}
+
 </style>
 </head>
 <body>
@@ -375,7 +489,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Asset Movement Checklist</div>
+  <div class="footer">SSSECURE Asset Movement Checklist - READABILITY V4</div>
 </div>
 
 <script>
@@ -957,7 +1071,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
       doc.setFont("helvetica","bold");
       doc.setFontSize(16);
       doc.text("SSSECURE",pageW/2,10,{align:"center"});
-      doc.setFontSize(9.3);
+      doc.setFontSize(10.1);
       doc.text("ASSET MOVEMENT CHECKLIST",pageW/2,18,{align:"center"});
       y=29;
     }
@@ -967,7 +1081,7 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
       doc.rect(margin,y,contentW,7,"F");
       doc.setTextColor(255,255,255);
       doc.setFont("helvetica","bold");
-      doc.setFontSize(9.2);
+      doc.setFontSize(10.0);
       doc.text(title,margin+3,y+4.9);
       y+=9;
     }
@@ -1007,18 +1121,20 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
       const maxW=w-4.8;
       const maxH=h-labelH-2.2;
 
-      doc.setFillColor(...LIGHT);
-      doc.setDrawColor(...LINE);
+      const highlight=Boolean(options.highlight);
+      doc.setFillColor(...(highlight?[255,243,191]:LIGHT));
+      doc.setDrawColor(...(highlight?[216,154,0]:LINE));
+      doc.setLineWidth(highlight?.6:.2);
       doc.roundedRect(x,boxY,w,h,1.4,1.4,"FD");
 
-      doc.setTextColor(...MUTED);
+      doc.setTextColor(...(highlight?[122,75,0]:MUTED));
       doc.setFont("helvetica","bold");
-      doc.setFontSize(labelSize);
+      doc.setFontSize(highlight?8.1:labelSize);
       doc.text(String(label).toUpperCase(),innerX,boxY+3.6);
 
-      const fitted=fitLines(value,maxW,maxH,valueSize,minValueSize);
-      doc.setTextColor(...INK);
-      doc.setFont("helvetica","normal");
+      const fitted=fitLines(value,maxW,maxH,highlight?11.5:valueSize,highlight?8.5:minValueSize);
+      doc.setTextColor(...(highlight?[18,58,118]:INK));
+      doc.setFont("helvetica","bold");
       doc.setFontSize(fitted.size);
       const startY=boxY+labelH+2.2;
       fitted.lines.forEach((line,index) => {
@@ -1063,13 +1179,13 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
     y+=16;
 
     if(data.movement==="Transfer") {
-      box("Transfer From Site",data.fromAddress,margin,y,contentW,15);
-      y+=17;
-      box("Transfer To Site",data.toAddress,margin,y,contentW,15);
-      y+=17;
+      box("Transfer From Site",data.fromAddress,margin,y,contentW,17,{highlight:true});
+      y+=19;
+      box("Transfer To Site",data.toAddress,margin,y,contentW,17,{highlight:true});
+      y+=19;
     } else {
-      box(`${data.movement} Site`,data.siteAddress,margin,y,contentW,15);
-      y+=17;
+      box(`${data.movement} Site`,data.siteAddress,margin,y,contentW,17,{highlight:true});
+      y+=19;
     }
 
     if(data.asset === "Hoist") {
@@ -1147,9 +1263,10 @@ body.large-print .share,body.large-print .save,body.large-print .reset,body.larg
           doc.setFont("helvetica","bold");
           doc.setFontSize(12.5);
           doc.text(`SSSECURE - ${group.label}`,pageW/2,9.5,{align:"center"});
-          doc.setFont("helvetica","normal");
-          doc.setFontSize(8);
-          doc.text(doc.splitTextToSize(group.address || "Site address not entered",180),pageW/2,15.5,{align:"center"});
+          doc.setFont("helvetica","bold");
+          doc.setFontSize(10.2);
+          doc.setTextColor(255,243,191);
+          doc.text(doc.splitTextToSize(group.address || "Site address not entered",180),pageW/2,16.2,{align:"center"});
         }
 
         const slot=index%2;
