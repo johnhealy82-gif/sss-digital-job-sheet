@@ -323,8 +323,14 @@ body.large-print .asset-type-grid .asset-type .asset-name{font-size:21px!importa
    No JavaScript or form logic changed. */
 body:has(input[name="asset"][value="Toilet"]:checked) .head,
 body:has(input[name="asset"][value="Shed"]:checked) .head{
-  background:#0A63C8!important;
-  color:#FFFFFF!important;
+  background:#9FD4FF!important;
+  color:#123A76!important;
+}
+body:has(input[name="asset"][value="Toilet"]:checked) .head h1,
+body:has(input[name="asset"][value="Toilet"]:checked) .head h2,
+body:has(input[name="asset"][value="Shed"]:checked) .head h1,
+body:has(input[name="asset"][value="Shed"]:checked) .head h2{
+  color:#123A76!important;
 }
 body:has(input[name="asset"][value="Brickies Kit"]:checked) .head{
   background:#F5C542!important;
@@ -576,7 +582,7 @@ body:has(input[name="asset"][value="Hoist"]:checked) .head{
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Asset Movement Checklist - HEADER COLOUR CSS V6</div>
+  <div class="footer">SSSECURE Asset Movement Checklist - ASSET HEADER FINAL</div>
 </div>
 
 <script>
@@ -1155,10 +1161,24 @@ body:has(input[name="asset"][value="Hoist"]:checked) .head{
     const BLUE=[18,58,118],GREEN=[10,99,200],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];
     let y=0;
 
+    function assetHeaderTheme() {
+      if(data.asset === "Hoist") {
+        return {bg:[180,35,24],fg:[255,255,255],address:[255,243,191]};
+      }
+      if(data.asset === "Brickies Kit") {
+        return {bg:[245,197,66],fg:[18,58,118],address:[18,58,118]};
+      }
+      if(data.asset === "Toilet" || data.asset === "Shed") {
+        return {bg:[159,212,255],fg:[18,58,118],address:[18,58,118]};
+      }
+      return {bg:[18,58,118],fg:[255,255,255],address:[255,243,191]};
+    }
+    const headerTheme = assetHeaderTheme();
+
     function header() {
-      doc.setFillColor(...BLUE);
+      doc.setFillColor(...headerTheme.bg);
       doc.rect(0,0,pageW,24,"F");
-      doc.setTextColor(255,255,255);
+      doc.setTextColor(...headerTheme.fg);
       doc.setFont("helvetica","bold");
       doc.setFontSize(16);
       doc.text("SSSECURE",pageW/2,10,{align:"center"});
@@ -1358,15 +1378,15 @@ body:has(input[name="asset"][value="Hoist"]:checked) .head{
       photos.forEach((photo,index) => {
         if(index%2===0) {
           doc.addPage();
-          doc.setFillColor(...BLUE);
+          doc.setFillColor(...headerTheme.bg);
           doc.rect(0,0,pageW,23,"F");
-          doc.setTextColor(255,255,255);
+          doc.setTextColor(...headerTheme.fg);
           doc.setFont("helvetica","bold");
           doc.setFontSize(12.5);
           doc.text(`SSSECURE - ${group.label}`,pageW/2,9.5,{align:"center"});
           doc.setFont("helvetica","bold");
           doc.setFontSize(10.2);
-          doc.setTextColor(255,243,191);
+          doc.setTextColor(...headerTheme.address);
           doc.text(doc.splitTextToSize(group.address || "Site address not entered",180),pageW/2,16.2,{align:"center"});
         }
 
