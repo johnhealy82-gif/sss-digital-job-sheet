@@ -252,6 +252,72 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   .asset-grid label,.size-grid label,.hoist-grid label{font-size:16px!important}
 }
 
+
+/* ASSET TYPE COLOUR CODING V5
+   Neutral until selected. Toilet/Shed = blue, Brickies Kit = yellow, Hoist = red. */
+.asset-type-grid .asset-type{
+  position:relative;
+  background:#fff!important;
+  border:2px solid var(--bluegrey)!important;
+  color:var(--ink)!important;
+  transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;
+}
+.asset-type-grid .asset-type .asset-name{
+  font-size:18px;
+  font-weight:950;
+  letter-spacing:.25px;
+}
+.asset-type-grid .asset-blue input{accent-color:#0A63C8!important}
+.asset-type-grid .asset-yellow input{accent-color:#D89A00!important}
+.asset-type-grid .asset-red input{accent-color:#C62828!important}
+
+.asset-type-grid .asset-blue:has(input:checked){
+  background:#DCEBFA!important;
+  border:3px solid #0A63C8!important;
+  color:#123A76!important;
+  box-shadow:0 0 0 3px rgba(10,99,200,.14)!important;
+}
+.asset-type-grid .asset-yellow:has(input:checked){
+  background:#FFF3BF!important;
+  border:3px solid #D89A00!important;
+  color:#6B4600!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.16)!important;
+}
+.asset-type-grid .asset-red:has(input:checked){
+  background:#FDE3E1!important;
+  border:3px solid #C62828!important;
+  color:#7A1F1F!important;
+  box-shadow:0 0 0 3px rgba(198,40,40,.14)!important;
+}
+
+/* Carry the selected asset colour into its detail subsection. */
+#assetDetailSection.asset-tone-blue > .sec{background:#0A63C8!important}
+#assetDetailSection.asset-tone-blue > .pad{background:#F3F8FD!important}
+#assetDetailSection.asset-tone-blue #assetNumber{
+  background:#EAF4FF!important;border:3px solid #0A63C8!important;color:#123A76!important;
+  box-shadow:0 0 0 3px rgba(10,99,200,.10)!important;
+}
+#assetDetailSection.asset-tone-yellow > .sec{
+  background:#D89A00!important;color:#fff!important;
+}
+#assetDetailSection.asset-tone-yellow > .pad{background:#FFF9DF!important}
+#assetDetailSection.asset-tone-yellow #kitSizeGroup label:has(input:checked){
+  background:#FFF3BF!important;border:3px solid #D89A00!important;color:#6B4600!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.12)!important;
+}
+#assetDetailSection.asset-tone-red > .sec{background:#B42318!important}
+#assetDetailSection.asset-tone-red > .pad{background:#FFF5F4!important}
+#assetDetailSection.asset-tone-red #hoistNumber{
+  background:#FDE3E1!important;border:3px solid #C62828!important;color:#7A1F1F!important;
+  box-shadow:0 0 0 3px rgba(198,40,40,.10)!important;
+}
+#assetDetailSection.asset-tone-red #hoistTypeGroup label:has(input:checked){
+  background:#FDE3E1!important;border:3px solid #C62828!important;color:#7A1F1F!important;
+}
+
+/* Large print keeps the colour-coded asset names prominent. */
+body.large-print .asset-type-grid .asset-type .asset-name{font-size:21px!important}
+
 </style>
 </head>
 <body>
@@ -286,11 +352,11 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   </div>
 
   <div class="sec">SSSECURE ASSET</div>
-  <div class="pad"><div id="assetGroup" class="asset-grid">
-    <label><input type="radio" name="asset" value="Toilet">Toilet</label>
-    <label><input type="radio" name="asset" value="Shed">Shed</label>
-    <label><input type="radio" name="asset" value="Brickies Kit">Brickies Kit</label>
-    <label><input type="radio" name="asset" value="Hoist">Hoist</label>
+  <div class="pad"><div id="assetGroup" class="asset-grid asset-type-grid">
+    <label class="asset-type asset-blue"><input type="radio" name="asset" value="Toilet"><span class="asset-name">TOILET</span></label>
+    <label class="asset-type asset-blue"><input type="radio" name="asset" value="Shed"><span class="asset-name">SHED</span></label>
+    <label class="asset-type asset-yellow"><input type="radio" name="asset" value="Brickies Kit"><span class="asset-name">BRICKIES KIT</span></label>
+    <label class="asset-type asset-red"><input type="radio" name="asset" value="Hoist"><span class="asset-name">HOIST</span></label>
   </div></div>
 
   <div id="assetDetailSection" class="conditional" hidden>
@@ -489,7 +555,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Asset Movement Checklist - READABILITY V4</div>
+  <div class="footer">SSSECURE Asset Movement Checklist - ASSET COLOUR V5</div>
 </div>
 
 <script>
@@ -682,6 +748,10 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     }
 
     $("assetDetailSection").hidden = !as;
+    $("assetDetailSection").classList.remove("asset-tone-blue","asset-tone-yellow","asset-tone-red");
+    if(as === "Toilet" || as === "Shed") $("assetDetailSection").classList.add("asset-tone-blue");
+    if(as === "Brickies Kit") $("assetDetailSection").classList.add("asset-tone-yellow");
+    if(as === "Hoist") $("assetDetailSection").classList.add("asset-tone-red");
     $("assetNumberField").hidden = !(as === "Toilet" || as === "Shed");
     $("kitSizeField").hidden = as !== "Brickies Kit";
     $("hoistDetailField").hidden = as !== "Hoist";
@@ -1122,18 +1192,23 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
       const maxH=h-labelH-2.2;
 
       const highlight=Boolean(options.highlight);
-      doc.setFillColor(...(highlight?[255,243,191]:LIGHT));
-      doc.setDrawColor(...(highlight?[216,154,0]:LINE));
-      doc.setLineWidth(highlight?.6:.2);
+      const fillColor=options.fillColor || (highlight?[255,243,191]:LIGHT);
+      const borderColor=options.borderColor || (highlight?[216,154,0]:LINE);
+      const labelColor=options.labelColor || (highlight?[122,75,0]:MUTED);
+      const valueColor=options.valueColor || (highlight?[18,58,118]:INK);
+      const customTone=Boolean(options.fillColor || options.borderColor || options.labelColor || options.valueColor);
+      doc.setFillColor(...fillColor);
+      doc.setDrawColor(...borderColor);
+      doc.setLineWidth((highlight || customTone)?.6:.2);
       doc.roundedRect(x,boxY,w,h,1.4,1.4,"FD");
 
-      doc.setTextColor(...(highlight?[122,75,0]:MUTED));
+      doc.setTextColor(...labelColor);
       doc.setFont("helvetica","bold");
-      doc.setFontSize(highlight?8.1:labelSize);
+      doc.setFontSize((highlight || customTone)?8.1:labelSize);
       doc.text(String(label).toUpperCase(),innerX,boxY+3.6);
 
-      const fitted=fitLines(value,maxW,maxH,highlight?11.5:valueSize,highlight?8.5:minValueSize);
-      doc.setTextColor(...(highlight?[18,58,118]:INK));
+      const fitted=fitLines(value,maxW,maxH,(highlight || customTone)?11.5:valueSize,(highlight || customTone)?8.5:minValueSize);
+      doc.setTextColor(...valueColor);
       doc.setFont("helvetica","bold");
       doc.setFontSize(fitted.size);
       const startY=boxY+labelH+2.2;
@@ -1175,7 +1250,12 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     y+=16;
 
     box("Movement",data.movement,margin,y,half,14);
-    box("Asset",data.asset,margin+half+gap,y,half,14);
+    const assetTone = (data.asset==="Hoist")
+      ? {fillColor:[253,227,225],borderColor:[198,40,40],labelColor:[122,31,31],valueColor:[122,31,31]}
+      : (data.asset==="Brickies Kit")
+        ? {fillColor:[255,243,191],borderColor:[216,154,0],labelColor:[107,70,0],valueColor:[18,58,118]}
+        : {fillColor:[220,235,250],borderColor:[10,99,200],labelColor:[18,58,118],valueColor:[18,58,118]};
+    box("Asset",data.asset,margin+half+gap,y,half,14,assetTone);
     y+=16;
 
     if(data.movement==="Transfer") {
