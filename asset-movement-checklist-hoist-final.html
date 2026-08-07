@@ -318,6 +318,27 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 /* Large print keeps the colour-coded asset names prominent. */
 body.large-print .asset-type-grid .asset-type .asset-name{font-size:21px!important}
 
+
+/* TOP HEADER COLOUR — CSS ONLY
+   No JavaScript or form logic changed. */
+body:has(input[name="asset"][value="Toilet"]:checked) .head,
+body:has(input[name="asset"][value="Shed"]:checked) .head{
+  background:#0A63C8!important;
+  color:#FFFFFF!important;
+}
+body:has(input[name="asset"][value="Brickies Kit"]:checked) .head{
+  background:#F5C542!important;
+  color:#123A76!important;
+}
+body:has(input[name="asset"][value="Brickies Kit"]:checked) .head h1,
+body:has(input[name="asset"][value="Brickies Kit"]:checked) .head h2{
+  color:#123A76!important;
+}
+body:has(input[name="asset"][value="Hoist"]:checked) .head{
+  background:#B42318!important;
+  color:#FFFFFF!important;
+}
+
 </style>
 </head>
 <body>
@@ -555,7 +576,7 @@ body.large-print .asset-type-grid .asset-type .asset-name{font-size:21px!importa
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Asset Movement Checklist - ASSET COLOUR V5</div>
+  <div class="footer">SSSECURE Asset Movement Checklist - HEADER COLOUR CSS V6</div>
 </div>
 
 <script>
