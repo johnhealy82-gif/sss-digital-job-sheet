@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B5D2A">
+<title>Newgrange Access — Job Count-Up Sheet</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --navy:#0B5D2A;--blue:#12823B;--pale:#E7F5EC;--soft:#F7FAFD;--line:#A8D5B8;
+  --ink:#172033;--muted:#5F7666;--yellow:#FFF3BF;--amber:#D89A00;--red:#B42318;--bluegrey:#A8D5B8;--softblue:#F2FAF5;
+}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#E9EFF5;color:var(--ink);font-family:Arial,Helvetica,sans-serif;font-size:18px;line-height:1.42;padding:12px 12px 122px}
+.wrap{max-width:900px;margin:auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.16)}
+.head{background:var(--navy);color:#fff;padding:19px 16px;text-align:center;border-bottom:6px solid var(--blue)}
+.head h1{margin:0;font-size:30px;line-height:1.06;font-weight:950;letter-spacing:.2px}.head h2{margin:5px 0 0;font-size:16px;font-weight:850}
+.intro{background:var(--pale);padding:11px 15px;color:var(--navy);font-size:15px;font-weight:850;border-bottom:1px solid var(--line)}
+.sec{background:var(--blue);color:#fff;padding:13px 16px;font-size:19px;font-weight:950;letter-spacing:.25px}
+.sec.main{background:var(--navy);font-size:23px;padding:16px}.sec small{display:block;font-size:13px;font-weight:750;opacity:.93;margin-top:3px;letter-spacing:0}
+.pad{padding:15px}.grid{display:grid;gap:12px}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.field label,.label{display:block;margin-bottom:6px;font-size:17px;font-weight:900;color:#263A55}
+input[type=text],input[type=date],input[type=number],textarea{width:100%;min-height:52px;border:2px solid var(--line);border-radius:9px;padding:12px;background:#fff;color:var(--ink);font:inherit;font-weight:780}
+textarea{resize:vertical;min-height:112px;font-family:inherit}input:focus,textarea:focus{outline:3px solid rgba(10,99,200,.16);border-color:var(--blue)}
+.address label{color:#744900;font-size:19px}.address textarea{background:var(--yellow);border:3px solid var(--amber);color:var(--navy);font-size:21px;font-weight:950;min-height:76px;box-shadow:0 0 0 3px rgba(216,154,0,.12)}
+.choice-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}.choice{display:flex;align-items:center;justify-content:center;gap:8px;min-height:58px;border:2px solid var(--line);border-radius:9px;padding:10px;background:#fff;text-align:center;font-size:16px;font-weight:900}.choice:has(input:checked){border-color:var(--blue);background:var(--pale);color:var(--navy)}
+.choice input{width:24px;height:24px;accent-color:var(--blue);flex:0 0 auto;margin:0}
+.count-wrap{padding:15px;background:#F5F9FD}.count-head,.count-row{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(86px,.6fr) minmax(86px,.6fr);gap:8px;align-items:center}.count-head{background:var(--navy);color:#fff;border-radius:10px 10px 0 0;padding:10px 11px;font-size:17px;font-weight:950}.count-head div:nth-child(n+2){text-align:center}.count-grid{border:3px solid var(--navy);border-top:0;border-radius:0 0 11px 11px;overflow:hidden;background:#fff}.count-row{min-height:72px;padding:9px 10px;border-top:1px solid #D8EBDD}.count-row:first-child{border-top:0}.count-row:nth-child(even){background:#F7FCF8}.count-name{font-size:19px;font-weight:950;color:var(--navy);line-height:1.18}.count-name small{display:block;font-size:12px;color:var(--muted);font-weight:750;margin-top:2px}.count-row input[type=number]{min-height:55px;padding:7px;text-align:center;font-size:24px;font-weight:950;border:3px solid #7DBE93;background:#fff}.count-row input[type=number]:focus{border-color:var(--blue)}
+.edit-name{min-height:48px!important;font-size:17px!important;font-weight:900!important;color:var(--navy)!important;padding:8px 10px!important}
+.count-total{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(86px,.6fr) minmax(86px,.6fr);gap:8px;align-items:center;background:#DCEBFA;color:var(--navy);padding:10px;font-weight:950;border-top:2px solid var(--navy)}.count-total span:nth-child(n+2){text-align:center;font-size:22px}
+.hourly-wrap{overflow-x:auto;border:2px solid var(--line);border-radius:10px}.hourly{width:100%;border-collapse:collapse;min-width:600px}.hourly th{background:var(--navy);color:#fff;padding:10px 8px;font-size:15px}.hourly td{padding:7px;border-top:1px solid #D8E3EE}.hourly input{min-height:48px;padding:8px}.hourly .desc{font-size:16px}.hourly .num{text-align:center;font-size:19px;font-weight:900}
+.hourly-total{display:flex;justify-content:flex-end;align-items:center;gap:10px;background:var(--pale);padding:10px 12px;color:var(--navy);font-size:15px;font-weight:950}.hourly-total output{min-width:85px;border:2px solid var(--blue);background:#fff;border-radius:7px;text-align:center;padding:7px;font-size:20px}
+.extras-compact{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.extras-compact .choice{min-height:52px;font-size:14px;background:var(--soft)}
+.notes-grid{display:grid;grid-template-columns:7fr 3fr;gap:12px}.notes-grid textarea{min-height:145px}.notes-grid .crew textarea{min-height:145px}
+.status{display:none;margin:12px 15px;padding:12px;border-radius:9px;font-weight:850}.status.show{display:block}.status.err{background:#FDEAEA;color:#8B1E1E;border:1px solid #F2B8B5}.status.ok{background:#E9F7EE;color:#176B39;border:1px solid #B8E0C5}.invalid{border-color:var(--red)!important;background:#FFF6F5!important}.group-invalid{outline:3px solid rgba(180,35,24,.17);outline-offset:3px;border-radius:10px}
+.footer{text-align:center;padding:14px 14px 20px;color:var(--muted);font-size:12px;font-weight:750}
+.actions{position:fixed;left:50%;bottom:0;transform:translateX(-50%);z-index:1000;width:min(900px,100%);display:grid;grid-template-columns:.65fr 1fr 1.15fr;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.98);border-top:1px solid var(--line);box-shadow:0 -4px 15px rgba(0,0,0,.14)}.actions button{border:0;border-radius:9px;min-height:54px;padding:12px 8px;font-size:16px;font-weight:950}.reset{background:#E7EDF4;color:#344054}.save{background:var(--blue);color:#fff}.share{background:var(--navy);color:#fff}.actions button:disabled{opacity:.55}
+@media(max-width:720px){body{padding:0 0 132px}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:27px}.two,.three,.notes-grid{grid-template-columns:1fr}.choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.extras-compact{grid-template-columns:repeat(2,minmax(0,1fr))}.count-wrap{padding:10px}.count-head,.count-row,.count-total{grid-template-columns:minmax(0,1.35fr) 82px 82px;gap:6px}.count-head{padding:9px 8px;font-size:15px}.count-row{padding:8px 7px;min-height:70px}.count-name{font-size:17px}.count-row input[type=number]{min-height:54px;font-size:23px;padding:6px}.sec.main{font-size:21px}}
+@media(max-width:390px){.count-head,.count-row,.count-total{grid-template-columns:minmax(0,1.2fr) 74px 74px}.count-name{font-size:16px}.count-row input[type=number]{font-size:21px}.choice{font-size:15px}.actions{grid-template-columns:1fr 1fr}.reset{grid-column:1/-1;order:3}}
+
+/* V2 — larger hourly work cards + conditional quick-extra detail boxes */
+.hourly-cards{display:grid;gap:12px}
+.hourly-card{
+  border:2px solid var(--bluegrey);border-radius:12px;background:var(--soft);
+  padding:13px;
+}
+.hourly-card-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  color:var(--navy);font-size:17px;font-weight:950;margin-bottom:9px
+}
+.hourly-card textarea{
+  min-height:100px!important;font-size:18px!important;font-weight:750!important;
+  background:#fff!important
+}
+.hourly-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.hourly-meta .field{margin:0!important}
+.hourly-meta input{font-size:20px!important;text-align:center;font-weight:900!important}
+.quick-extra-details{display:grid;gap:10px;margin-top:12px}
+.quick-extra-detail{
+  border:2px solid var(--bluegrey);border-radius:12px;background:var(--softblue);padding:12px
+}
+.quick-extra-detail[hidden]{display:none!important}
+.quick-extra-detail label{
+  display:block;color:var(--navy);font-size:17px;font-weight:950;margin-bottom:7px
+}
+.quick-extra-detail textarea{min-height:92px!important;background:#fff!important}
+@media(max-width:520px){
+  .hourly-meta{grid-template-columns:1fr 1fr}
+  .hourly-card{padding:11px}
+  .hourly-card textarea{min-height:112px!important}
+  .quick-extra-detail textarea{min-height:105px!important}
+}
+
+
+/* V3 — HIGH READABILITY STANDARD */
+body{
+  font-size:20px!important;
+  line-height:1.48!important;
+}
+.head{padding:23px 17px!important}
+.head h1{font-size:35px!important;font-weight:950!important}
+.head h2{font-size:20px!important;font-weight:950!important;line-height:1.25!important}
+.intro{
+  font-size:17px!important;font-weight:900!important;line-height:1.45!important;
+  padding:14px 16px!important
+}
+.sec{
+  font-size:22px!important;font-weight:950!important;
+  padding:16px 17px!important;line-height:1.22!important
+}
+.sec.main{font-size:26px!important;padding:18px 17px!important}
+.sec small{font-size:15px!important;font-weight:850!important;line-height:1.35!important;margin-top:5px!important}
+.pad{padding:18px!important}
+.field label,.label{
+  font-size:19px!important;font-weight:950!important;margin-bottom:8px!important;
+  color:#214A30!important
+}
+input[type=text],input[type=date],input[type=number],textarea{
+  min-height:59px!important;
+  font-size:20px!important;
+  font-weight:900!important;
+  padding:15px!important;
+  border-width:2.5px!important;
+}
+textarea{min-height:125px!important;line-height:1.42!important}
+.address label{font-size:22px!important;font-weight:950!important}
+.address textarea{
+  font-size:24px!important;
+  min-height:92px!important;
+  padding:17px!important;
+}
+.choice{
+  min-height:66px!important;
+  font-size:18px!important;
+  font-weight:950!important;
+  padding:12px!important
+}
+.choice input{width:27px!important;height:27px!important}
+.count-head,.count-row,.count-total{
+  grid-template-columns:minmax(0,1.55fr) minmax(92px,.6fr) minmax(92px,.6fr)!important
+}
+.count-head{
+  font-size:20px!important;
+  padding:13px 12px!important
+}
+.count-row{min-height:82px!important;padding:10px 11px!important}
+.count-name{
+  font-size:22px!important;
+  font-weight:950!important;
+  line-height:1.18!important
+}
+.count-name small{font-size:14px!important;font-weight:850!important}
+.count-row input[type=number]{
+  min-height:62px!important;
+  font-size:28px!important;
+  font-weight:950!important;
+  padding:8px!important
+}
+.edit-name{
+  min-height:57px!important;
+  font-size:19px!important;
+  font-weight:950!important
+}
+.count-total{padding:13px 11px!important;font-size:19px!important}
+.count-total span:nth-child(n+2){font-size:26px!important}
+.hourly-cards{gap:15px!important}
+.hourly-card{
+  border-width:2.5px!important;
+  padding:15px!important;
+  background:#F2FAF5!important
+}
+.hourly-card-head{
+  font-size:20px!important;
+  font-weight:950!important;
+  margin-bottom:11px!important
+}
+.hourly-card textarea{
+  min-height:125px!important;
+  font-size:20px!important;
+  font-weight:850!important
+}
+.hourly-meta{gap:12px!important;margin-top:12px!important}
+.hourly-meta input{
+  min-height:62px!important;
+  font-size:24px!important;
+  font-weight:950!important
+}
+.quick-extra-detail{
+  border-width:2.5px!important;
+  padding:14px!important
+}
+.quick-extra-detail label{
+  font-size:20px!important;
+  font-weight:950!important;
+  margin-bottom:9px!important
+}
+.quick-extra-detail textarea{
+  min-height:120px!important;
+  font-size:20px!important
+}
+.actions button{
+  min-height:60px!important;
+  font-size:18px!important;
+  font-weight:950!important
+}
+.footer{font-size:14px!important;font-weight:850!important}
+@media(max-width:720px){
+  body{font-size:19px!important}
+  .head h1{font-size:31px!important}
+  .head h2{font-size:18px!important}
+  .intro{font-size:16px!important}
+  .sec{font-size:20px!important}
+  .sec.main{font-size:23px!important}
+  .field label,.label{font-size:18px!important}
+  input[type=text],input[type=date],input[type=number],textarea{font-size:19px!important}
+  .choice{font-size:17px!important}
+  .count-head,.count-row,.count-total{
+    grid-template-columns:minmax(0,1.28fr) 84px 84px!important;
+    gap:7px!important
+  }
+  .count-head{font-size:18px!important}
+  .count-name{font-size:19px!important}
+  .count-name small{font-size:13px!important}
+  .count-row input[type=number]{font-size:25px!important;min-height:59px!important}
+  .hourly-card-head{font-size:19px!important}
+  .hourly-card textarea{font-size:19px!important;min-height:130px!important}
+  .hourly-meta input{font-size:23px!important}
+}
+@media(max-width:390px){
+  .count-head,.count-row,.count-total{
+    grid-template-columns:minmax(0,1.15fr) 78px 78px!important
+  }
+  .count-name{font-size:18px!important}
+  .count-row input[type=number]{font-size:24px!important;padding:6px!important}
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head"><h1>NEWGRANGE ACCESS</h1><h2>COUNT-UP SHEET</h2></header>
+  <div class="intro">The scaffold count-up is the main record. Enter every chargeable component directly in UP and DOWN before adding hourly work, extras or crew notes.</div>
+
+  <section><div class="sec">1. JOB DETAILS</div><div class="pad grid two">
+    <div class="field" style="grid-column:1/-1"><label for="builder">Builder / Client *</label><input id="builder" type="text" maxlength="120"></div>
+    <div class="field address" style="grid-column:1/-1"><label for="address">SITE ADDRESS *</label><textarea id="address" maxlength="300"></textarea></div>
+    <div class="field"><label for="date">Date * <span style="font-size:14px;color:#5F7666;font-weight:850">(auto-filled)</span></label><input id="date" type="date"></div>
+    <div class="field"><label for="leadingHand">Leading Hand / Crew *</label><input id="leadingHand" type="text" maxlength="120"></div>
+  </div></section>
+
+  <section><div class="sec">2. JOB TYPE <small>Select everything completed on this job.</small></div><div class="pad"><div id="jobTypeGroup" class="choice-grid">
+    <label class="choice"><input type="checkbox" name="jobType" value="Base Out">Base Out</label>
+    <label class="choice"><input type="checkbox" name="jobType" value="3rd Lift Up">3rd Lift Up</label>
+    <label class="choice"><input type="checkbox" name="jobType" value="3rd Lift Down">3rd Lift Down</label>
+    <label class="choice"><input type="checkbox" name="jobType" value="Dismantle All">Dis All</label>
+    <label class="choice"><input type="checkbox" name="jobType" value="Other">Other</label>
+  </div><div class="field" style="margin-top:10px"><label for="otherJob">Other Job Type / Short Description</label><input id="otherJob" type="text" maxlength="160"></div></div></section>
+
+  <section><div class="sec main">3. MAIN SCAFFOLD COUNT-UP <small>This is the core charge-up section. UP and DOWN stay visible and typeable on mobile.</small></div>
+    <div class="count-wrap">
+      <div class="count-head"><div>CHARGEABLE ITEM</div><div>UP</div><div>DOWN</div></div>
+      <div class="count-grid" id="countGrid">
+        <div class="count-row"><div class="count-name">Frames</div><input id="framesUp" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Frames up"><input id="framesDown" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Frames down"></div>
+        <div class="count-row"><div class="count-name">Hop-Ups</div><input id="hopupsUp" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Hop-Ups up"><input id="hopupsDown" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Hop-Ups down"></div>
+        <div class="count-row"><div class="count-name">D/R Posts<small>Double Rail Posts</small></div><input id="drpostsUp" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Double Rail Posts up"><input id="drpostsDown" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Double Rail Posts down"></div>
+        <div class="count-row"><div class="count-name">Slab Posts</div><input id="slabpostsUp" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Slab Posts up"><input id="slabpostsDown" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Slab Posts down"></div>
+        <div class="count-row"><div class="count-name">Ex Legs<small>Extension Legs</small></div><input id="exlegsUp" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Extension Legs up"><input id="exlegsDown" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Extension Legs down"></div>
+        <div class="count-row"><div class="count-name">Standards</div><input id="standardsUp" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Standards up"><input id="standardsDown" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Standards down"></div>
+        <div class="count-row"><div class="count-name">Return Transoms</div><input id="returnUp" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Return Transoms up"><input id="returnDown" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Return Transoms down"></div>
+        <div class="count-row"><input id="extraName1" class="edit-name" type="text" maxlength="50" placeholder="Other chargeable item"><input id="extra1Up" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Other item 1 up"><input id="extra1Down" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Other item 1 down"></div>
+        <div class="count-row"><input id="extraName2" class="edit-name" type="text" maxlength="50" placeholder="Other chargeable item"><input id="extra2Up" data-count="up" type="number" min="0" step="1" inputmode="numeric" aria-label="Other item 2 up"><input id="extra2Down" data-count="down" type="number" min="0" step="1" inputmode="numeric" aria-label="Other item 2 down"></div>
+        <div class="count-total"><span>TOTAL COMPONENT COUNT</span><span id="upTotal">0</span><span id="downTotal">0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section><div class="sec">4. HOURLY CHARGES / DESCRIPTION OF WORK <small>Five separate entries so different hourly tasks can be recorded clearly.</small></div><div class="pad">
+    <div class="hourly-cards">
+      <div class="hourly-card">
+        <div class="hourly-card-head"><span>HOURLY WORK 1</span></div>
+        <div class="field"><label for="h0desc">Description of Work</label><textarea id="h0desc" maxlength="600" placeholder="Describe this hourly work in enough detail for charging..."></textarea></div>
+        <div class="hourly-meta">
+          <div class="field"><label for="h0men">Men</label><input id="h0men" type="number" min="0" step="1" inputmode="numeric"></div>
+          <div class="field"><label for="h0hours">Hours</label><input id="h0hours" type="number" min="0" step="0.25" inputmode="decimal"></div>
+        </div>
+      </div>
+      <div class="hourly-card">
+        <div class="hourly-card-head"><span>HOURLY WORK 2</span></div>
+        <div class="field"><label for="h1desc">Description of Work</label><textarea id="h1desc" maxlength="600" placeholder="Describe this hourly work in enough detail for charging..."></textarea></div>
+        <div class="hourly-meta">
+          <div class="field"><label for="h1men">Men</label><input id="h1men" type="number" min="0" step="1" inputmode="numeric"></div>
+          <div class="field"><label for="h1hours">Hours</label><input id="h1hours" type="number" min="0" step="0.25" inputmode="decimal"></div>
+        </div>
+      </div>
+      <div class="hourly-card">
+        <div class="hourly-card-head"><span>HOURLY WORK 3</span></div>
+        <div class="field"><label for="h2desc">Description of Work</label><textarea id="h2desc" maxlength="600" placeholder="Describe this hourly work in enough detail for charging..."></textarea></div>
+        <div class="hourly-meta">
+          <div class="field"><label for="h2men">Men</label><input id="h2men" type="number" min="0" step="1" inputmode="numeric"></div>
+          <div class="field"><label for="h2hours">Hours</label><input id="h2hours" type="number" min="0" step="0.25" inputmode="decimal"></div>
+        </div>
+      </div>
+      <div class="hourly-card">
+        <div class="hourly-card-head"><span>HOURLY WORK 4</span></div>
+        <div class="field"><label for="h3desc">Description of Work</label><textarea id="h3desc" maxlength="600" placeholder="Describe this hourly work in enough detail for charging..."></textarea></div>
+        <div class="hourly-meta">
+          <div class="field"><label for="h3men">Men</label><input id="h3men" type="number" min="0" step="1" inputmode="numeric"></div>
+          <div class="field"><label for="h3hours">Hours</label><input id="h3hours" type="number" min="0" step="0.25" inputmode="decimal"></div>
+        </div>
+      </div>
+      <div class="hourly-card">
+        <div class="hourly-card-head"><span>HOURLY WORK 5</span></div>
+        <div class="field"><label for="h4desc">Description of Work</label><textarea id="h4desc" maxlength="600" placeholder="Describe this hourly work in enough detail for charging..."></textarea></div>
+        <div class="hourly-meta">
+          <div class="field"><label for="h4men">Men</label><input id="h4men" type="number" min="0" step="1" inputmode="numeric"></div>
+          <div class="field"><label for="h4hours">Hours</label><input id="h4hours" type="number" min="0" step="0.25" inputmode="decimal"></div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <section><div class="sec">5. QUICK EXTRAS <small>Select what applies. A detail box opens for each selected extra.</small></div><div class="pad">
+    <div class="extras-compact">
+      <label class="choice"><input type="checkbox" name="extra" value="Double Decking" data-detail="doubleDeckingDetail">Double Decking</label>
+      <label class="choice"><input type="checkbox" name="extra" value="Ladder Beams" data-detail="ladderBeamsDetail">Ladder Beams</label>
+      <label class="choice"><input type="checkbox" name="extra" value="Carting Gear" data-detail="cartingGearDetail">Carting Gear</label>
+    </div>
+    <div class="quick-extra-details">
+      <div id="doubleDeckingDetail" class="quick-extra-detail" hidden><label for="doubleDeckingNotes">Double Decking — Details</label><textarea id="doubleDeckingNotes" maxlength="900" placeholder="Where, how much, why it was required, or any other charging detail..."></textarea></div>
+      <div id="ladderBeamsDetail" class="quick-extra-detail" hidden><label for="ladderBeamsNotes">Ladder Beams — Details</label><textarea id="ladderBeamsNotes" maxlength="900" placeholder="Describe the ladder beam work in more detail..."></textarea></div>
+      <div id="cartingGearDetail" class="quick-extra-detail" hidden><label for="cartingGearNotes">Carting Gear — Details</label><textarea id="cartingGearNotes" maxlength="900" placeholder="Describe the carting gear / handling work in more detail..."></textarea></div>
+    </div>
+  </div></section>
+
+  <section><div class="sec">6. DESCRIPTION OF OTHER EXTRAS <small>Use for any other non-standard work not covered above.</small></div><div class="pad"><textarea id="extrasDescription" maxlength="2200" placeholder="Describe any other extra work and why it was required..."></textarea></div></section>
+
+  <section><div class="sec">7. CREW FEEDBACK / ISSUES</div><div class="pad"><textarea id="crewFeedback" maxlength="1600" placeholder="Missing gear, access issues, builder instructions, return work, improvements required..."></textarea></div></section>
+
+  <div id="status" class="status" role="status"></div><div class="footer">Newgrange Access · Count-Up Sheet</div>
+</div>
+<div class="actions"><button id="resetBtn" class="reset" type="button">RESET</button><button id="saveBtn" class="save" type="button">SAVE PDF</button><button id="shareBtn" class="share" type="button">SHARE PDF</button></div>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id), $$=sel=>Array.from(document.querySelectorAll(sel));
+const STORAGE='newgrange_job_countup_v2';
+const baseItems=[
+  ['Frames','framesUp','framesDown'],['Hop-Ups','hopupsUp','hopupsDown'],['D/R Posts — Double Rail Posts','drpostsUp','drpostsDown'],
+  ['Slab Posts','slabpostsUp','slabpostsDown'],['Ex Legs — Extension Legs','exlegsUp','exlegsDown'],['Standards','standardsUp','standardsDown'],['Return Transoms','returnUp','returnDown']
+];
+function today(){
+  const parts=new Intl.DateTimeFormat('en-CA',{
+    timeZone:'Australia/Perth',year:'numeric',month:'2-digit',day:'2-digit'
+  }).formatToParts(new Date()).reduce((a,p)=>{if(p.type!=='literal')a[p.type]=p.value;return a},{});
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+$('date').value=today();
+function n(v){const x=parseFloat(v);return Number.isFinite(x)?x:0}
+function totals(){let up=0,down=0;$$('[data-count="up"]').forEach(x=>up+=n(x.value));$$('[data-count="down"]').forEach(x=>down+=n(x.value));$('upTotal').textContent=up;$('downTotal').textContent=down}
+function selected(name){return $$(`input[name="${name}"]:checked`).map(x=>x.value)}
+function collect(){return{
+  builder:$('builder').value.trim(),
+  address:$('address').value.trim(),
+  date:$('date').value,
+  leadingHand:$('leadingHand').value.trim(),
+  jobTypes:selected('jobType'),
+  otherJob:$('otherJob').value.trim(),
+  counts:[
+    ...baseItems.map(([item,u,d])=>({item,up:n($(u).value),down:n($(d).value)})),
+    {item:$('extraName1').value.trim(),up:n($('extra1Up').value),down:n($('extra1Down').value)},
+    {item:$('extraName2').value.trim(),up:n($('extra2Up').value),down:n($('extra2Down').value)}
+  ],
+  hourly:Array.from({length:5},(_,i)=>({
+    description:$(`h${i}desc`).value.trim(),
+    men:n($(`h${i}men`).value),
+    hours:n($(`h${i}hours`).value)
+  })).filter(r=>r.description||r.men||r.hours),
+  extras:selected('extra'),
+  quickExtraDetails:{
+    'Double Decking':$('doubleDeckingNotes').value.trim(),
+    'Ladder Beams':$('ladderBeamsNotes').value.trim(),
+    'Carting Gear':$('cartingGearNotes').value.trim()
+  },
+  extrasDescription:$('extrasDescription').value.trim(),
+  crewFeedback:$('crewFeedback').value.trim()
+}}
+function saveDraft(){try{localStorage.setItem(STORAGE,JSON.stringify(collect()))}catch(_){}}
+function updateQuickExtraDetails(){
+  $$('input[name="extra"]').forEach(cb=>{
+    const panel=$(cb.dataset.detail);
+    if(panel) panel.hidden=!cb.checked;
+  });
+}
+function restore(){try{
+  const d=JSON.parse(localStorage.getItem(STORAGE)||'null');
+  if(!d)return;
+  ['builder','address','date','leadingHand','otherJob','extrasDescription','crewFeedback'].forEach(k=>{if(d[k]!=null)$(k).value=d[k]});
+  $$('input[name="jobType"]').forEach(x=>x.checked=(d.jobTypes||[]).includes(x.value));
+  $$('input[name="extra"]').forEach(x=>x.checked=(d.extras||[]).includes(x.value));
+  (d.counts||[]).forEach((r,i)=>{
+    if(i<7){const [_,u,dn]=baseItems[i];$(u).value=r.up||'';$(dn).value=r.down||''}
+    else if(i===7){$('extraName1').value=r.item||'';$('extra1Up').value=r.up||'';$('extra1Down').value=r.down||''}
+    else if(i===8){$('extraName2').value=r.item||'';$('extra2Up').value=r.up||'';$('extra2Down').value=r.down||''}
+  });
+  (d.hourly||[]).slice(0,5).forEach((r,i)=>{$(`h${i}desc`).value=r.description||'';$(`h${i}men`).value=r.men||'';$(`h${i}hours`).value=r.hours||''});
+  if(d.quickExtraDetails){
+    $('doubleDeckingNotes').value=d.quickExtraDetails['Double Decking']||'';
+    $('ladderBeamsNotes').value=d.quickExtraDetails['Ladder Beams']||'';
+    $('cartingGearNotes').value=d.quickExtraDetails['Carting Gear']||'';
+  }
+  updateQuickExtraDetails();
+  totals();
+}catch(_){}}
+restore();
+$('date').value=today();
+saveDraft();
+let saveTimer;document.addEventListener('input',e=>{if(e.target.matches('input,textarea')){e.target.classList.remove('invalid');totals();clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,180)}});document.addEventListener('change',e=>{
+  if(e.target.matches('input')){
+    e.target.closest('.group-invalid')?.classList.remove('group-invalid');
+    if(e.target.matches('input[name="extra"]')) updateQuickExtraDetails();
+    saveDraft();
+  }
+});
+function validate(d){$$('.invalid').forEach(x=>x.classList.remove('invalid'));$$('.group-invalid').forEach(x=>x.classList.remove('group-invalid'));const errs=[];const field=(id,msg)=>{$(id).classList.add('invalid');errs.push({el:$(id),msg})};if(!d.builder)field('builder','Builder / Client is required.');if(!d.address)field('address','Site Address is required.');if(!d.date)field('date','Date is required.');if(!d.leadingHand)field('leadingHand','Leading Hand / Crew is required.');if(!d.jobTypes.length){$('jobTypeGroup').classList.add('group-invalid');errs.push({el:$('jobTypeGroup'),msg:'Select at least one job type.'})}if(d.jobTypes.includes('Other')&&!d.otherJob)field('otherJob','Describe the other job type.');for(let i=0;i<5;i++){const desc=$(`h${i}desc`).value.trim(),men=n($(`h${i}men`).value),hours=n($(`h${i}hours`).value);if((men||hours)&&!desc)field(`h${i}desc`,'Describe each hourly entry.');if(desc&&!men)field(`h${i}men`,'Enter men for each hourly entry.');if(desc&&!hours)field(`h${i}hours`,'Enter hours for each hourly entry.')}if(errs.length){$('status').className='status show err';$('status').textContent=`Complete ${errs.length} highlighted item${errs.length===1?'':'s'}. ${errs.slice(0,3).map(x=>x.msg).join(' ')}`;errs[0].el.scrollIntoView({behavior:'smooth',block:'center'});return false}$('status').className='status';return true}
+function fmtDate(s){if(!s)return'';const [y,m,d]=s.split('-');return `${d}/${m}/${y}`}
+function safe(s){return(s||'Job').replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,70)}
+async function buildPdf(d){if(!window.jspdf?.jsPDF)throw new Error('PDF engine did not load. Check internet connection and refresh.');const{jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait'}),W=210,H=297,M=10,CW=190;const NAVY=[11,93,42],BLUE=[18,130,59],INK=[23,32,51],MUTED=[91,108,128],LINE=[168,213,184],YELLOW=[255,243,191];let y=10;const ensure=h=>{if(y+h>H-11){doc.addPage();y=12;header(false)}};function header(first=true){doc.setFillColor(...NAVY);doc.rect(0,0,W,22,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(first?15:12);doc.text('NEWGRANGE ACCESS',W/2,8.5,{align:'center'});doc.setFontSize(9);doc.text('COUNT-UP SHEET',W/2,15,{align:'center'});y=26}function sec(t){ensure(10);doc.setFillColor(...BLUE);doc.roundedRect(M,y,CW,8,1,1,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.text(t,M+3,y+5.3);y+=10}function box(label,val,x,w,h=14,hilite=false){doc.setFillColor(...(hilite?YELLOW:[248,250,253]));doc.setDrawColor(...(hilite?[216,154,0]:LINE));doc.roundedRect(x,y,w,h,1.2,1.2,'FD');doc.setTextColor(...MUTED);doc.setFontSize(6.5);doc.setFont('helvetica','bold');doc.text(label.toUpperCase(),x+2.5,y+3.7);doc.setTextColor(...(hilite?NAVY:INK));doc.setFontSize(hilite?10:8.5);const lines=doc.splitTextToSize(val||'—',w-5);doc.text(lines,x+2.5,y+8)}header();sec('JOB DETAILS');const gap=3,half=(CW-gap)/2;box('Builder / Client',d.builder,M,CW,14);y+=16;box('Site Address',d.address,M,CW,18,true);y+=20;box('Date',fmtDate(d.date),M,half);box('Leading Hand / Crew',d.leadingHand,M+half+gap,half);y+=16;sec('JOB TYPE');box('Completed Work',[...d.jobTypes,d.otherJob].filter(Boolean).join(', '),M,CW,15);y+=17;sec('MAIN SCAFFOLD COUNT-UP');doc.setFillColor(...NAVY);doc.rect(M,y,CW,8,'F');doc.setTextColor(255,255,255);doc.setFontSize(8);doc.text('CHARGEABLE ITEM',M+3,y+5.3);doc.text('UP',M+142,y+5.3,{align:'center'});doc.text('DOWN',M+174,y+5.3,{align:'center'});y+=8;let up=0,down=0;d.counts.filter(r=>r.item||r.up||r.down).forEach((r,i)=>{ensure(7);if(i%2===0){doc.setFillColor(248,251,254);doc.rect(M,y,CW,7,'F')}doc.setTextColor(...INK);doc.setFont('helvetica','bold');doc.setFontSize(8.2);doc.text(r.item||'Other chargeable item',M+3,y+4.8);doc.setFontSize(9);doc.text(r.up?String(r.up):'—',M+142,y+4.8,{align:'center'});doc.text(r.down?String(r.down):'—',M+174,y+4.8,{align:'center'});doc.setDrawColor(...LINE);doc.line(M,y+7,W-M,y+7);up+=r.up;down+=r.down;y+=7});doc.setFillColor(220,235,250);doc.rect(M,y,CW,8,'F');doc.setTextColor(...NAVY);doc.setFontSize(8.5);doc.text('TOTAL COMPONENT COUNT',M+3,y+5.2);doc.text(String(up),M+142,y+5.2,{align:'center'});doc.text(String(down),M+174,y+5.2,{align:'center'});y+=11;sec('HOURLY CHARGES / DESCRIPTION OF WORK');const rows=d.hourly.length?d.hourly:[{description:'No hourly charge work recorded',men:0,hours:0}];doc.setFillColor(...NAVY);doc.rect(M,y,CW,8,'F');doc.setTextColor(255,255,255);doc.setFontSize(7.5);doc.text('DESCRIPTION',M+3,y+5);doc.text('MEN',M+153,y+5,{align:'center'});doc.text('HOURS',M+178,y+5,{align:'center'});y+=8;rows.forEach((r,i)=>{const ls=doc.splitTextToSize(r.description||'—',140),rh=Math.max(9,4.2+ls.length*3.3);ensure(rh);doc.setTextColor(...INK);doc.setFont('helvetica','normal');doc.setFontSize(7.7);doc.text(ls,M+3,y+4.9);doc.setFont('helvetica','bold');doc.text(r.men?String(r.men):'—',M+153,y+4.9,{align:'center'});doc.text(r.hours?String(r.hours):'—',M+178,y+4.9,{align:'center'});doc.setDrawColor(...LINE);doc.line(M,y+rh,W-M,y+rh);y+=rh});y+=3;function textSec(title,text){sec(title);const ls=doc.splitTextToSize(text||'No details recorded.',CW-7);const h=Math.max(15,5+ls.length*3.8);ensure(h);doc.setFillColor(248,250,253);doc.setDrawColor(...LINE);doc.roundedRect(M,y,CW,h,1.2,1.2,'FD');doc.setTextColor(...INK);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.text(ls,M+3,y+5.5);y+=h+3}sec('QUICK EXTRAS');box('Selected',d.extras.length?d.extras.join(', '):'None marked',M,CW,14);y+=16;d.extras.forEach(name=>{const detail=d.quickExtraDetails?.[name]||'';if(detail)textSec(`${name.toUpperCase()} — DETAILS`,detail)});textSec('DESCRIPTION OF OTHER EXTRAS',d.extrasDescription);textSec('CREW FEEDBACK / ISSUES',d.crewFeedback);const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setTextColor(...MUTED);doc.setFontSize(6.5);doc.text(`Newgrange Access | Page ${p} of ${pages}`,W/2,H-5,{align:'center'})}return doc.output('blob')}
+function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}
+async function generate(mode){const d=collect();if(!validate(d))return;const buttons=[$('resetBtn'),$('saveBtn'),$('shareBtn')];buttons.forEach(b=>b.disabled=true);$('status').className='status show ok';$('status').textContent='Building PDF...';try{const blob=await buildPdf(d),name=`Newgrange_Count_Up_${safe(d.address)}_${d.date}.pdf`,file=new File([blob],name,{type:'application/pdf'});if(mode==='share'&&navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){await navigator.share({files:[file],title:'Newgrange Access Count-Up Sheet'});$('status').textContent='PDF shared.'}else{download(blob,name);$('status').textContent='PDF saved.'}}catch(e){$('status').className='status show err';$('status').textContent=e?.message||'PDF could not be created.'}finally{buttons.forEach(b=>b.disabled=false)}}
+$('saveBtn').onclick=()=>generate('save');$('shareBtn').onclick=()=>generate('share');$('resetBtn').onclick=()=>{if(!confirm('Clear this entire job sheet?'))return;localStorage.removeItem(STORAGE);document.querySelectorAll('input,textarea').forEach(el=>{if(el.type==='checkbox')el.checked=false;else el.value=''});$('date').value=today();updateQuickExtraDetails();totals();$('status').className='status';window.scrollTo({top:0,behavior:'smooth'})};updateQuickExtraDetails();totals();
+})();
+</script>
+</body>
+</html>
