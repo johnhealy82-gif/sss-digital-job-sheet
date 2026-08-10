@@ -357,6 +357,11 @@ body.large-print #driverName{font-size:21px;padding:16px}
 .header-address[hidden]{display:none!important}
 body.large-print .header-address{font-size:30px}
 @media(max-width:600px){.header-address{font-size:22px}}
+/* Keep the existing top header visible during field entry so the live site address can be seen as it is typed. */
+@media(max-width:600px){
+  .wrap{overflow:visible!important}
+  .head{position:-webkit-sticky!important;position:sticky!important;top:0!important;z-index:900!important}
+}
 
 </style>
 </head>
