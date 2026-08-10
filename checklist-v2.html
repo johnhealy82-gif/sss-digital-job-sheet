@@ -517,7 +517,26 @@
   document.getElementById('btnReset').addEventListener('click', () => {
     if (confirm('Clear form and draft data?')) {
       localStorage.removeItem(STORAGE_KEY);
-      uploadedFiles = [];
+          function header() {
+      const siteAddr = data.movement === "Transfer" 
+        ? `${data.fromAddress || ''} TO ${data.toAddress || ''}` 
+        : (data.siteAddress || '');
+
+      doc.setFillColor(...headerTheme.bg);
+      doc.rect(0,0,pageW,25,"F");
+      doc.setTextColor(...headerTheme.fg);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(13.5);
+      doc.text("SSSECURE - ASSET MOVEMENT CHECKLIST",pageW/2,9,{align:"center"});
+
+      if(siteAddr) {
+        doc.setFontSize(9.8);
+        doc.setTextColor(...headerTheme.address);
+        doc.text(doc.splitTextToSize(siteAddr,180),pageW/2,16.2,{align:"center"});
+      }
+      y=31;
+    }
+
       form.reset();
       document.getElementById('dateTime').value = getPerthTime();
       renderPreviews();
