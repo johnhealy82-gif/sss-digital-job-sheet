@@ -600,7 +600,7 @@ body.large-print .header-address{font-size:30px}
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
     <button type="button" id="shareBtn" class="share">SHARE PDF</button>
   </div>
-  <div class="footer">SSSECURE Asset Movement Checklist - ASSET HEADER FINAL</div>
+  <div class="footer">SSSECURE Asset Movement Checklist - DOMINANT PDF ADDRESS HEADER</div>
 </div>
 
 <script>
@@ -1212,16 +1212,59 @@ body.large-print .header-address{font-size:30px}
     }
     const headerTheme = assetHeaderTheme();
 
+    function pdfPrimaryAddress() {
+      if(data.movement === "Transfer") {
+        return [
+          `FROM: ${data.fromAddress || "Site address not entered"}`,
+          `TO: ${data.toAddress || "Site address not entered"}`
+        ];
+      }
+      return [data.siteAddress || "Site address not entered"];
+    }
+
+    function drawDominantPdfAddress(lines, options={}) {
+      const maxWidth=options.maxWidth || 194;
+      const maxHeight=options.maxHeight || 17;
+      const centerY=options.centerY || 19;
+      const startSize=options.startSize || 20;
+      const minSize=options.minSize || 10.5;
+      const color=options.color || headerTheme.address;
+      const source=(Array.isArray(lines) ? lines : [lines]).map(v => String(v || "Site address not entered"));
+      let size=startSize, fitted=[], lineHeight=0;
+
+      doc.setFont("helvetica","bold");
+      while(size >= minSize) {
+        doc.setFontSize(size);
+        fitted=source.flatMap(line => doc.splitTextToSize(line,maxWidth));
+        lineHeight=size*0.3528*1.08;
+        if(fitted.length*lineHeight <= maxHeight) break;
+        size-=.5;
+      }
+
+      doc.setFontSize(Math.max(size,minSize));
+      if(!fitted.length) fitted=["Site address not entered"];
+      lineHeight=Math.max(size,minSize)*0.3528*1.08;
+      const totalHeight=(fitted.length-1)*lineHeight;
+      const firstBaseline=centerY-totalHeight/2+1.4;
+      doc.setTextColor(...color);
+      fitted.forEach((line,index) => {
+        doc.text(line,pageW/2,firstBaseline+index*lineHeight,{align:"center"});
+      });
+    }
+
     function header() {
       doc.setFillColor(...headerTheme.bg);
-      doc.rect(0,0,pageW,24,"F");
+      doc.rect(0,0,pageW,31,"F");
+
+      // Keep the form identity deliberately secondary. The site address is the headline.
       doc.setTextColor(...headerTheme.fg);
       doc.setFont("helvetica","bold");
-      doc.setFontSize(16);
-      doc.text("SSSECURE",pageW/2,10,{align:"center"});
-      doc.setFontSize(10.1);
-      doc.text("ASSET MOVEMENT CHECKLIST",pageW/2,18,{align:"center"});
-      y=29;
+      doc.setFontSize(6.8);
+      doc.text("SSSECURE",8,5.5);
+      doc.text("ASSET MOVEMENT CHECKLIST",pageW-8,5.5,{align:"right"});
+
+      drawDominantPdfAddress(pdfPrimaryAddress(),{centerY:19,maxHeight:18,startSize:20.5,minSize:11});
+      y=35.5;
     }
 
     function section(title) {
@@ -1416,19 +1459,19 @@ body.large-print .header-address{font-size:30px}
         if(index%2===0) {
           doc.addPage();
           doc.setFillColor(...headerTheme.bg);
-          doc.rect(0,0,pageW,23,"F");
+          doc.rect(0,0,pageW,31,"F");
+
+          // Address remains the dominant header on every photo page as well.
           doc.setTextColor(...headerTheme.fg);
           doc.setFont("helvetica","bold");
-          doc.setFontSize(12.5);
-          doc.text(`SSSECURE - ${group.label}`,pageW/2,9.5,{align:"center"});
-          doc.setFont("helvetica","bold");
-          doc.setFontSize(10.2);
-          doc.setTextColor(...headerTheme.address);
-          doc.text(doc.splitTextToSize(group.address || "Site address not entered",180),pageW/2,16.2,{align:"center"});
+          doc.setFontSize(6.8);
+          doc.text("SSSECURE",8,5.5);
+          doc.text(group.label,pageW-8,5.5,{align:"right"});
+          drawDominantPdfAddress([group.address || "Site address not entered"],{centerY:19,maxHeight:18,startSize:20.5,minSize:11});
         }
 
         const slot=index%2;
-        const boxX=15,boxY=29+slot*128,boxW=180,boxH=109;
+        const boxX=15,boxY=36+slot*125,boxW=180,boxH=106;
 
         doc.setFillColor(243,245,247);
         doc.setDrawColor(...LINE);
