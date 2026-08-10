@@ -1175,7 +1175,26 @@ body:has(input[name="asset"][value="Hoist"]:checked) .head{
     }
     const headerTheme = assetHeaderTheme();
 
-    function header() {
+        function header() {
+      const siteAddr = data.movement === "Transfer" 
+        ? `${data.fromAddress || ''} TO ${data.toAddress || ''}` 
+        : (data.siteAddress || '');
+
+      doc.setFillColor(...headerTheme.bg);
+      doc.rect(0,0,pageW,25,"F");
+      doc.setTextColor(...headerTheme.fg);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(13);
+      doc.text("SSSECURE - ASSET MOVEMENT CHECKLIST",pageW/2,9.5,{align:"center"});
+
+      if(siteAddr) {
+        doc.setFontSize(9.5);
+        doc.setTextColor(...headerTheme.address);
+        doc.text(doc.splitTextToSize(siteAddr,180),pageW/2,17,{align:"center"});
+      }
+      y=31;
+    }
+ {
       doc.setFillColor(...headerTheme.bg);
       doc.rect(0,0,pageW,24,"F");
       doc.setTextColor(...headerTheme.fg);
