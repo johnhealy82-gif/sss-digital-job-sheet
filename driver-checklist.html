@@ -1,20 +1,884 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="0; url=delivery-driver-checklist.html">
-<link rel="canonical" href="delivery-driver-checklist.html">
-<title>SSSECURE</title>
-<script>
-(function(){
-  var target = 'delivery-driver-checklist.html';
-  var suffix = (location.search || '') + (location.hash || '');
-  location.replace(target + suffix);
-})();
-</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0A63C8">
+<meta property="og:title" content="SSSECURE Delivery Driver Completion Checklist">
+<meta property="og:description" content="Complete and share the SSSECURE delivery or pickup checklist.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SSSECURE Delivery Driver Completion Checklist">
+<meta name="twitter:description" content="Complete and share the SSSECURE delivery or pickup checklist.">
+
+<title>SSSECURE Delivery Driver Completion Checklist</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;--line:#d8e0e8;--muted:#687586}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:14px}
+.wrap{max-width:850px;margin:auto;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.16)}
+.head{background:var(--blue);color:#fff;padding:20px;text-align:center}.head h1{font-size:26px;margin:0 0 4px}.head h2{font-size:17px;margin:0}
+.sec{background:var(--green);color:#fff;padding:11px 15px;font-weight:800;letter-spacing:.2px}.pad{padding:15px}.field{margin-bottom:13px}.field:last-child{margin-bottom:0}
+.field-label{display:block;font-weight:800;margin-bottom:7px}
+input[type=text],input[type=date],textarea{width:100%;padding:12px;border:1.5px solid #b8c2ce;border-radius:9px;font-size:16px;background:#fff}
+textarea{height:88px;resize:vertical}
+.option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.work-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.option-grid label,.work-grid label,.answer-row label{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:10px;border:1.5px solid var(--line);border-radius:9px;font-weight:800;line-height:1.2;text-align:center}
+input[type=radio],input[type=checkbox]{width:22px;height:22px;accent-color:var(--blue);flex:0 0 auto}
+.question{padding:14px 0;border-bottom:1px solid #e6ebf0}.question:last-child{border-bottom:none}.question-title{font-weight:800;line-height:1.35;margin-bottom:9px}.question-note{display:block;margin-top:3px;font-size:12px;font-weight:600;color:var(--muted)}
+.answer-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.answer-row.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.conditional{display:block}.conditional[hidden]{display:none!important}
+.photo-input{width:100%;border:1.5px dashed #8ca0b5;border-radius:10px;padding:13px;background:#f8fbfe;font-size:15px}.photo-note{color:var(--muted);font-size:13px;margin-top:7px}
+.preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.preview{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f4f6f8}.preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}.preview span{display:block;padding:6px 8px;font-size:12px;color:var(--muted)}
+.share-area{
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  position:sticky;
+  bottom:0;
+  background:rgba(255,255,255,.97);
+  border-top:1px solid var(--line);
+  display:grid;
+  grid-template-columns:.8fr 1.25fr 1.45fr;
+  gap:8px;
+}
+.share,.save,.reset{
+  width:100%;
+  border:none;
+  border-radius:9px;
+  padding:15px 8px;
+  font-size:15px;
+  font-weight:800;
+}
+.share{background:var(--blue);color:#fff}
+.save{background:var(--green);color:#fff}
+.reset{background:#e9eef4;color:#344054;border:1px solid #cbd5df}
+button:disabled{opacity:.6;cursor:not-allowed}
+@media(max-width:430px){
+  .share-area{grid-template-columns:1fr 1fr}
+  .reset{grid-column:1/-1;order:3}
+}
+.status{display:none;margin:0 15px 15px;padding:12px;border-radius:9px;font-weight:700}.status.ok{display:block;background:#e7f6ec;color:#176b39}.status.err{display:block;background:#fdeaea;color:#9b2020}.footer{text-align:center;padding:0 15px 16px;color:var(--muted);font-size:12px}
+.invalid{border-color:#b42318!important;background:#fff8f7!important}.group-invalid{outline:3px solid rgba(180,35,24,.18)!important;outline-offset:3px;border-radius:10px}.status.err{line-height:1.45}
+@media(max-width:720px){.work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){body{padding:0}.wrap{border-radius:0;min-height:100vh}.head h1{font-size:24px}}
+
+
+/* SSSECURE BLUE READABILITY STANDARD V2 */
+:root{--navy:#123A76;--blue:#0A63C8;--green:#0A63C8;--pale:#DCEBFA;--softblue:#F3F8FD;--bluegrey:#B7CBE1;--ink:#172033}
+body{font-size:17px;line-height:1.42}
+.head{background:var(--navy)!important}.head h1{font-size:31px!important;font-weight:900!important}.head h2{font-size:20px!important;font-weight:800!important}
+.sec{background:var(--blue)!important;font-size:19px!important;padding:14px 16px!important;font-weight:900!important;letter-spacing:.25px!important}
+.section-note{font-size:14px!important;line-height:1.3!important;font-weight:700!important}
+.field-label,.question-title,.gear-title,.inspection-title,.photo-picker{font-size:17px!important;font-weight:900!important}
+input[type=text],input[type=date],textarea,.photo-input{font-size:18px!important;font-weight:700!important;padding:14px!important;line-height:1.35!important;border-color:var(--bluegrey)!important}
+textarea{min-height:100px}
+.work-grid label,.option-grid label,.option-row label,.answer-row label{font-size:16px!important;font-weight:850!important;min-height:58px!important;background:#fff;border-color:var(--bluegrey)!important}
+.inspection-item,.question,.declaration-text{background:var(--softblue)!important;border-color:var(--bluegrey)!important}
+.inspection-item{padding:15px!important}.question{padding:16px 0!important}
+input[type=checkbox],input[type=radio]{width:25px!important;height:25px!important}
+.photo-note,.sig-help,.question-note{font-size:15px!important;font-weight:700!important;line-height:1.4!important}
+.declaration-text{font-size:16.5px!important;font-weight:800!important;line-height:1.55!important}
+.share,.save,.reset,.clear{font-size:17px!important;font-weight:900!important;min-height:54px!important}
+.save{background:var(--blue)!important;color:#fff!important}.share{background:var(--navy)!important;color:#fff!important}
+.preview-meta,.preview span{font-size:14px!important}.footer,.draft-note{font-size:13px!important}
+.large-print-strip{display:flex;justify-content:flex-end;padding:10px 14px;background:var(--pale);border-bottom:1px solid var(--bluegrey)}
+.large-print-toggle{border:2px solid var(--blue);border-radius:10px;padding:12px 16px;background:#fff;color:var(--navy);font-size:16px;font-weight:900;cursor:pointer;min-height:48px}
+.large-print-toggle.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+body.large-print{font-size:20px}
+body.large-print .head h1{font-size:36px!important}body.large-print .head h2{font-size:24px!important}
+body.large-print .sec{font-size:22px!important;padding:17px!important}
+body.large-print .field-label,body.large-print .question-title,body.large-print .gear-title,body.large-print .inspection-title,body.large-print .photo-picker{font-size:20px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print textarea,body.large-print .photo-input{font-size:21px!important;padding:16px!important}
+body.large-print .work-grid label,body.large-print .option-grid label,body.large-print .option-row label,body.large-print .answer-row label{font-size:19px!important;min-height:66px!important}
+body.large-print input[type=checkbox],body.large-print input[type=radio]{width:29px!important;height:29px!important}
+body.large-print .photo-note,body.large-print .sig-help,body.large-print .question-note{font-size:18px!important}
+body.large-print .declaration-text{font-size:19px!important}
+body.large-print .share,body.large-print .save,body.large-print .reset,body.large-print .clear,body.large-print .large-print-toggle{font-size:19px!important;min-height:60px!important}
+
+
+/* SSSECURE CRITICAL INFORMATION READABILITY V3 */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"]{
+  color:#7A4B00!important;font-size:19px!important;font-weight:900!important;letter-spacing:.2px!important;
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:#FFF3BF!important;border:2.5px solid #D89A00!important;color:#123A76!important;
+  font-size:21px!important;font-weight:900!important;line-height:1.35!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.13)!important;
+}
+body.large-print label[for="address"],body.large-print label[for="siteAddress"],body.large-print label[for="fromAddress"],body.large-print label[for="toAddress"]{font-size:22px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:24px!important;padding:18px!important}
+
+
+
+/* SSSECURE UNIVERSAL READABILITY & HIGHLIGHT STANDARD V4 */
+:root{
+  --navy:#123A76;--blue:#0A63C8;--pale:#DCEBFA;--softblue:#F3F8FD;
+  --bluegrey:#B7CBE1;--amber:#D89A00;--yellow:#FFF3BF;--ink:#172033
+}
+body{font-size:18px!important;line-height:1.48!important}
+.head{background:var(--navy)!important;padding:24px 18px!important}
+.head h1{font-size:34px!important;font-weight:900!important;letter-spacing:.3px!important}
+.head h2{font-size:22px!important;font-weight:900!important;line-height:1.25!important}
+.sec{
+  background:var(--blue)!important;color:#fff!important;font-size:20px!important;
+  padding:15px 17px!important;font-weight:900!important;letter-spacing:.35px!important;
+  border-top:1px solid rgba(255,255,255,.2)!important
+}
+.section-note{font-size:15px!important;line-height:1.35!important;font-weight:800!important;margin-top:5px!important}
+.pad{padding:18px!important}
+.field{margin-bottom:16px!important}
+.field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title,.confirm-label{
+  font-size:18px!important;font-weight:900!important;line-height:1.35!important;color:var(--ink)
+}
+.req{font-size:11px!important;font-weight:900!important;padding:2px 6px!important}
+input[type=text],input[type=date],input[type=number],textarea,.photo-input{
+  font-size:20px!important;font-weight:800!important;line-height:1.35!important;
+  min-height:56px!important;padding:15px!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;color:var(--ink)!important
+}
+textarea{min-height:112px!important}
+.addr{min-height:92px!important}
+.work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+.asset-grid label,.size-grid label,.hoist-grid label{
+  font-size:17.5px!important;font-weight:900!important;line-height:1.25!important;
+  min-height:64px!important;padding:12px!important;background:#fff!important;
+  border:2px solid var(--bluegrey)!important;border-radius:10px!important
+}
+input[type=checkbox],input[type=radio]{width:27px!important;height:27px!important;flex:0 0 auto!important}
+.question,.inspection-item,.gear-question,.evidence-card,.missing-row{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:12px!important;padding:16px!important;margin-bottom:13px!important
+}
+.inspection-list,.missing-list{padding:15px!important;background:#fff!important}
+.inspection-item:last-child,.question:last-child,.gear-question:last-child,.missing-row:last-child{margin-bottom:0!important}
+.question-note,.photo-note,.photo-instruction,.sig-help,.evidence-instruction,.qty-wrap label{
+  font-size:16px!important;font-weight:800!important;line-height:1.45!important
+}
+.photo-instruction{
+  background:var(--pale)!important;color:var(--navy)!important;border:2px solid var(--bluegrey)!important;
+  border-radius:10px!important;padding:13px 14px!important
+}
+.photo-input{background:#F8FBFE!important;border-style:dashed!important}
+.photo-input::file-selector-button{
+  font-size:16px!important;font-weight:900!important;padding:12px 14px!important;background:var(--blue)!important
+}
+.declaration-text{
+  background:var(--softblue)!important;border:2px solid var(--bluegrey)!important;
+  font-size:17.5px!important;font-weight:800!important;line-height:1.58!important;padding:16px!important
+}
+.preview-meta,.preview span{font-size:15px!important;font-weight:800!important}
+.share,.save,.reset,.clear,.action-area button,.share-area button{
+  font-size:17px!important;font-weight:900!important;min-height:56px!important
+}
+.save{background:var(--blue)!important;color:#fff!important}.share{background:var(--navy)!important;color:#fff!important}
+.footer,.draft-note{font-size:13.5px!important;font-weight:700!important}
+.large-print-strip{padding:12px 15px!important;background:var(--pale)!important}
+.large-print-toggle{font-size:17px!important;min-height:50px!important;padding:12px 17px!important}
+/* Address is the only yellow exception across the forms. */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"],#singleAddressLabel{
+  color:#7A4B00!important;font-size:20px!important;font-weight:900!important;letter-spacing:.2px!important
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:var(--yellow)!important;border:3px solid var(--amber)!important;color:var(--navy)!important;
+  font-size:22px!important;font-weight:900!important;line-height:1.38!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.14)!important
+}
+.evidence-card{padding:17px!important}.evidence-title{font-size:19px!important;color:var(--navy)!important}
+.evidence-instruction{font-size:16px!important}
+.declaration-lock{font-size:20px!important;font-weight:900!important;line-height:1.45!important}
+body.large-print{font-size:21px!important}
+body.large-print .head h1{font-size:39px!important}body.large-print .head h2{font-size:26px!important}
+body.large-print .sec{font-size:23px!important;padding:18px!important}
+body.large-print .field-label,body.large-print .question-title,body.large-print .gear-title,
+body.large-print .inspection-title,body.large-print .photo-picker,body.large-print .evidence-title{font-size:21px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print input[type=number],
+body.large-print textarea,body.large-print .photo-input{font-size:23px!important;min-height:64px!important;padding:18px!important}
+body.large-print .work-grid label,body.large-print .option-grid label,body.large-print .option-row label,
+body.large-print .answer-row label,body.large-print .choice-grid label,body.large-print .asset-grid label,
+body.large-print .size-grid label,body.large-print .hoist-grid label{font-size:20px!important;min-height:72px!important}
+body.large-print .question-note,body.large-print .photo-note,body.large-print .photo-instruction,
+body.large-print .sig-help,body.large-print .evidence-instruction{font-size:19px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:26px!important;padding:20px!important}
+@media(max-width:650px){
+  .head h1{font-size:31px!important}.head h2{font-size:20px!important}.sec{font-size:19px!important}
+  .pad{padding:15px!important}
+  .field-label,.question-title,.gear-title,.inspection-title,.photo-picker,.evidence-title{font-size:17px!important}
+  input[type=text],input[type=date],input[type=number],textarea,.photo-input{font-size:18px!important}
+  #address,#siteAddress,#fromAddress,#toAddress{font-size:21px!important}
+  .work-grid label,.option-grid label,.option-row label,.answer-row label,.choice-grid label,
+  .asset-grid label,.size-grid label,.hoist-grid label{font-size:16px!important}
+}
+
+</style>
 </head>
 <body>
-<p>Opening SSSECURE form… <a href="delivery-driver-checklist.html">Continue</a></p>
+<div class="wrap">
+  <div class="head"><h1>SSSECURE</h1><h2>Delivery Driver Completion Checklist</h2></div><div class="large-print-strip"><button type="button" id="largePrintToggle" class="large-print-toggle" aria-pressed="false">LARGE PRINT: OFF</button></div>
+
+  <div class="sec">JOB DETAILS</div>
+  <div class="pad">
+    <div class="field"><label class="field-label" for="driverName">Driver Name</label><input id="driverName" type="text" autocomplete="name"></div>
+    <div class="field"><label class="field-label" for="siteAddress">Site Address</label><input id="siteAddress" type="text" autocomplete="street-address"></div>
+    <div class="field"><label class="field-label" for="date">Date</label><input id="date" type="date"></div>
+  </div>
+
+  <div class="sec">DELIVERY OR PICKUP</div>
+  <div class="pad"><div class="option-grid">
+    <label><input type="radio" name="movementType" value="Delivery">Delivery</label>
+    <label><input type="radio" name="movementType" value="Pickup">Pickup</label>
+  </div></div>
+
+  <div class="sec">WHAT IS BEING DELIVERED OR PICKED UP?</div>
+  <div class="pad"><div class="work-grid">
+    <label><input type="checkbox" name="jobType" value="Gable Scaffold">Gable Scaffold</label>
+    <label><input type="checkbox" name="jobType" value="Base Out">Base Out</label>
+    <label><input type="checkbox" name="jobType" value="3rd Lift Up">3rd Lift Up</label>
+    <label><input type="checkbox" name="jobType" value="3rd Lift Down">3rd Lift Down</label>
+    <label><input type="checkbox" name="jobType" value="Dismantle All">Dismantle All</label>
+    <label><input type="checkbox" name="jobType" value="Lower Roof Scaffold">Lower Roof Scaffold</label>
+    <label><input type="checkbox" name="jobType" value="Swimming Pool / Edge Protection">Swimming Pool / Edge Protection</label>
+    <label><input type="checkbox" name="jobType" value="Small Job / Modification"><span>Small Job / Modification<small style="display:block;margin-top:4px;font-size:.72em;line-height:1.2;color:#667085;font-weight:800">Provide details in comments below</small></span></label>
+  </div></div>
+
+  <div id="baseOutSection" class="conditional" hidden>
+    <div class="sec">BASE OUT DELIVERY CHECKS</div>
+    <div class="pad">
+      <div class="question">
+        <div class="question-title">Has The Slab Gear Been Lifted Up Top?<span class="question-note">(Steel Boards, Timbers, Mesh And Posts)</span></div>
+        <div class="answer-row">
+          <label><input type="radio" name="slabGearUpTop" value="Yes">Yes</label>
+          <label><input type="radio" name="slabGearUpTop" value="No">No</label>
+          <label><input type="radio" name="slabGearUpTop" value="N/A">N/A</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="question-title">Has The Base-Out Gear Been Placed Clear Of The Area Where The Scaffold Is To Be Built?</div>
+        <div class="answer-row">
+          <label><input type="radio" name="baseOutClear" value="Yes">Yes</label>
+          <label><input type="radio" name="baseOutClear" value="No">No</label>
+          <label><input type="radio" name="baseOutClear" value="N/A">N/A</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="thirdLiftSection" class="conditional" hidden>
+    <div class="sec">THIRD LIFT DELIVERY CHECK</div>
+    <div class="pad"><div class="question">
+      <div class="question-title">Has The Third-Lift Gear Been Lifted Onto The Balcony Or Scaffold?</div>
+      <div class="answer-row">
+        <label><input type="radio" name="thirdLiftGear" value="Yes">Yes</label>
+        <label><input type="radio" name="thirdLiftGear" value="No">No</label>
+        <label><input type="radio" name="thirdLiftGear" value="N/A">N/A</label>
+      </div>
+    </div></div>
+  </div>
+
+
+  <div id="dismantleAllSection" class="conditional" hidden>
+    <div class="sec">DISMANTLE ALL CHECK</div>
+    <div class="pad">
+      <div class="question">
+        <div class="question-title">Has A Full Site Check Been Completed To Ensure No Excess Gear Has Been Left Behind, Inside And Out?</div>
+        <div class="answer-row two">
+          <label><input type="radio" name="dismantleSiteCheck" value="Yes">Yes</label>
+          <label><input type="radio" name="dismantleSiteCheck" value="No">No</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">COMPLETION CHECKS</div>
+  <div class="pad">
+    <div class="question">
+      <div id="completedQuestion" class="question-title">Is The Delivery Or Pickup Fully Completed?</div>
+      <div class="answer-row two">
+        <label><input type="radio" name="fullyCompleted" value="Yes">Yes</label>
+        <label><input type="radio" name="fullyCompleted" value="No">No</label>
+      </div>
+    </div>
+    <div class="question">
+      <div class="question-title">Is The Gear Clear Of Driveways And Site Access?</div>
+      <div class="answer-row two">
+        <label><input type="radio" name="clearAccess" value="Yes">Yes</label>
+        <label><input type="radio" name="clearAccess" value="No">No</label>
+      </div>
+    </div>
+    <div class="question">
+      <div id="photosQuestion" class="question-title">Have Delivery Or Pickup Photos Been Taken?</div>
+      <div class="answer-row two">
+        <label><input type="radio" name="photosTaken" value="Yes">Yes</label>
+        <label><input type="radio" name="photosTaken" value="No">No</label>
+      </div>
+    </div>
+
+    <div id="photoDistanceSection" class="question conditional" hidden>
+      <div class="question-title">
+        Were The Photos Taken From A Sufficient Distance Back To Clearly Show The Full Front Elevation, Verge, Site Access And Delivery / Pickup Area?
+      </div>
+      <div class="answer-row two">
+        <label><input type="radio" name="photoDistance" value="Yes">Yes</label>
+        <label><input type="radio" name="photoDistance" value="No">No</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">COMMENTS</div>
+  <div class="pad"><textarea id="comments" placeholder="Only add comments if something is incomplete or needs attention."></textarea></div>
+
+  <div class="sec">PHOTOS</div>
+  <div class="pad">
+    <input id="photos" class="photo-input" type="file" accept="image/*" multiple>
+    <div class="photo-note">Add up to 4 delivery or pickup photos.</div>
+    <div id="previewGrid" class="preview-grid"></div>
+  </div>
+
+  <div id="status" class="status"></div>
+  <div class="share-area">
+    <button type="button" id="resetBtn" class="reset">RESET</button>
+    <button type="button" id="saveBtn" class="save">SAVE PDF</button>
+    <button type="button" id="shareBtn" class="share">SHARE PDF</button>
+  </div>
+  <div class="footer">SSSECURE Delivery Driver Completion Checklist - PDF - READABILITY V4</div>
+</div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const now = new Date();
+  const pad2 = n => String(n).padStart(2,"0");
+  $("date").value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
+  let selectedPhotos = [];
+
+  const movement = () => document.querySelector('input[name="movementType"]:checked')?.value || "";
+  const jobs = () => Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el => el.value);
+  const radioValue = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "";
+
+  function updateConditionalSections(){
+    const type = movement();
+    const selected = jobs();
+    const isDelivery = type === "Delivery";
+    const showBaseOut = isDelivery && selected.includes("Base Out");
+    const showThirdLift = isDelivery && (selected.includes("3rd Lift Up") || selected.includes("3rd Lift Down"));
+    const showDismantleAll = selected.includes("Dismantle All");
+
+    $("baseOutSection").hidden = !showBaseOut;
+    $("thirdLiftSection").hidden = !showThirdLift;
+    $("dismantleAllSection").hidden = !showDismantleAll;
+    $("completedQuestion").textContent = type === "Delivery" ? "Is The Delivery Fully Completed?" : type === "Pickup" ? "Is The Pickup Fully Completed?" : "Is The Delivery Or Pickup Fully Completed?";
+    $("photosQuestion").textContent = type === "Delivery" ? "Have Delivery Photos Been Taken?" : type === "Pickup" ? "Have Pickup Photos Been Taken?" : "Have Delivery Or Pickup Photos Been Taken?";
+
+    const showPhotoDistance = radioValue("photosTaken") === "Yes";
+    $("photoDistanceSection").hidden = !showPhotoDistance;
+
+    if(!showPhotoDistance){
+      document.querySelectorAll('input[name="photoDistance"]').forEach(input => {
+        input.checked = false;
+      });
+    }
+  }
+
+  document.addEventListener("change", event => {
+    if(event.target.matches('input[name="movementType"], input[name="jobType"], input[name="photosTaken"]')){
+      updateConditionalSections();
+    }
+  });
+
+  $("photos").addEventListener("change", e => {
+    selectedPhotos = Array.from(e.target.files || []).slice(0,4);
+    const grid = $("previewGrid");
+    grid.innerHTML = "";
+    selectedPhotos.forEach((file,index) => {
+      const url = URL.createObjectURL(file);
+      const box = document.createElement("div");
+      box.className = "preview";
+      box.innerHTML = `<img alt="Photo ${index+1}"><span>Photo ${index+1}</span>`;
+      const img = box.querySelector("img");
+      img.src = url;
+      img.onload = () => URL.revokeObjectURL(url);
+      grid.appendChild(box);
+    });
+  });
+
+  function collect(){
+    return {
+      driverName:$("driverName").value,
+      siteAddress:$("siteAddress").value,
+      date:$("date").value,
+      movementType:movement(),
+      jobTypes:jobs(),
+      slabGearUpTop:radioValue("slabGearUpTop"),
+      baseOutClear:radioValue("baseOutClear"),
+      thirdLiftGear:radioValue("thirdLiftGear"),
+      dismantleSiteCheck:radioValue("dismantleSiteCheck"),
+      fullyCompleted:radioValue("fullyCompleted"),
+      clearAccess:radioValue("clearAccess"),
+      photosTaken:radioValue("photosTaken"),
+      photoDistance:radioValue("photoDistance"),
+      comments:$("comments").value
+    };
+  }
+
+  function clearValidation(){
+    document.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));
+    document.querySelectorAll(".group-invalid").forEach(el=>el.classList.remove("group-invalid"));
+  }
+
+  function validate(data){
+    clearValidation();
+    const errors=[];
+    const markField=(id,message)=>{const el=$(id);el.classList.add("invalid");errors.push({message,element:el});};
+    const markGroup=(selector,message)=>{
+      const input=document.querySelector(selector);
+      const el=input?.closest(".question,.pad")||input;
+      if(el) el.classList.add("group-invalid");
+      errors.push({message,element:el||document.body});
+    };
+    if(!data.driverName.trim()) markField("driverName","Driver Name is required.");
+    if(!data.siteAddress.trim()) markField("siteAddress","Site Address is required.");
+    if(!data.date) markField("date","Date is required.");
+    if(!data.movementType) markGroup('input[name="movementType"]',"Select Delivery or Pickup.");
+    if(!data.jobTypes.length) markGroup('input[name="jobType"]',"Select at least one work type.");
+
+    const isDelivery=data.movementType==="Delivery";
+    if(isDelivery && data.jobTypes.includes("Base Out")){
+      if(!data.slabGearUpTop) markGroup('input[name="slabGearUpTop"]',"Answer the slab gear question.");
+      if(!data.baseOutClear) markGroup('input[name="baseOutClear"]',"Answer the base-out placement question.");
+    }
+    if(isDelivery && (data.jobTypes.includes("3rd Lift Up")||data.jobTypes.includes("3rd Lift Down")) && !data.thirdLiftGear){
+      markGroup('input[name="thirdLiftGear"]',"Answer the third-lift gear question.");
+    }
+    if(data.jobTypes.includes("Dismantle All") && !data.dismantleSiteCheck){
+      markGroup('input[name="dismantleSiteCheck"]',"Answer the full-site dismantle check.");
+    }
+    if(!data.fullyCompleted) markGroup('input[name="fullyCompleted"]',"Answer whether the job is fully completed.");
+    if(!data.clearAccess) markGroup('input[name="clearAccess"]',"Answer whether access is clear.");
+    if(!data.photosTaken) markGroup('input[name="photosTaken"]',"Answer whether photos were taken.");
+    if(data.photosTaken==="Yes"){
+      if(!data.photoDistance) markGroup('input[name="photoDistance"]',"Answer the photo-distance question.");
+      if(!selectedPhotos.length) markField("photos","Add at least one delivery or pickup photo.");
+    }
+
+    const relevantAnswers=[data.slabGearUpTop,data.baseOutClear,data.thirdLiftGear,data.dismantleSiteCheck,data.fullyCompleted,data.clearAccess,data.photosTaken,data.photoDistance];
+    if(relevantAnswers.includes("No") && !data.comments.trim()) markField("comments","Comments are required whenever any answer is No.");
+
+    if(errors.length){
+      status(`Complete ${errors.length} highlighted item${errors.length===1?"":"s"}: ${errors.slice(0,5).map(e=>e.message).join(" ")}${errors.length>5?" Check the remaining highlighted sections.":""}`,"err");
+      errors[0].element?.scrollIntoView?.({behavior:"smooth",block:"center"});
+      return false;
+    }
+    return true;
+  }
+
+  function status(message,type){
+    const el = $("status");
+    el.className = "status " + type;
+    el.textContent = message;
+    el.scrollIntoView({behavior:"smooth",block:"center"});
+  }
+
+  function loadImageFromFile(file){
+    return new Promise((resolve,reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = reject;
+      img.src = url;
+    });
+  }
+
+  function formatDateAU(value){
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || "");
+    return match ? `${match[3]}/${match[2]}/${match[1]}` : value || "";
+  }
+
+  function safeFilenamePart(value){
+    return (value || "Completed")
+      .normalize("NFKD")
+      .replace(/[^a-z0-9]+/gi,"_")
+      .replace(/^_+|_+$/g,"")
+      .slice(0,55) || "Completed";
+  }
+
+  async function photoToJpeg(file,maxDimension=1800,quality=.86){
+    const img = await loadImageFromFile(file);
+    const sourceW = img.naturalWidth || img.width;
+    const sourceH = img.naturalHeight || img.height;
+    const scale = Math.min(1,maxDimension / Math.max(sourceW,sourceH));
+    const width = Math.max(1,Math.round(sourceW*scale));
+    const height = Math.max(1,Math.round(sourceH*scale));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0,0,width,height);
+    ctx.drawImage(img,0,0,width,height);
+    return {
+      dataUrl: canvas.toDataURL("image/jpeg",quality),
+      width,
+      height
+    };
+  }
+
+  async function buildPdf(data){
+    if(!window.jspdf?.jsPDF){
+      throw new Error("PDF engine did not load. Refresh the page and try again.");
+    }
+
+    const {jsPDF} = window.jspdf;
+    const doc = new jsPDF({
+      orientation:"portrait",
+      unit:"mm",
+      format:"a4",
+      compress:true
+    });
+
+    const pageW = 210;
+    const pageH = 297;
+    const margin = 11;
+    const contentW = pageW - margin*2;
+    const BLUE = [18,58,118];
+    const GREEN = [10,99,200];
+    const INK = [23,32,51];
+    const MUTED = [90,101,116];
+    const LIGHT = [246,248,250];
+    const LINE = [216,224,232];
+    let y = 0;
+
+    function header(){
+      doc.setFillColor(...BLUE);
+      doc.rect(0,0,pageW,24,"F");
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(16);
+      doc.text("SSSECURE",pageW/2,10,{align:"center"});
+      doc.setFontSize(10.0);
+      doc.text("DELIVERY DRIVER COMPLETION CHECKLIST",pageW/2,18,{align:"center"});
+      y = 29;
+    }
+
+    function section(title){
+      doc.setFillColor(...GREEN);
+      doc.rect(margin,y,contentW,7,"F");
+      doc.setTextColor(255,255,255);
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(10.0);
+      doc.text(title,margin+3,y+4.9);
+      y += 9;
+    }
+
+    function fitLines(value,maxWidth,maxHeight,startSize=8.4,minSize=5.7){
+      const text = String(value || "-");
+      let size = startSize;
+      let lines = [];
+      let lineHeight = 0;
+
+      while(size >= minSize){
+        doc.setFont("helvetica","normal");
+        doc.setFontSize(size);
+        lines = doc.splitTextToSize(text,maxWidth);
+        lineHeight = size * 0.3528 * 1.16;
+        if(lines.length * lineHeight <= maxHeight){
+          return {lines,size,lineHeight};
+        }
+        size -= .25;
+      }
+
+      doc.setFontSize(minSize);
+      lines = doc.splitTextToSize(text,maxWidth);
+      lineHeight = minSize * 0.3528 * 1.16;
+      const maxLines = Math.max(1,Math.floor(maxHeight/lineHeight));
+      if(lines.length > maxLines){
+        lines = lines.slice(0,maxLines);
+        let last = lines[maxLines-1];
+        while(doc.getTextWidth(last+"...") > maxWidth && last.length > 1){
+          last = last.slice(0,-1);
+        }
+        lines[maxLines-1] = last+"...";
+      }
+      return {lines,size:minSize,lineHeight};
+    }
+
+    function box(label,value,x,boxY,w,h,options={}){
+      const labelSize = options.labelSize || 7.2;
+      const valueSize = options.valueSize || 9.5;
+      const minValueSize = options.minValueSize || 6.4;
+      const labelH = 4.7;
+      const innerX = x+2.4;
+      const maxW = w-4.8;
+      const maxH = h-labelH-2.2;
+
+      const highlight=Boolean(options.highlight);
+      doc.setFillColor(...(highlight?[255,243,191]:LIGHT));
+      doc.setDrawColor(...(highlight?[216,154,0]:LINE));
+      doc.setLineWidth(highlight?.6:.2);
+      doc.roundedRect(x,boxY,w,h,1.4,1.4,"FD");
+
+      doc.setTextColor(...(highlight?[122,75,0]:MUTED));
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(highlight?8.1:labelSize);
+      doc.text(String(label).toUpperCase(),innerX,boxY+3.6);
+
+      const fitted = fitLines(value,maxW,maxH,highlight?11.5:valueSize,highlight?8.5:minValueSize);
+      doc.setTextColor(...(highlight?[18,58,118]:INK));
+      doc.setFont("helvetica","bold");
+      doc.setFontSize(fitted.size);
+      const startY = boxY+labelH+2.2;
+      fitted.lines.forEach((line,index) => {
+        doc.text(line,innerX,startY+index*fitted.lineHeight);
+      });
+    }
+
+    function commentPanel(value,h=31){
+      doc.setFillColor(...LIGHT);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(margin,y,contentW,h,1.4,1.4,"FD");
+      const fitted = fitLines(value || "No additional comments.",contentW-5,h-5,9.3,6.4);
+      doc.setTextColor(...INK);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(fitted.size);
+      const startY = y+4;
+      fitted.lines.forEach((line,index) => {
+        doc.text(line,margin+2.5,startY+index*fitted.lineHeight);
+      });
+      y += h+2;
+    }
+
+    function resultValue(value){
+      return value || "-";
+    }
+
+    header();
+
+    // PAGE 1 - compact driver summary.
+    section("JOB DETAILS");
+    const gap = 3;
+    const half = (contentW-gap)/2;
+
+    box("Driver Name",data.driverName,margin,y,half,14);
+    box("Date",formatDateAU(data.date),margin+half+gap,y,half,14);
+    y += 16;
+
+    box("Site Address",data.siteAddress,margin,y,contentW,17,{highlight:true});
+    y += 19;
+
+    box("Delivery / Pickup",data.movementType,margin,y,half,14);
+    box("Work Type",data.jobTypes.join(", "),margin+half+gap,y,half,14,{valueSize:7.8,minValueSize:5.6});
+    y += 16;
+
+    if(data.movementType === "Delivery" && data.jobTypes.includes("Base Out")){
+      section("BASE OUT DELIVERY CHECKS");
+      box("Slab Gear Lifted Up Top",resultValue(data.slabGearUpTop),margin,y,half,14);
+      box("Base-Out Gear Clear Of Build Area",resultValue(data.baseOutClear),margin+half+gap,y,half,14,{valueSize:7.8});
+      y += 16;
+    }
+
+    if(data.movementType === "Delivery" &&
+       (data.jobTypes.includes("3rd Lift Up") || data.jobTypes.includes("3rd Lift Down"))){
+      section("THIRD LIFT DELIVERY CHECK");
+      box("Gear Lifted Onto Balcony Or Scaffold",resultValue(data.thirdLiftGear),margin,y,contentW,14);
+      y += 16;
+    }
+
+    if(data.jobTypes.includes("Dismantle All")){
+      section("DISMANTLE ALL CHECK");
+      box("Full Site Check Completed - Inside And Out",resultValue(data.dismantleSiteCheck),margin,y,contentW,14);
+      y += 16;
+    }
+
+    section("COMPLETION CHECKS");
+    box(`${data.movementType || "Delivery / Pickup"} Fully Completed`,resultValue(data.fullyCompleted),margin,y,half,14);
+    box("Gear Clear Of Driveways And Site Access",resultValue(data.clearAccess),margin+half+gap,y,half,14);
+    y += 16;
+
+    box(`${data.movementType || "Delivery / Pickup"} Photos Taken`,resultValue(data.photosTaken),margin,y,half,14);
+    box("Photos Show Full Elevation, Verge And Site Access",
+        data.photosTaken === "Yes" ? resultValue(data.photoDistance) : "N/A",
+        margin+half+gap,y,half,14,{valueSize:7.5,minValueSize:5.5});
+    y += 16;
+
+    section("COMMENTS");
+    commentPanel(data.comments || "No additional comments.",31);
+
+    const photos = [];
+    for(const file of selectedPhotos){
+      photos.push(await photoToJpeg(file));
+    }
+
+    // PAGE 2 ONWARD - delivery / pickup photos only.
+    photos.forEach((photo,index) => {
+      if(index % 2 === 0){
+        doc.addPage();
+        doc.setFillColor(...BLUE);
+        doc.rect(0,0,pageW,23,"F");
+        doc.setTextColor(255,255,255);
+        doc.setFont("helvetica","bold");
+        doc.setFontSize(12.5);
+        doc.text(`SSSECURE - ${(data.movementType || "DELIVERY / PICKUP").toUpperCase()} PHOTOS`,pageW/2,9.5,{align:"center"});
+        doc.setFont("helvetica","bold");
+        doc.setFontSize(10.2);
+        doc.setTextColor(255,243,191);
+        const addressLines = doc.splitTextToSize(data.siteAddress || "Site address not entered",180);
+        doc.text(addressLines,pageW/2,16.2,{align:"center"});
+      }
+
+      const slot = index % 2;
+      const boxX = 15;
+      const boxY = 29 + slot*128;
+      const boxW = 180;
+      const boxH = 109;
+
+      doc.setFillColor(243,245,247);
+      doc.setDrawColor(...LINE);
+      doc.roundedRect(boxX,boxY,boxW,boxH,2,2,"FD");
+
+      const scale = Math.min((boxW-4)/photo.width,(boxH-4)/photo.height);
+      const drawW = photo.width*scale;
+      const drawH = photo.height*scale;
+      const drawX = boxX+(boxW-drawW)/2;
+      const drawY = boxY+(boxH-drawH)/2;
+      doc.addImage(photo.dataUrl,"JPEG",drawX,drawY,drawW,drawH,undefined,"FAST");
+
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(8);
+      doc.text(`Photo ${index+1}`,boxX,boxY+boxH+5);
+    });
+
+    const pages = doc.getNumberOfPages();
+    for(let p=1;p<=pages;p++){
+      doc.setPage(p);
+      doc.setTextColor(...MUTED);
+      doc.setFont("helvetica","normal");
+      doc.setFontSize(7);
+      doc.text(`SSSECURE Delivery Driver Completion Checklist | Page ${p} of ${pages}`,
+               pageW/2,pageH-5.5,{align:"center"});
+    }
+
+    return doc.output("blob");
+  }
+
+  function downloadBlob(blob,filename){
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url),60000);
+  }
+
+  async function generatePdf(mode){
+    const data = collect();
+    if(!validate(data)) return;
+    const buttons = [$("resetBtn"),$("saveBtn"),$("shareBtn")];
+    const oldSaveText = $("saveBtn").textContent;
+    const oldShareText = $("shareBtn").textContent;
+
+    buttons.forEach(button => button.disabled = true);
+    $("saveBtn").textContent = "BUILDING PDF...";
+    $("shareBtn").textContent = "BUILDING PDF...";
+    status("Building clear A4 PDF...","ok");
+
+    try{
+      const blob = await buildPdf(data);
+      const filename = `SSSECURE_Driver_${data.movementType || "Completion"}_${safeFilenamePart(data.siteAddress)}.pdf`;
+      const file = new File([blob],filename,{type:"application/pdf"});
+
+      if(mode === "share" && navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+        try{
+          await navigator.share({
+            title:"SSSECURE Delivery Driver Completion Checklist",
+            text:"Completed SSSECURE delivery driver checklist",
+            files:[file]
+          });
+          status("PDF shared successfully.","ok");
+        } catch(error){
+          if(error?.name === "AbortError"){
+            status("Sharing was cancelled. The completed form is still here.","ok");
+          } else {
+            downloadBlob(blob,filename);
+            status("PDF saved to Downloads because direct sharing was unavailable.","ok");
+          }
+        }
+      } else {
+        downloadBlob(blob,filename);
+        status("PDF saved to Downloads.","ok");
+      }
+    } catch(error){
+      console.error(error);
+      status(error?.message || "The PDF could not be created. Refresh the live page and try again.","err");
+    } finally {
+      buttons.forEach(button => button.disabled = false);
+      $("saveBtn").textContent = oldSaveText;
+      $("shareBtn").textContent = oldShareText;
+    }
+  }
+
+  function resetForm(){
+    if(!window.confirm("Clear every field, selection, comment and photo from this form?")) return;
+
+    $("driverName").value = "";
+    $("siteAddress").value = "";
+    $("comments").value = "";
+
+    document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(input => {
+      input.checked = false;
+    });
+
+    selectedPhotos = [];
+    $("photos").value = "";
+    $("previewGrid").innerHTML = "";
+
+    const fresh = new Date();
+    $("date").value = `${fresh.getFullYear()}-${pad2(fresh.getMonth()+1)}-${pad2(fresh.getDate())}`;
+
+    updateConditionalSections();
+    clearValidation();
+    status("Form reset.","ok");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  document.addEventListener("input",event=>{
+    if(event.target.matches("input,textarea")){event.target.classList.remove("invalid");event.target.closest(".group-invalid")?.classList.remove("group-invalid");}
+  });
+  document.addEventListener("change",event=>{
+    if(event.target.matches('input[type="radio"],input[type="checkbox"]')) event.target.closest(".group-invalid")?.classList.remove("group-invalid");
+    if(event.target.id==="photos" && selectedPhotos.length) event.target.classList.remove("invalid");
+  });
+
+  $("saveBtn").addEventListener("click", () => generatePdf("save"));
+  $("shareBtn").addEventListener("click", () => generatePdf("share"));
+  $("resetBtn").addEventListener("click", resetForm);
+
+  updateConditionalSections();
+})();
+</script>
+
+<script>
+(() => {
+  'use strict';
+  const key='sssecure_large_print_standard_v2';
+  const button=document.getElementById('largePrintToggle');
+  if(!button) return;
+  const apply=enabled=>{
+    document.body.classList.toggle('large-print',enabled);
+    button.classList.toggle('active',enabled);
+    button.setAttribute('aria-pressed',enabled?'true':'false');
+    button.textContent=enabled?'LARGE PRINT: ON':'LARGE PRINT: OFF';
+  };
+  let enabled=false;
+  try{enabled=localStorage.getItem(key)==='1';}catch(_){ }
+  apply(enabled);
+  button.addEventListener('click',()=>{
+    enabled=!document.body.classList.contains('large-print');
+    apply(enabled);
+    try{localStorage.setItem(key,enabled?'1':'0');}catch(_){ }
+  });
+})();
+</script>
+
 </body>
 </html>
