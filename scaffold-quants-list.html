@@ -195,7 +195,19 @@ function filter(){
 function clearForm(){
   if(!confirm('Clear all delivery details and quantities?'))return;
   try{localStorage.removeItem(STORE)}catch(e){}
-  state.quantities={};document.querySelectorAll('input[type=text],textarea').forEach(e=>e.value='');document.querySelectorAll('.qty').forEach(e=>e.value='');updateCounts();status('Form cleared.','ok');window.scrollTo({top:0,behavior:'smooth'});
+  state.quantities={};
+  document.querySelectorAll('input[type=text],textarea').forEach(e=>e.value='');
+  document.querySelectorAll('.qty').forEach(e=>{e.value='';e.classList.remove('active')});
+  $('search').value='';
+  filter();
+  document.querySelectorAll('.category').forEach((e,i)=>e.open=i===0);
+  document.querySelectorAll('.modal.show').forEach(e=>e.classList.remove('show'));
+  document.body.classList.remove('large');
+  $('largeBtn').classList.remove('active');
+  $('largeBtn').textContent='LARGE PRINT: OFF';
+  updateCounts();
+  status('Form cleared.','ok');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 async function shareSummary(){
   const d=validate();if(!d)return;
