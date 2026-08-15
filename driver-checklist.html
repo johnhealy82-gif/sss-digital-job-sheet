@@ -364,6 +364,24 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     $("baseOutSection").hidden = !showBaseOut;
     $("thirdLiftSection").hidden = !showThirdLift;
     $("dismantleAllSection").hidden = !showDismantleAll;
+
+    // Clear answers that no longer apply so hidden stale answers cannot
+    // affect validation or the generated PDF.
+    if(!showBaseOut){
+      document.querySelectorAll('input[name="slabGearUpTop"], input[name="baseOutClear"]').forEach(input => {
+        input.checked = false;
+      });
+    }
+    if(!showThirdLift){
+      document.querySelectorAll('input[name="thirdLiftGear"]').forEach(input => {
+        input.checked = false;
+      });
+    }
+    if(!showDismantleAll){
+      document.querySelectorAll('input[name="dismantleSiteCheck"]').forEach(input => {
+        input.checked = false;
+      });
+    }
     $("completedQuestion").textContent = type === "Delivery" ? "Is The Delivery Fully Completed?" : type === "Pickup" ? "Is The Pickup Fully Completed?" : "Is The Delivery Or Pickup Fully Completed?";
     $("photosQuestion").textContent = type === "Delivery" ? "Have Delivery Photos Been Taken?" : type === "Pickup" ? "Have Pickup Photos Been Taken?" : "Have Delivery Or Pickup Photos Been Taken?";
 
