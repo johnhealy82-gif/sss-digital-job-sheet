@@ -393,7 +393,7 @@ function restore(){try{
   totals();
 }catch(_){}}
 restore();
-$('date').value=today();
+if(!$('date').value) $('date').value=today();
 saveDraft();
 let saveTimer;document.addEventListener('input',e=>{if(e.target.matches('input,textarea')){e.target.classList.remove('invalid');totals();clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,180)}});document.addEventListener('change',e=>{
   if(e.target.matches('input')){
