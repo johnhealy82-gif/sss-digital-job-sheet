@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#123A76">
 <title>SSSECURE Scaffold Delivery Quantification Form</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root{--navy:#123A76;--blue:#0A63C8;--bg:#EEF3F7;--ink:#172033;--muted:#667085;--line:#D8E0E8;--pale:#DCEBFA;--soft:#F3F8FD;--amber:#D89A00;--yellow:#FFF3BF;--danger:#B42318}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -67,7 +68,7 @@ body.large .name{font-size:22px}body.large .qty{height:66px;font-size:28px}body.
   </div>
   <div class="sec">SCAFFOLD QUANTITIES</div>
   <div class="nav" id="categoryNav"><div class="nav-title">JUMP TO CATEGORY</div><div class="nav-grid" id="navGrid"></div><div class="nav-actions"><button class="expand" id="expandAll">EXPAND ALL</button><button class="collapse" id="collapseAll">COLLAPSE ALL</button></div></div>
-  <div class="instruction"><strong>Enter only the gear required.</strong><br>The Preview and PRINT / SAVE PDF output include only items with a quantity greater than zero.</div>
+  <div class="instruction"><strong>Enter only the gear required.</strong><br>The Preview and PDF include only items with a quantity greater than zero.</div>
   <div class="sticky">
     <div class="search-wrap"><input id="search" type="text" placeholder="Search equipment — e.g. 2.4 tube, ladder, hop-up"><button class="clear-search" id="clearSearch">×</button></div>
     <div class="tool-row"><button class="review-btn" id="reviewBtn">VIEW ENTERED ITEMS (<span id="enteredCount">0</span>)</button><button class="save-btn" id="saveBtn">SAVE DRAFT</button></div>
@@ -77,7 +78,7 @@ body.large .name{font-size:22px}body.large .qty{height:66px;font-size:28px}body.
   <div id="status" class="status"></div>
   <div class="footer">SSSECURE Scaffold Delivery Quantification Form</div>
 </div>
-<div class="action"><div class="action-grid"><button class="clear-btn" id="clearBtn">CLEAR FORM</button><button class="preview-btn" id="previewBtn">PREVIEW</button><button class="print-btn" id="printBtn">PRINT / SAVE PDF</button><button class="share-btn" id="shareBtn">SHARE SUMMARY</button></div><div class="note">PRINT / SAVE PDF creates a compact packing list containing entered quantities only.</div></div>
+<div class="action"><div class="action-grid"><button class="clear-btn" id="clearBtn">CLEAR FORM</button><button class="preview-btn" id="previewBtn">PREVIEW</button><button class="print-btn" id="printBtn">PRINT / SAVE PDF</button><button class="share-btn" id="shareBtn">SHARE SUMMARY</button></div><div class="note">PRINT / SAVE PDF creates a real PDF file containing entered quantities only.</div></div>
 <div class="modal" id="reviewModal"><div class="modal-card"><div class="modal-head"><h3>Entered Equipment</h3><button class="modal-close" data-close="reviewModal">×</button></div><div class="modal-body" id="reviewBody"></div></div></div>
 <div class="modal" id="previewModal"><div class="modal-card"><div class="modal-head"><h3>Form Preview</h3><button class="modal-close" data-close="previewModal">×</button></div><div class="modal-body" id="previewBody"></div></div></div>
 <script>
@@ -118,13 +119,51 @@ function renderReview(target){const groups=selected();target.innerHTML=groups.le
 function validate(){const d=collect(),missing=[];if(!d.client)missing.push('Client');if(!d.siteAddress)missing.push('Site Address');if(!d.preparedBy)missing.push('Prepared By');if(!selected().length)missing.push('at least one quantity');if(missing.length){status('Complete: '+missing.join(', ')+'.','err');return null}return d}
 function buildSummary(){const d=validate();if(!d)return null;const groups=selected();$('previewBody').innerHTML=`<div class="preview-sheet"><div class="preview-head"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION</p></div><div class="preview-content"><div class="preview-sec">DELIVERY DETAILS</div><div class="preview-field"><small>Client</small><div>${esc(d.client)}</div></div><div class="preview-field address"><small>Site Address</small><div>${esc(d.siteAddress)}</div></div><div class="preview-field"><small>Prepared By</small><div>${esc(d.preparedBy)}</div></div><div class="preview-field"><small>Job Description</small><div>${esc(d.jobDescription||'-')}</div></div><div class="preview-field"><small>Special Delivery Instructions</small><div>${esc(d.specialInstructions||'-')}</div></div><div class="preview-sec">PACKING LIST — QUANTITIES REQUIRED</div>${groups.map(g=>`<div class="preview-cat"><h5>${esc(g.category)}</h5>${g.items.map(x=>`<div class="preview-line"><span>${esc(x.item)}</span><strong>${esc(formatQty(x.qty,x.unit))}</strong></div>`).join('')}</div>`).join('')}</div></div>`;return d}
 function preview(){const d=buildSummary();if(!d)return;$('previewModal').classList.add('show')}
-function printSummary(){const d=buildSummary();if(!d)return;$('previewModal').classList.add('show');document.body.classList.add('print-summary');requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>window.print(),120)))}
+function safeFilenamePart(v){return(v||'Packing_List').normalize('NFKD').replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,60)||'Packing_List'}
+function buildPackingPdf(){
+  const d=validate();if(!d)return null;
+  if(!window.jspdf?.jsPDF){status('PDF engine did not load. Refresh the page and try again.','err');return null}
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const W=210,H=297,M=11,CW=W-(M*2),NAVY=[18,58,118],BLUE=[10,99,200],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[247,250,252],LINE=[205,215,225],YELLOW=[255,243,191],AMBER=[216,154,0];
+  let y=0;
+  const groups=selected();
+  function pageHeader(first=false){
+    doc.setFillColor(...NAVY);doc.rect(0,0,W,24,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text('SSSECURE',W/2,9.5,{align:'center'});doc.setFontSize(9.5);doc.text(first?'SCAFFOLD DELIVERY PACKING LIST':'SCAFFOLD DELIVERY PACKING LIST - CONTINUED',W/2,17,{align:'center'});y=29;
+  }
+  function ensure(h){if(y+h>H-12){doc.addPage();pageHeader(false)}}
+  function section(title){ensure(10);doc.setFillColor(...BLUE);doc.rect(M,y,CW,7.5,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.text(title,M+3,y+5.1);y+=10}
+  function field(label,value,highlight=false){
+    const text=String(value||'-');doc.setFont('helvetica','bold');doc.setFontSize(highlight?10.5:9);const lines=doc.splitTextToSize(text,CW-6);const h=Math.max(highlight?14:12,7+lines.length*(highlight?4.3:3.7));ensure(h+2);doc.setFillColor(...(highlight?YELLOW:LIGHT));doc.setDrawColor(...(highlight?AMBER:LINE));doc.setLineWidth(highlight?.6:.2);doc.roundedRect(M,y,CW,h,1.5,1.5,'FD');doc.setTextColor(...(highlight?[122,75,0]:MUTED));doc.setFontSize(6.8);doc.text(label.toUpperCase(),M+3,y+3.8);doc.setTextColor(...(highlight?NAVY:INK));doc.setFontSize(highlight?10.5:9);doc.text(lines,M+3,y+8.4);y+=h+2;
+  }
+  function category(g){
+    const rowH=6.5,headH=7.5,totalH=headH+(g.items.length*rowH)+2;ensure(totalH);
+    doc.setFillColor(...BLUE);doc.roundedRect(M,y,CW,headH,1.2,1.2,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9.2);doc.text(g.category,M+3,y+5.1);y+=headH;
+    g.items.forEach((x,i)=>{if(i%2===0){doc.setFillColor(...LIGHT);doc.rect(M,y,CW,rowH,'F')}doc.setDrawColor(...LINE);doc.line(M,y+rowH,M+CW,y+rowH);doc.setTextColor(...INK);doc.setFont('helvetica','normal');doc.setFontSize(8.8);doc.text(x.item,M+3,y+4.5);doc.setFont('helvetica','bold');doc.setFontSize(9.3);doc.text(formatQty(x.qty,x.unit),M+CW-3,y+4.5,{align:'right'});y+=rowH});y+=2;
+  }
+  pageHeader(true);section('DELIVERY DETAILS');field('Client',d.client);field('Site Address',d.siteAddress,true);field('Prepared By',d.preparedBy);field('Job Description',d.jobDescription||'-');field('Special Delivery Instructions',d.specialInstructions||'-');section('PACKING LIST - QUANTITIES REQUIRED');groups.forEach(category);
+  const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setTextColor(...MUTED);doc.setFont('helvetica','normal');doc.setFontSize(6.8);doc.text(`SSSECURE Scaffold Delivery Packing List | Page ${p} of ${pages}`,W/2,H-5.5,{align:'center'})}
+  return {blob:doc.output('blob'),filename:`SSSECURE_Packing_List_${safeFilenamePart(d.siteAddress)}.pdf`};
+}
+function downloadBlob(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000)}
+async function savePackingPdf(){
+  const result=buildPackingPdf();if(!result)return;
+  const btn=$('printBtn'),old=btn.textContent;btn.disabled=true;btn.textContent='BUILDING PDF...';status('Building packing-list PDF...','info');
+  try{
+    const file=new File([result.blob],result.filename,{type:'application/pdf'});
+    if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){
+      try{await navigator.share({title:'SSSECURE Scaffold Delivery Packing List',text:'SSSECURE scaffold delivery packing list',files:[file]});status('Packing-list PDF ready.','ok')}
+      catch(e){if(e?.name==='AbortError')status('PDF ready. Sharing was cancelled.','info');else{downloadBlob(result.blob,result.filename);status('Packing-list PDF saved.','ok')}}
+    }else{downloadBlob(result.blob,result.filename);status('Packing-list PDF saved.','ok')}
+  }catch(e){console.error(e);status(e?.message||'PDF could not be created.','err')}
+  finally{btn.disabled=false;btn.textContent=old}
+}
 function filter(){const tokens=$('search').value.toLowerCase().trim().split(/\s+/).filter(Boolean);let visible=0;document.querySelectorAll('.category').forEach(cat=>{let count=0;cat.querySelectorAll('.row').forEach(r=>{const match=!tokens.length||tokens.every(t=>r.dataset.search.includes(t));r.classList.toggle('hidden',!match);if(match)count++});cat.classList.toggle('hidden',count===0);if(tokens.length&&count)cat.open=true;visible+=count});$('empty').style.display=visible?'none':'block';$('clearSearch').style.display=$('search').value?'block':'none'}
 function clearForm(){if(!confirm('Clear all delivery details and quantities?'))return;try{localStorage.removeItem(STORE)}catch(e){}state.quantities={};document.querySelectorAll('input[type=text],textarea').forEach(e=>e.value='');document.querySelectorAll('.qty').forEach(e=>{e.value='';e.classList.remove('active')});$('search').value='';filter();updateCounts();status('Form cleared.','ok');window.scrollTo({top:0,behavior:'smooth'})}
 async function shareSummary(){const d=validate();if(!d)return;const lines=['SSSECURE SCAFFOLD DELIVERY QUANTIFICATION','',`Client: ${d.client}`,`Site Address: ${d.siteAddress}`,`Prepared By: ${d.preparedBy}`,`Job Description: ${d.jobDescription||'-'}`,`Special Delivery Instructions: ${d.specialInstructions||'-'}`,'','PACKING LIST'];selected().forEach(g=>{lines.push('',g.category.toUpperCase());g.items.forEach(x=>lines.push(`${x.item}: ${formatQty(x.qty,x.unit)}`))});const text=lines.join('\n');try{if(navigator.share){await navigator.share({title:'SSSECURE Scaffold Delivery Quantification',text});status('Summary shared.','ok')}else{await navigator.clipboard.writeText(text);status('Summary copied to clipboard.','ok')}}catch(e){if(e.name!=='AbortError')status('Sharing was unavailable.','err')}}
 build();restore();apply();
 document.addEventListener('input',e=>{if(e.target.matches('.qty')){const n=parseFloat(e.target.value);if(Number.isFinite(n)&&n>0)state.quantities[e.target.dataset.key]=n;else delete state.quantities[e.target.dataset.key];e.target.classList.toggle('active',n>0);updateCounts();save(false)}else if(e.target.matches('#client,#siteAddress,#preparedBy,#jobDescription,#specialInstructions'))save(false)});
-$('search').addEventListener('input',filter);$('clearSearch').onclick=()=>{$('search').value='';filter();$('search').focus()};$('expandAll').onclick=()=>document.querySelectorAll('.category').forEach(x=>x.open=true);$('collapseAll').onclick=()=>document.querySelectorAll('.category').forEach(x=>x.open=false);$('reviewBtn').onclick=()=>{renderReview($('reviewBody'));$('reviewModal').classList.add('show')};$('saveBtn').onclick=()=>save(true);$('largeBtn').onclick=()=>{document.body.classList.toggle('large');const on=document.body.classList.contains('large');$('largeBtn').classList.toggle('active',on);$('largeBtn').textContent='LARGE PRINT: '+(on?'ON':'OFF')};$('clearBtn').onclick=clearForm;$('previewBtn').onclick=preview;$('printBtn').onclick=printSummary;$('shareBtn').onclick=shareSummary;
+$('search').addEventListener('input',filter);$('clearSearch').onclick=()=>{$('search').value='';filter();$('search').focus()};$('expandAll').onclick=()=>document.querySelectorAll('.category').forEach(x=>x.open=true);$('collapseAll').onclick=()=>document.querySelectorAll('.category').forEach(x=>x.open=false);$('reviewBtn').onclick=()=>{renderReview($('reviewBody'));$('reviewModal').classList.add('show')};$('saveBtn').onclick=()=>save(true);$('largeBtn').onclick=()=>{document.body.classList.toggle('large');const on=document.body.classList.contains('large');$('largeBtn').classList.toggle('active',on);$('largeBtn').textContent='LARGE PRINT: '+(on?'ON':'OFF')};$('clearBtn').onclick=clearForm;$('previewBtn').onclick=preview;$('printBtn').onclick=savePackingPdf;$('shareBtn').onclick=shareSummary;
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).classList.remove('show'));document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 })();
 </script>
