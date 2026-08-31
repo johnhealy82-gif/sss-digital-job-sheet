@@ -1,61 +1,378 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#123A76">
-<title>SSSECURE Scaffold Delivery Quantification Form</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><style>
-:root{--navy:#123A76;--blue:#0A63C8;--bg:#EEF3F7;--ink:#172033;--muted:#667085;--line:#B7CBE1;--pale:#DCEBFA;--soft:#F3F8FD;--amber:#D89A00;--yellow:#FFF3BF;--danger:#B42318}
-*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink);font-size:18px;line-height:1.45;padding:12px 12px 215px}
-.app{max-width:900px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 3px 16px rgba(0,0,0,.12)}.header{background:var(--navy);color:#fff;padding:24px 18px;text-align:center}.header h1{font-size:34px;margin:0 0 4px;font-weight:900}.header h2{font-size:22px;margin:0;font-weight:900}
-.sec{background:var(--blue);color:#fff;padding:15px 17px;font-size:20px;font-weight:900}.pad{padding:18px}.field{margin-bottom:16px}.field:last-child{margin-bottom:0}label{display:block;font-weight:900;margin-bottom:8px}.req{background:var(--danger);color:#fff;border-radius:4px;padding:2px 6px;font-size:11px;margin-left:5px}
-input[type=text],textarea{width:100%;font-size:20px;font-weight:800;line-height:1.35;padding:15px;border:2px solid var(--line);border-radius:10px;color:var(--ink);background:#fff}textarea{min-height:112px;resize:vertical;font-family:inherit}
-label[for=siteAddress]{color:#7A4B00;font-size:20px}#siteAddress{background:var(--yellow);border:3px solid var(--amber);color:var(--navy);font-size:22px;box-shadow:0 0 0 3px rgba(216,154,0,.14)}.prepared-date-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.prepared-date-grid .field{min-width:0}.prepared-date-grid label{display:flex;gap:5px;white-space:nowrap;font-size:16px}.prepared-date-grid input{font-size:18px}
-.nav{padding:16px 14px;background:var(--soft);border-bottom:2px solid var(--line)}.nav-title{font-size:19px;font-weight:900;color:var(--navy);margin-bottom:10px}.nav-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.jump{display:flex;align-items:center;justify-content:center;text-decoration:none;min-height:54px;padding:11px 9px;border:2px solid var(--line);border-radius:9px;background:#fff;color:var(--navy);font-size:16px;font-weight:900;text-align:center}
-.nav-actions,.tool-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}button{font:inherit;font-weight:900;cursor:pointer}.nav-actions button,.tool-row button,.large-btn{min-height:52px;border:0;border-radius:9px;padding:12px}.expand{background:#EAF2FF;color:#174EA6}.collapse{background:#E9EEF4;color:#344054}.instruction{margin:12px;background:var(--pale);color:var(--navy);border:2px solid var(--line);border-radius:9px;padding:14px;font-size:16px;font-weight:900}
-.sticky{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:14px}.search-wrap{position:relative}#search{padding-right:46px}.clear-search{position:absolute;right:7px;top:7px;width:38px;height:38px;border:0;border-radius:8px;background:#E9EEF4;font-size:22px;color:#344054}.review-btn{background:var(--navy);color:#fff}.save-btn{background:var(--pale);color:var(--navy);border:1px solid var(--line)!important}.large-btn{width:100%;margin-top:9px;background:var(--pale);color:var(--navy);border:2px solid var(--blue)}.large-btn.active{background:var(--navy);color:#fff}
-.category{border-bottom:2px solid #fff;scroll-margin-top:145px}.category summary{list-style:none;display:flex;align-items:center;gap:12px;background:var(--blue);color:#fff;padding:17px;font-size:20px;font-weight:900;cursor:pointer}.category[open] summary{background:var(--navy)}.category summary::-webkit-details-marker{display:none}.category summary::after{content:'+';font-size:28px;margin-left:auto}.category[open] summary::after{content:'–'}.badge{background:#fff;color:var(--navy);border-radius:999px;padding:5px 9px;font-size:14px;margin-left:auto}
-.items{padding:2px 14px 14px;background:var(--soft)}.row{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:12px;align-items:center;padding:13px 0;border-bottom:2px solid #E2EAF3}.row:last-child{border-bottom:0}.name{font-size:19px;font-weight:900;line-height:1.3}.unit{font-size:15px;font-weight:800;color:var(--muted);margin-top:4px}.qty{width:100%;height:58px;font-size:24px;font-weight:900;text-align:center;border:2px solid var(--line);border-radius:8px;background:#fff}.qty.active{border-color:var(--blue)}.back{display:block;text-align:center;text-decoration:none;margin:0 auto 13px;padding:13px;border-radius:8px;background:var(--pale);color:var(--navy);font-weight:900}.hidden{display:none!important}.empty{display:none;padding:28px;text-align:center;color:var(--muted);font-weight:800}
-.status{display:none;margin:12px 15px;padding:12px;border-radius:9px;font-weight:800}.status.show{display:block}.ok{background:#E7F6EC;color:#176B39}.info{background:#EEF5FF;color:#184F8C}.err{background:#FDEAEA;color:#9B2020}.invalid{border-color:var(--danger)!important;background:#FFF6F5!important}
-.action{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(900px,100%);background:rgba(255,255,255,.98);border-top:1px solid var(--line);box-shadow:0 -3px 14px rgba(0,0,0,.14);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:50}.action-grid{display:grid;grid-template-columns:.75fr 1fr 1fr 1.25fr;gap:8px}.action button{border:0;border-radius:10px;min-height:56px;padding:12px 8px;font-size:16px}.clear-btn{background:#E9EEF4;color:#344054}.preview-btn{background:var(--navy);color:#fff}.pdf-btn{background:var(--blue);color:#fff}.share-btn{background:var(--navy);color:#fff}.note{text-align:center;color:var(--muted);font-size:13px;font-weight:800;margin-top:7px}
-.modal{position:fixed;inset:0;background:rgba(18,29,45,.58);display:none;align-items:flex-end;justify-content:center;z-index:100}.modal.show{display:flex}.modal-card{width:min(900px,100%);max-height:88vh;background:#fff;border-radius:18px 18px 0 0;overflow:hidden;display:flex;flex-direction:column}.modal-head{background:var(--navy);color:#fff;padding:16px;display:flex;align-items:center;justify-content:space-between}.modal-head h3{margin:0;font-size:23px}.modal-close{width:44px;height:44px;border:0;border-radius:8px;background:rgba(255,255,255,.16);color:#fff;font-size:26px}.modal-body{padding:14px;overflow:auto}
-.preview-sheet{background:#fff}.preview-head{background:var(--navy);color:#fff;text-align:center;padding:18px}.preview-head h4{font-size:28px;margin:0}.preview-content{padding:14px}.preview-sec{background:var(--blue);color:#fff;padding:10px;font-weight:900;margin:8px 0}.preview-field{border:2px solid var(--line);background:#F7FAFC;border-radius:8px;padding:10px;margin-bottom:8px}.preview-field.address{background:var(--yellow);border:3px solid var(--amber)}.preview-field small{display:block;color:var(--muted);font-weight:900;font-size:11px;text-transform:uppercase}.preview-field div{font-weight:900;font-size:17px;white-space:pre-wrap}.preview-cat{border:2px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:8px}.preview-cat h5{margin:0;background:var(--blue);color:#fff;padding:9px;font-size:17px}.preview-line{display:grid;grid-template-columns:1fr auto;gap:12px;padding:8px 10px;border-top:1px solid #EDF0F3;font-size:15px}.preview-line strong{font-size:17px}
-body.large .name{font-size:22px}body.large .qty{height:66px;font-size:28px}body.large .category summary{font-size:23px}body.large input[type=text],body.large textarea{font-size:23px}
-@media(max-width:650px){body{padding:0 0 245px}.app{border-radius:0;min-height:100vh}.nav-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:minmax(0,1fr) 112px}.action-grid{grid-template-columns:1fr 1fr}}
-</style></head>
-<body><div class="app"><div class="header"><h1>SSSECURE</h1><h2>Scaffold Delivery Quantification Form</h2></div><div class="sec">DELIVERY DETAILS</div><div class="pad">
-<div class="field"><label for="client">Client <span class="req">REQUIRED</span></label><input id="client" type="text" maxlength="120"></div>
-<div class="field"><label for="siteAddress">Site Address <span class="req">REQUIRED</span></label><input id="siteAddress" type="text" maxlength="250" autocomplete="street-address"></div>
-<div class="prepared-date-grid"><div class="field"><label for="preparedBy">Prepared By <span class="req">REQUIRED</span></label><input id="preparedBy" type="text" maxlength="100"></div>
-<div class="field"><label for="formDate">Date <span class="req">REQUIRED</span></label><input id="formDate" type="text" inputmode="numeric" maxlength="10" placeholder="DD/MM/YYYY" autocomplete="off"></div></div>
-<div class="field"><label for="jobDescription">Job Description</label><textarea id="jobDescription" maxlength="900"></textarea></div>
-<div class="field"><label for="specialInstructions">Special Delivery Instructions</label><textarea id="specialInstructions" maxlength="1200"></textarea></div></div>
-<div class="sec">SCAFFOLD QUANTITIES</div><div class="nav" id="categoryNav"><div class="nav-title">JUMP TO CATEGORY</div><div class="nav-grid" id="navGrid"></div><div class="nav-actions"><button class="expand" id="expandAll">EXPAND ALL</button><button class="collapse" id="collapseAll">COLLAPSE ALL</button></div></div>
-<div class="instruction"><strong>Enter only the gear required.</strong><br>The Preview and PDF include only items with a quantity greater than zero.</div><div class="sticky"><div class="search-wrap"><input id="search" type="text" placeholder="Search equipment"><button class="clear-search" id="clearSearch">×</button></div>
-<div class="tool-row"><button class="review-btn" id="reviewBtn">VIEW ENTERED ITEMS (<span id="enteredCount">0</span>)</button><button class="save-btn" id="saveBtn">SAVE DRAFT</button></div><button class="large-btn" id="largeBtn">LARGE PRINT: OFF</button></div>
-<div id="inventory"></div><div id="empty" class="empty">No equipment matches that search.</div><div id="status" class="status"></div><div class="footer">SSSECURE Scaffold Delivery Quantification Form</div></div>
-<div class="action"><div class="action-grid"><button class="clear-btn" id="clearBtn">CLEAR FORM</button><button class="preview-btn" id="previewBtn">PREVIEW</button><button class="pdf-btn" id="pdfBtn">SAVE PDF</button><button class="share-btn" id="shareBtn">EMAIL / SHARE PDF</button></div><div class="note">Draft saves automatically on this device.</div></div>
-<div class="modal" id="reviewModal"><div class="modal-card"><div class="modal-head"><h3>Entered Equipment</h3><button class="modal-close" data-close="reviewModal">×</button></div><div class="modal-body" id="reviewBody"></div></div></div>
-<div class="modal" id="previewModal"><div class="modal-card"><div class="modal-head"><h3>Form Preview</h3><button class="modal-close" data-close="previewModal">×</button></div><div class="modal-body" id="previewBody"></div></div></div>
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="#0A63C8" name="theme-color"/>
+<title>SSSECURE Scaffold Delivery Quantification Form</title>
+<style>
+:root{--blue:#0A63C8;--navy:#123A76;--green:#0A63C8;--orange:#E85D0F;--bg:#EEF3F7;--card:#FFFFFF;--ink:#172033;--muted:#667085;--line:#D8E0E8;--soft:#F7FAFC;--danger:#B42318;--shadow:0 3px 16px rgba(0,0,0,.12)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink);padding:12px 12px 190px}.app{max-width:900px;margin:0 auto;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}.header{background:var(--navy);color:#fff;padding:20px 16px;text-align:center}.header h1{font-size:28px;margin:0 0 4px}.header h2{font-size:16px;margin:0;font-weight:700}.section-title{background:var(--blue);color:#fff;padding:11px 15px;font-weight:800;letter-spacing:.2px}.pad{padding:15px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}.field:last-child{margin-bottom:0}label.field-label{display:block;font-weight:800;margin-bottom:7px}.req{color:#fff;background:var(--danger);border-radius:4px;padding:1px 5px;font-size:10px;vertical-align:2px;margin-left:5px}input[type=text],input[type=date],textarea{width:100%;padding:12px;border:1.5px solid #B8C2CE;border-radius:9px;font-size:16px;background:#fff;color:var(--ink)}textarea{height:86px;resize:vertical;font-family:Arial,Helvetica,sans-serif}.readonly{background:#F1F4F7!important;color:#566274}.category-nav{padding:13px 12px;background:#F7FAFC;border-bottom:1px solid var(--line)}.category-nav-title{font-weight:800;margin-bottom:9px}.category-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.category-jump{display:flex;align-items:center;justify-content:center;text-decoration:none;border:1.5px solid #B9C9DE;background:#fff;color:#123A76;border-radius:9px;min-height:45px;padding:8px 7px;font-weight:800;font-size:13px;cursor:pointer}.category-jump:active{background:#EAF2FF}.category-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.category-actions button{border:0;border-radius:9px;padding:11px;font-weight:800;cursor:pointer}.expand-btn{background:#EAF2FF;color:#174EA6}.collapse-btn{background:#E9EEF4;color:#344054}.sticky-tools{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.98);border-bottom:1px solid var(--line);padding:12px}.search-wrap{position:relative}.search-wrap input{padding-right:44px}.clear-search{position:absolute;right:7px;top:7px;border:0;background:#E9EEF4;border-radius:8px;width:34px;height:34px;font-size:20px;color:#344054;display:none}.tool-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.tool-btn{border:0;border-radius:9px;padding:12px 10px;font-weight:800;font-size:14px;cursor:pointer}.review-btn{background:var(--navy);color:#fff}.draft-btn{background:#DCEBFA;color:#123A76;border:1px solid #B7CBE1}.category{border-bottom:1px solid var(--line);scroll-margin-top:135px}.category summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px;background:#fff;cursor:pointer;font-weight:800}.category summary::-webkit-details-marker{display:none}.category summary::after{content:'+';font-size:24px;color:var(--blue);line-height:1}.category[open] summary::after{content:'–'}.category-count{font-size:12px;background:#EAF2FF;color:#174EA6;border-radius:999px;padding:4px 8px;margin-left:auto}.items{padding:0 12px 12px;background:#FAFCFE}.item-row{display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #E7ECF1}.item-row:last-child{border-bottom:0}.item-label-wrap{min-width:0}.item-name{font-weight:700;line-height:1.25}.item-unit{font-size:12px;color:var(--muted);font-weight:700;margin-top:4px}.qty-control{display:block;align-items:center}.qty-input{width:100%;height:48px;border:1.5px solid #AEB8C4;border-radius:8px;text-align:center;font-size:18px;font-weight:800;color:var(--ink);background:#fff}.qty-input.active{border-color:var(--blue);background:#F3F8FD}.back-categories{display:block;text-align:center;text-decoration:none;margin:0 auto 13px;border:0;border-radius:8px;padding:10px 15px;background:#EEF5FF;color:#174EA6;font-weight:800}.empty-search{display:none;padding:28px 16px;text-align:center;color:var(--muted);font-weight:700}.status{display:none;margin:12px 15px;padding:12px;border-radius:9px;font-weight:700;line-height:1.4}.status.show{display:block}.status.ok{background:#E7F6EC;color:#176B39}.status.info{background:#EEF5FF;color:#184F8C}.status.err{background:#FDEAEA;color:#9B2020}.action-bar{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(900px,100%);background:rgba(255,255,255,.98);border-top:1px solid var(--line);box-shadow:0 -3px 14px rgba(0,0,0,.14);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:50}.action-grid{display:grid;grid-template-columns:.75fr 1fr 1fr 1.25fr;gap:8px}.action-grid button{border:0;border-radius:10px;padding:15px 8px;font-weight:800;font-size:14px;cursor:pointer}.clear-btn{background:#E9EEF4;color:#344054;border:1px solid #CBD5DF!important}.preview-btn{background:var(--navy);color:#fff}.pdf-btn{background:var(--blue);color:#fff}.share-btn{background:var(--navy);color:#fff}.action-note{text-align:center;color:var(--muted);font-size:11px;margin-top:7px}.modal{position:fixed;inset:0;background:rgba(18,29,45,.58);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:0}.modal.show{display:flex}.modal-card{width:min(900px,100%);max-height:88vh;background:#fff;border-radius:18px 18px 0 0;overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,.28);display:flex;flex-direction:column}.modal-head{background:var(--navy);color:#fff;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}.modal-head h3{margin:0;font-size:19px}.modal-close{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:8px;width:38px;height:38px;font-size:22px}.modal-body{padding:14px;overflow:auto}.review-empty{text-align:center;padding:28px 10px;color:var(--muted);font-weight:700}.review-category{margin-bottom:14px;border:1px solid var(--line);border-radius:10px;overflow:hidden}.review-category h4{margin:0;background:#EEF5FF;color:#174EA6;padding:9px 11px;font-size:14px}.review-line{display:grid;grid-template-columns:1fr 60px;gap:10px;padding:9px 11px;border-top:1px solid #EDF0F3}.review-line strong{text-align:right}.pdf-preview-sheet{background:#fff;border:1px solid #d8e0e8;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)}.pdf-preview-header{background:#0A63C8;color:#fff;text-align:center;padding:18px 14px}.pdf-preview-header h4{font-size:24px;margin:0 0 3px}.pdf-preview-header p{margin:0;font-weight:800;font-size:13px}.pdf-preview-content{padding:14px}.pdf-preview-section{background:#0A63C8;color:#fff;font-weight:800;padding:8px 10px;margin:0 0 10px}.pdf-preview-field{border:1px solid #d8e0e8;background:#f7fafc;border-radius:8px;padding:9px 10px;margin-bottom:8px}.pdf-preview-field small{display:block;color:#667085;font-weight:800;font-size:10px;margin-bottom:4px;text-transform:uppercase}.pdf-preview-field div{font-size:14px;line-height:1.35;white-space:pre-wrap}.pdf-preview-category{border:1px solid #d8e0e8;border-radius:8px;overflow:hidden;margin-bottom:10px}.pdf-preview-category h5{margin:0;background:#e8f0fc;color:#123A76;padding:8px 10px;font-size:13px}.pdf-preview-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:8px 10px;border-top:1px solid #edf0f3;font-size:13px}.pdf-preview-line strong{text-align:right}.preview-help{margin-top:12px;background:#eef5ff;color:#184f8c;border-radius:8px;padding:10px;font-size:13px;font-weight:700;line-height:1.4}.footer{text-align:center;color:var(--muted);font-size:12px;padding:18px 12px 24px}.hidden{display:none!important}noscript .no-script-note{display:block}.no-script-note{display:none;background:#FFF8E6;color:#674D00;padding:12px 15px;font-weight:800;border-bottom:1px solid #EAD7A6}
+@media(max-width:650px){body{padding:0 0 245px}.app{border-radius:0;min-height:100vh}.grid2{grid-template-columns:1fr}.item-row{grid-template-columns:minmax(0,1fr) 110px}.qty-control{display:block}.tool-row{grid-template-columns:1fr 1fr}.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.action-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:410px){.action-grid{grid-template-columns:1fr 1fr}.clear-btn{order:4}.item-row{grid-template-columns:minmax(0,1fr) 122px}.qty-control{grid-template-columns:36px 1fr 36px}}
+
+.pdf-preview-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.pdf-preview-details-grid .wide{grid-column:1/-1}
+.pdf-preview-quant-grid{columns:2 210px;column-gap:10px}
+.pdf-preview-quant-grid .pdf-preview-category{break-inside:avoid;display:inline-block;width:100%;margin:0 0 8px}
+@media(max-width:650px){.pdf-preview-quant-grid{columns:2 145px}.pdf-preview-details-grid{grid-template-columns:1fr}}
+
+/* READABILITY V2 - larger, bolder site and yard interface */
+body{font-size:16px}
+.header h1{font-size:32px;letter-spacing:.3px}.header h2{font-size:19px}
+.section-title{padding:14px 16px;font-size:19px;font-weight:900;letter-spacing:.45px}
+label.field-label{font-size:17px;font-weight:900;margin-bottom:8px}
+.req{font-size:11px;padding:2px 6px}
+input[type=text],input[type=date],textarea{padding:14px 13px;font-size:18px;font-weight:700;line-height:1.35;border-width:2px}
+textarea{height:105px}
+.category-nav-title{font-size:18px;font-weight:900}
+.category-jump{min-height:52px;padding:10px 8px;font-size:15px;font-weight:900}
+.category-actions button{padding:13px;font-size:15px}
+.photo-instruction{font-size:16px;line-height:1.45;font-weight:800;background:#EEF5FF;color:#184F8C;border:1px solid #C8D9F0;border-radius:9px;padding:12px 13px!important}
+.search-wrap input{font-size:17px;font-weight:700}
+.tool-btn{padding:14px 10px;font-size:15px;font-weight:900}
+.large-print-btn{width:100%;margin-top:9px;border:2px solid #0A63C8;border-radius:10px;padding:14px 10px;background:#DCEBFA;color:#123A76;font-size:16px;font-weight:900;cursor:pointer}
+.large-print-btn.active{background:#123A76;border-color:#123A76;color:#fff}
+.category summary{padding:17px 16px;font-size:20px;font-weight:900;background:#F9FBFD}
+.category-count{font-size:14px;font-weight:900;padding:5px 9px}
+.items{padding:0 14px 14px}
+.item-row{grid-template-columns:minmax(0,1fr) 124px;gap:12px;padding:13px 0}
+.item-name{font-size:18px;font-weight:900;line-height:1.28}
+.item-unit{font-size:14px;font-weight:800;margin-top:5px}
+.qty-input{height:56px;font-size:23px;font-weight:900;border-width:2px}
+.back-categories{font-size:16px;padding:12px 16px}
+.status{font-size:16px;padding:14px}
+.action-grid button{padding:16px 8px;font-size:15px;font-weight:900}
+.action-note{font-size:13px;font-weight:700}
+.modal-head h3{font-size:22px}.modal-close{width:44px;height:44px;font-size:26px}
+.review-category h4{padding:12px;font-size:18px;font-weight:900}
+.review-line{grid-template-columns:1fr 85px;padding:12px;font-size:17px;line-height:1.3}
+.review-line strong{font-size:20px;font-weight:900}
+.pdf-preview-header h4{font-size:30px}.pdf-preview-header p{font-size:16px}
+.pdf-preview-section{font-size:18px;padding:11px 12px}
+.pdf-preview-field{padding:12px;margin-bottom:10px}
+.pdf-preview-field small{font-size:12px;margin-bottom:5px}
+.pdf-preview-field div{font-size:17px;font-weight:800;line-height:1.4}
+.pdf-preview-category h5{padding:11px 12px;font-size:18px;font-weight:900}
+.pdf-preview-line{padding:11px 12px;font-size:16px;line-height:1.35}
+.pdf-preview-line span{font-weight:700}.pdf-preview-line strong{font-size:18px;font-weight:900}
+.preview-help{font-size:15px;line-height:1.45}
+.footer{font-size:14px;font-weight:700}
+
+/* Remembered one-tap accessibility mode for older drivers and bright-site use. */
+body.large-print .header h1{font-size:36px}body.large-print .header h2{font-size:22px}
+body.large-print .section-title{font-size:22px;padding:16px}
+body.large-print label.field-label{font-size:20px}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print textarea{font-size:21px;padding:16px 14px}
+body.large-print textarea{height:125px}
+body.large-print .category-nav-title{font-size:21px}
+body.large-print .category-jump{font-size:18px;min-height:61px}
+body.large-print .category-actions button,body.large-print .tool-btn,body.large-print .large-print-btn{font-size:18px;padding:16px 11px}
+body.large-print .photo-instruction{font-size:19px}
+body.large-print .search-wrap input{font-size:20px}
+body.large-print .category summary{font-size:23px;padding:20px 17px}
+body.large-print .category-count{font-size:16px}
+body.large-print .item-row{grid-template-columns:minmax(0,1fr) 136px;padding:16px 0}
+body.large-print .item-name{font-size:21px}
+body.large-print .item-unit{font-size:17px}
+body.large-print .qty-input{height:65px;font-size:27px}
+body.large-print .back-categories{font-size:19px;padding:14px}
+body.large-print .action-grid button{font-size:18px;padding:18px 9px}
+body.large-print .action-note{font-size:15px}
+body.large-print .review-category h4{font-size:21px}
+body.large-print .review-line{font-size:20px;padding:14px}
+body.large-print .review-line strong{font-size:23px}
+body.large-print .pdf-preview-field div{font-size:20px}
+body.large-print .pdf-preview-category h5{font-size:21px}
+body.large-print .pdf-preview-line{font-size:19px}
+body.large-print .pdf-preview-line strong{font-size:22px}
+
+@media(max-width:650px){
+  .item-row{grid-template-columns:minmax(0,1fr) 120px}
+  body.large-print .item-row{grid-template-columns:minmax(0,1fr) 132px}
+  .pdf-preview-quant-grid{columns:2 155px}
+}
+@media(max-width:380px){
+  .item-name{font-size:17px}.qty-input{font-size:22px}
+  body.large-print .item-name{font-size:20px}
+}
+
+/* SSSECURE CRITICAL INFORMATION READABILITY V3 */
+label[for="address"],label[for="siteAddress"],label[for="fromAddress"],label[for="toAddress"]{
+  color:#7A4B00!important;font-size:19px!important;font-weight:900!important;letter-spacing:.2px!important;
+}
+#address,#siteAddress,#fromAddress,#toAddress{
+  background:#FFF3BF!important;border:2.5px solid #D89A00!important;color:#123A76!important;
+  font-size:21px!important;font-weight:900!important;line-height:1.35!important;
+  box-shadow:0 0 0 3px rgba(216,154,0,.13)!important;
+}
+body.large-print label[for="address"],body.large-print label[for="siteAddress"],body.large-print label[for="fromAddress"],body.large-print label[for="toAddress"]{font-size:22px!important}
+body.large-print #address,body.large-print #siteAddress,body.large-print #fromAddress,body.large-print #toAddress{font-size:24px!important;padding:18px!important}
+
+/* QUANTIFICATION CATEGORY EMPHASIS V3 */
+.category summary{background:#0A63C8!important;color:#fff!important;border-bottom:2px solid #123A76!important;font-size:21px!important;letter-spacing:.2px!important}
+.category summary::after{color:#fff!important}
+.category-count{background:#DCEBFA!important;color:#123A76!important;border:1px solid #fff!important;font-size:13px!important;font-weight:900!important}
+.category[open] summary{background:#123A76!important}
+.pdf-preview-category h5{background:#0A63C8!important;color:#fff!important;border-bottom:2px solid #123A76!important;font-size:19px!important}
+.pdf-preview-field.wide,.pdf-preview-field.address-highlight{background:#FFF3BF!important;border:2px solid #D89A00!important}
+.pdf-preview-field.wide small,.pdf-preview-field.address-highlight small{color:#7A4B00!important;font-size:12px!important}
+.pdf-preview-field.wide div,.pdf-preview-field.address-highlight div{color:#123A76!important;font-size:20px!important;font-weight:900!important}
+body.large-print .category summary{font-size:24px!important}
+
+/* SSSECURE UNIVERSAL READABILITY & HIGHLIGHT STANDARD V4 */
+:root{--navy:#123A76;--blue:#0A63C8;--pale:#DCEBFA;--softblue:#F3F8FD;--bluegrey:#B7CBE1;--amber:#D89A00;--yellow:#FFF3BF;--ink:#172033}
+body{font-size:18px!important;line-height:1.48!important}
+.header{background:var(--navy)!important;padding:24px 18px!important}
+.header h1{font-size:34px!important;font-weight:900!important;letter-spacing:.3px!important}
+.header h2{font-size:22px!important;font-weight:900!important;line-height:1.25!important}
+.section-title{background:var(--blue)!important;color:#fff!important;font-size:20px!important;padding:15px 17px!important;font-weight:900!important;letter-spacing:.4px!important}
+.pad{padding:18px!important}
+.field{margin-bottom:16px!important}.prepared-date-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}.prepared-date-grid .field{margin-bottom:16px!important}.field-label{font-size:18px!important;font-weight:900!important;margin-bottom:8px!important}
+.req{font-size:11px!important;font-weight:900!important;padding:2px 6px!important}
+input[type=text],input[type=date],textarea{font-size:20px!important;font-weight:800!important;line-height:1.35!important;min-height:56px!important;padding:15px!important;border:2px solid var(--bluegrey)!important;border-radius:10px!important;color:var(--ink)!important}
+textarea{min-height:112px!important}
+label[for="siteAddress"]{color:#7A4B00!important;font-size:20px!important;font-weight:900!important}
+#siteAddress{background:var(--yellow)!important;border:3px solid var(--amber)!important;color:var(--navy)!important;font-size:22px!important;font-weight:900!important;box-shadow:0 0 0 3px rgba(216,154,0,.14)!important}
+.category-nav{padding:16px 14px!important;background:var(--softblue)!important;border-top:1px solid var(--bluegrey)!important;border-bottom:2px solid var(--bluegrey)!important}
+.category-nav-title{font-size:19px!important;font-weight:900!important;color:var(--navy)!important}
+.category-jump{min-height:54px!important;padding:11px 9px!important;font-size:16px!important;font-weight:900!important;border:2px solid var(--bluegrey)!important;color:var(--navy)!important}
+.category-actions button,.tool-btn,.large-print-btn{font-size:16px!important;font-weight:900!important;min-height:52px!important;padding:13px!important}
+.photo-instruction{font-size:16px!important;font-weight:900!important;line-height:1.45!important;background:var(--pale)!important;color:var(--navy)!important;border:2px solid var(--bluegrey)!important;padding:14px!important}
+.sticky-tools{padding:14px!important;background:#fff!important}
+.category{border-bottom:2px solid #fff!important}
+.category summary{background:var(--blue)!important;color:#fff!important;padding:17px!important;font-size:20px!important;font-weight:900!important;letter-spacing:.15px!important}
+.category[open] summary{background:var(--navy)!important}
+.category summary::after{color:#fff!important;font-size:28px!important;font-weight:900!important}
+.category-count{font-size:14px!important;font-weight:900!important;background:#fff!important;color:var(--navy)!important;padding:5px 9px!important}
+.items{padding:2px 14px 14px!important;background:var(--softblue)!important}
+.item-row{grid-template-columns:minmax(0,1fr) 120px!important;gap:12px!important;padding:13px 0!important;border-bottom:2px solid #E2EAF3!important}
+.item-name{font-size:19px!important;font-weight:900!important;line-height:1.3!important}
+.item-unit{font-size:15px!important;font-weight:800!important}
+.qty-input{height:58px!important;font-size:24px!important;font-weight:900!important;border:2px solid var(--bluegrey)!important}
+.back-categories{font-size:16px!important;font-weight:900!important;padding:13px 16px!important;background:var(--pale)!important;color:var(--navy)!important}
+.action-grid button{font-size:16px!important;font-weight:900!important;min-height:56px!important;padding:14px 8px!important}
+.action-note{font-size:13px!important;font-weight:800!important}
+.modal-head h3{font-size:23px!important;font-weight:900!important}
+.review-category{border:2px solid var(--bluegrey)!important}.review-category h4{background:var(--blue)!important;color:#fff!important;font-size:19px!important;font-weight:900!important;padding:12px!important}
+.review-line{font-size:17px!important;padding:12px!important}.review-line strong{font-size:20px!important}
+.pdf-preview-section{font-size:19px!important;font-weight:900!important;padding:12px!important}
+.pdf-preview-field{padding:12px!important;border:2px solid #D8E0E8!important}.pdf-preview-field small{font-size:12px!important}.pdf-preview-field div{font-size:18px!important;font-weight:800!important}
+.pdf-preview-category{border:2px solid var(--bluegrey)!important}.pdf-preview-category h5{background:var(--blue)!important;color:#fff!important;font-size:19px!important;font-weight:900!important;padding:12px!important}
+.pdf-preview-line{font-size:17px!important;padding:11px 12px!important}.pdf-preview-line strong{font-size:19px!important}
+.pdf-preview-field.wide,.pdf-preview-field.address-highlight{background:var(--yellow)!important;border:3px solid var(--amber)!important}
+.pdf-preview-field.wide small,.pdf-preview-field.address-highlight small{color:#7A4B00!important;font-size:13px!important}
+.pdf-preview-field.wide div,.pdf-preview-field.address-highlight div{color:var(--navy)!important;font-size:21px!important;font-weight:900!important}
+.footer{font-size:14px!important;font-weight:800!important}
+body.large-print{font-size:21px!important}
+body.large-print .header h1{font-size:39px!important}body.large-print .header h2{font-size:26px!important}
+body.large-print .section-title{font-size:23px!important;padding:18px!important}
+body.large-print .field-label,body.large-print .category-nav-title{font-size:21px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print textarea{font-size:23px!important;min-height:64px!important;padding:18px!important}
+body.large-print #siteAddress{font-size:26px!important}
+body.large-print .category summary{font-size:23px!important;padding:19px!important}
+body.large-print .item-name{font-size:22px!important}.large-print .item-unit{font-size:18px!important}.large-print .qty-input{height:66px!important;font-size:28px!important}
+@media(max-width:650px){
+  .prepared-date-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important}
+  .header h1{font-size:31px!important}.header h2{font-size:20px!important}.section-title{font-size:19px!important}
+  .pad{padding:15px!important}.field-label{font-size:17px!important}input[type=text],input[type=date],textarea{font-size:18px!important}
+  #siteAddress{font-size:21px!important}.category summary{font-size:18px!important}.item-name{font-size:17px!important}.qty-input{font-size:22px!important}
+  .item-row{grid-template-columns:minmax(0,1fr) 112px!important}
+}
+
+/* Prepared By + Date: clean mobile two-column row */
+.prepared-date-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:12px!important;width:100%!important;align-items:start!important}
+.prepared-date-grid .field{min-width:0!important;margin-bottom:16px!important}
+.prepared-date-grid label.field-label{display:flex!important;align-items:center!important;gap:6px!important;white-space:nowrap!important;font-size:17px!important}
+.prepared-date-grid label.field-label .req{margin-left:0!important;flex:0 0 auto!important;font-size:9px!important}
+.prepared-date-grid input{width:100%!important;min-width:0!important;height:58px!important;min-height:58px!important;padding:15px!important;font-size:18px!important;font-weight:800!important;line-height:1.35!important;border:2px solid var(--bluegrey)!important;border-radius:10px!important;background:#fff!important;color:var(--ink)!important;box-sizing:border-box!important;-webkit-appearance:none!important;appearance:none!important}
+@media(max-width:430px){.prepared-date-grid{gap:10px!important}.prepared-date-grid label.field-label{font-size:16px!important;gap:4px!important}.prepared-date-grid label.field-label .req{font-size:8px!important;padding:2px 4px!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header"><h1>SSSECURE</h1><h2>Scaffold Delivery Quantification Form</h2></div>
+<noscript><div class="no-script-note">Categories and quantity fields remain usable. Search, automatic saving and PDF buttons require the hosted Safari version.</div></noscript>
+<div class="section-title">DELIVERY DETAILS</div>
+<div class="pad">
+<div class="field"><label class="field-label" for="client">Client <span class="req">REQUIRED</span></label><input id="client" maxlength="120" type="text"/></div>
+<div class="field"><label class="field-label" for="siteAddress">Site Address <span class="req">REQUIRED</span></label><input autocomplete="street-address" id="siteAddress" maxlength="250" type="text"/></div>
+<div class="prepared-date-grid">
+<div class="field"><label class="field-label" for="preparedBy">Prepared By <span class="req">REQUIRED</span></label><input autocomplete="name" name="name" autocapitalize="words" id="preparedBy" maxlength="100" type="text"/></div>
+<div class="field"><label class="field-label" for="formDate">Date <span class="req">REQUIRED</span></label><input id="formDate" type="text" inputmode="numeric" maxlength="10" placeholder="DD/MM/YYYY" autocomplete="off"/></div>
+</div>
+<div class="field"><label class="field-label" for="jobDescription">Job Description</label><textarea id="jobDescription" maxlength="900"></textarea></div>
+<div class="field"><label class="field-label" for="specialInstructions">Special Delivery Instructions</label><textarea id="specialInstructions" maxlength="1200"></textarea></div>
+</div>
+<div class="section-title">SCAFFOLD QUANTITIES</div>
+<div class="category-nav" id="categoryNav">
+<div class="category-nav-title">JUMP TO CATEGORY</div>
+<div class="category-grid"><a class="category-jump" data-target="cat-screw-jacks" href="#cat-screw-jacks">Screw Jacks</a><a class="category-jump" data-target="cat-frames-wide" href="#cat-frames-wide">Frames - Wide</a><a class="category-jump" data-target="cat-frames-narrow" href="#cat-frames-narrow">Frames - Narrow</a><a class="category-jump" data-target="cat-braces" href="#cat-braces">Braces</a><a class="category-jump" data-target="cat-hop-ups" href="#cat-hop-ups">Hop-Ups</a><a class="category-jump" data-target="cat-steel-boards" href="#cat-steel-boards">Steel Boards</a><a class="category-jump" data-target="cat-woods" href="#cat-woods">Woods</a><a class="category-jump" data-target="cat-modular" href="#cat-modular">Modular</a><a class="category-jump" data-target="cat-handrail" href="#cat-handrail">Handrail</a><a class="category-jump" data-target="cat-tube" href="#cat-tube">Tube</a><a class="category-jump" data-target="cat-fittings" href="#cat-fittings">Fittings</a><a class="category-jump" data-target="cat-ladder-access" href="#cat-ladder-access">Ladder &amp; Access</a><a class="category-jump" data-target="cat-miscellaneous" href="#cat-miscellaneous">Miscellaneous</a></div>
+<div class="category-actions"><button class="expand-btn" id="expandAll" type="button">EXPAND ALL</button><button class="collapse-btn" id="collapseAll" type="button">COLLAPSE ALL</button></div>
+</div>
+<div class="photo-instruction" style="margin:12px 12px 0">Enter the required quantity directly in the number box beside each item. For Cable Ties and Dyna Bolts, enter 0.5 for half a pack or half a box.</div>
+<div class="sticky-tools">
+<div class="search-wrap"><input id="searchInput" placeholder="Search equipment — e.g. 2.4 tube, ladder, hop-up" type="text"/><button aria-label="Clear search" class="clear-search" id="clearSearch" type="button">×</button></div>
+<div class="tool-row"><button class="tool-btn review-btn" id="reviewBtn" type="button">VIEW ENTERED ITEMS (<span id="enteredCount">0</span>)</button><button class="tool-btn draft-btn" id="saveDraftBtn" type="button">SAVE DRAFT</button></div>
+<button aria-pressed="false" class="large-print-btn" id="largePrintBtn" type="button">LARGE PRINT: OFF</button>
+</div>
+<div id="inventory"></div>
+<div class="empty-search" id="emptySearch">No equipment matched that search.</div>
+<div aria-live="polite" class="status" id="status" role="status"></div>
+<div class="footer">SSSECURE Scaffold Delivery Quantification Form - READABILITY V4</div>
+</div>
+<div class="action-bar"><div class="action-grid"><button class="clear-btn" id="clearBtn" type="button">CLEAR FORM</button><button class="preview-btn" id="previewPdfBtn" type="button">PREVIEW PDF</button><button class="pdf-btn" id="pdfBtn" type="button">SAVE PDF</button><button class="share-btn" id="shareBtn" type="button">EMAIL / SHARE PDF</button></div><div class="action-note" id="actionNote">Draft saves automatically on this device.</div></div>
+<div aria-labelledby="reviewTitle" aria-modal="true" class="modal" id="reviewModal" role="dialog"><div class="modal-card"><div class="modal-head"><h3 id="reviewTitle">Entered Equipment</h3><button class="modal-close" id="closeReview" type="button">×</button></div><div class="modal-body" id="reviewBody"></div></div></div>
+<div aria-labelledby="pdfPreviewTitle" aria-modal="true" class="modal" id="pdfPreviewModal" role="dialog"><div class="modal-card"><div class="modal-head"><h3 id="pdfPreviewTitle">PDF Preview</h3><button class="modal-close" id="closePdfPreview" type="button">×</button></div><div class="modal-body" id="pdfPreviewBody"></div></div></div>
 <script>
-(()=>{'use strict';
-const catalogue=[{"category": "Screw Jacks", "items": ["Screw Jacks - Full", "Screw Jacks - Half", "Screw Jacks - Swivel", "Base Boards - Hardwood", "Joint Pins"]}, {"category": "Frames - Wide", "items": ["2.0m Frame", "1.8m Frame", "1.5m Frame", "1.2m S/B Frame", "0.9m Frame", "0.75m Frame", "0.6m Frame", "0.3m Frame"]}, {"category": "Frames - Narrow", "items": ["2.0m Narrow", "1.8m Narrow", "1.5m Narrow", "1.2m S/B Narrow", "0.9m Narrow", "0.75m Narrow", "0.6m Narrow", "0.3m Narrow"]}, {"category": "Braces", "items": ["1.2 Long Brace (Black)", "Large Brace (Blue)", "Small Brace (Green)", "Extra Small Brace (Blue)", "1.2 Small Brace (Green)"]}, {"category": "Hop-Ups", "items": ["3BD Hop-Up", "2BD Hop-Up - Post Hole", "2BD Hop-Up - Flat", "2BD Hop-Up - No Angle", "1BD Hop-Up - Post Hole", "1BD Hop-Up - Flat", "1x1 Corner Hop-Up", "2x1 Left Hop-Up", "2x1 Right Hop-Up", "Two Step"]}, {"category": "Steel Boards", "items": ["1.8m Steel Boards", "1.6m Steel Boards", "1.2m Steel Boards", "0.8m Steel Boards", "1.8m Ramp Steels"]}, {"category": "Woods", "items": ["2.7m Woods", "2.4m Woods", "1.8m Woods", "1.5m Woods", "1.2m Woods", "0.9m Woods"]}, {"category": "Modular", "items": ["3.0m Standard", "2.0m Standard", "1.0m Standard", "2.4m Ledger", "1.3m Transom", "2.4m Transom", "0.8m Modular Steel Board", "1.3m Modular Steel Board", "1.8m Modular Steel Board", "2.4m Modular Steel Board", "2.0m Modular Brace"]}, {"category": "Handrail", "items": ["Single Toggle Post", "Double Toggle Post", "1.8m Mesh", "1.2m Mesh", "0.8m Mesh", "1.8m Rail", "1.2m Rail", "0.8m Rail"]}, {"category": "Tube", "items": ["0.3m Tube", "0.6m Tube", "0.9m Tube", "1.2m Tube", "1.5m Tube", "1.8m Tube", "2.1m Tube", "2.4m Tube", "2.7m Tube", "3.0m Tube", "3.3m Tube", "3.6m Tube", "3.9m Tube", "4.2m Tube", "4.8m Tube", "5.1m Tube", "5.4m Tube", "5.7m Tube", "6.0m Tube"]}, {"category": "Fittings", "items": ["Double Coupler", "Swivel Coupler", "Single Coupler", "Joiner - External", "Joiner - Internal", "Beam Clamp", "Pin Coupler", "Toggle Coupler", "Spade Coupler"]}, {"category": "Ladder & Access", "items": ["3.0m Ladder", "3.3m Ladder", "3.6m Ladder", "3.9m Ladder", "4.2m Ladder", "4.5m Ladder", "4.8m Ladder", "5.1m Ladder", "5.4m Ladder", "5.7m Ladder", "6.0m Ladder", "Ladder Hooks", "Ladder Hatch", "Ladder Bracket", "1.8m Safe Gate", "1.2m Safe Gate", "1.8m Hoist Gate", "1.2m Hoist Gate", "Orange Swing Gate"]}, {"category": "Miscellaneous", "items": ["4.0m Ladder Beam", "6.0m Ladder Beam", "8.0m Ladder Beam", "Slab Posts", "Slab Post 150mm", "Parapet Post", "Parapet Post Wide", "Return Transoms", "Shadecloth", "Black Plastic", "Cable Ties", "Dyna Bolts", "Rags / Carpet", "Orange Bunting", "Infills 1.8", "Infills 1.2"]}];const meta={"Miscellaneous|||Shadecloth": {"unit": "lineal metres", "label": "Lineal metres", "step": 1}, "Miscellaneous|||Black Plastic": {"unit": "lineal metres", "label": "Lineal metres", "step": 1}, "Miscellaneous|||Orange Bunting": {"unit": "lineal metres", "label": "Lineal metres", "step": 1}, "Miscellaneous|||Cable Ties": {"unit": "packs", "label": "Packs (half-pack increments)", "step": 0.5}, "Miscellaneous|||Dyna Bolts": {"unit": "boxes", "label": "Boxes (half-box increments)", "step": 0.5}};const STORE='sssecure_scaffold_delivery_quant_v5_fixed';const $=id=>document.getElementById(id);
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const slug=s=>s.toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');const key=(c,i)=>c+'|||'+i;const state={quantities:{}};
-function today(){const d=new Date();return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()}
-function validDate(v){const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec((v||'').trim());if(!m)return false;const d=+m[1],mo=+m[2],y=+m[3];if(y<2000||y>2100)return false;const x=new Date(y,mo-1,d);return x.getFullYear()===y&&x.getMonth()===mo-1&&x.getDate()===d}
-function maskDate(el){let v=el.value.replace(/\D/g,'').slice(0,8);if(v.length>4)v=v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4);else if(v.length>2)v=v.slice(0,2)+'/'+v.slice(2);el.value=v}
-function itemMeta(c,i){return meta[key(c,i)]||{unit:'',label:'Quantity',step:1}}function formatQty(q,u){return u?`${q} ${u}`:String(q)}
-function build(){document.getElementById('navGrid').innerHTML=catalogue.map(g=>`<a class="jump" href="#cat-${slug(g.category)}">${esc(g.category)}</a>`).join('');document.getElementById('inventory').innerHTML=catalogue.map((g,gi)=>`<details class="category" id="cat-${slug(g.category)}" ${gi===0?'open':''}><summary><span>${esc(g.category)}</span><span class="badge">0 entered</span></summary><div class="items">${g.items.map(item=>{const m=itemMeta(g.category,item);return `<div class="row" data-search="${esc((g.category+' '+item).toLowerCase())}"><div><div class="name">${esc(item)}</div>${m.unit?`<div class="unit">${esc(m.label)}</div>`:''}</div><input class="qty" type="number" inputmode="decimal" min="0" max="9999" step="${m.step}" data-key="${esc(key(g.category,item))}" aria-label="${esc(item)} quantity"></div>`}).join('')}<a class="back" href="#categoryNav">↑ Back to Categories</a></div></details>`).join('')}
-function status(msg,type='info'){const e=$('status');e.className='status show '+type;e.textContent=msg}function collect(){return{client:$('client').value.trim(),siteAddress:$('siteAddress').value.trim(),preparedBy:$('preparedBy').value.trim(),formDate:$('formDate').value.trim(),jobDescription:$('jobDescription').value.trim(),specialInstructions:$('specialInstructions').value.trim(),quantities:{...state.quantities}}}
-function save(show=false){try{localStorage.setItem(STORE,JSON.stringify(collect()));if(show)status('Draft saved on this device.','ok')}catch(e){if(show)status('Draft could not be saved.','err')}}function restore(){try{const d=JSON.parse(localStorage.getItem(STORE)||'null');if(!d)return;['client','siteAddress','preparedBy','formDate','jobDescription','specialInstructions'].forEach(id=>{if(d[id]!=null)$(id).value=d[id]});state.quantities=d.quantities||{}}catch(e){}}
-function apply(){document.querySelectorAll('.qty').forEach(e=>{const n=Number(state.quantities[e.dataset.key]||0);e.value=n>0?n:'';e.classList.toggle('active',n>0)});counts()}function selected(){return catalogue.map(g=>({category:g.category,items:g.items.map(item=>{const m=itemMeta(g.category,item);return{item,qty:Number(state.quantities[key(g.category,item)]||0),unit:m.unit}}).filter(x=>x.qty>0)})).filter(g=>g.items.length)}
-function counts(){let total=0;document.querySelectorAll('.category').forEach(cat=>{let n=0;cat.querySelectorAll('.qty').forEach(q=>{if(Number(q.value)>0)n++});cat.querySelector('.badge').textContent=`${n} entered`;total+=n});$('enteredCount').textContent=total}
-function validate(){const d=collect(),miss=[];$('formDate').classList.remove('invalid');if(!d.client)miss.push('Client');if(!d.siteAddress)miss.push('Site Address');if(!d.preparedBy)miss.push('Prepared By');if(!d.formDate)miss.push('Date');else if(!validDate(d.formDate)){miss.push('a valid Date (DD/MM/YYYY)');$('formDate').classList.add('invalid')}if(!selected().length)miss.push('at least one quantity');if(miss.length){status('Complete: '+miss.join(', ')+'.','err');return null}return d}
-function renderReview(t){const g=selected();t.innerHTML=g.length?g.map(x=>`<div class="preview-cat"><h5>${esc(x.category)}</h5>${x.items.map(i=>`<div class="preview-line"><span>${esc(i.item)}</span><strong>${esc(formatQty(i.qty,i.unit))}</strong></div>`).join('')}</div>`).join(''):'<p>No quantities entered.</p>'}
-function summary(){const d=validate();if(!d)return null;const g=selected();$('previewBody').innerHTML=`<div class="preview-sheet"><div class="preview-head"><h4>SSSECURE</h4><p>Scaffold Delivery Quantification Form</p></div><div class="preview-content"><div class="preview-sec">DELIVERY DETAILS</div><div class="preview-field"><small>Client</small><div>${esc(d.client)}</div></div><div class="preview-field address"><small>Site Address</small><div>${esc(d.siteAddress)}</div></div><div class="preview-field"><small>Prepared By</small><div>${esc(d.preparedBy)}</div></div><div class="preview-field"><small>Date</small><div>${esc(d.formDate)}</div></div><div class="preview-field"><small>Job Description</small><div>${esc(d.jobDescription||'-')}</div></div><div class="preview-field"><small>Special Delivery Instructions</small><div>${esc(d.specialInstructions||'-')}</div></div><div class="preview-sec">PACKING LIST — QUANTITIES REQUIRED</div>${g.map(x=>`<div class="preview-cat"><h5>${esc(x.category)}</h5>${x.items.map(i=>`<div class="preview-line"><span>${esc(i.item)}</span><strong>${esc(formatQty(i.qty,i.unit))}</strong></div>`).join('')}</div>`).join('')}</div></div>`;return d}
-function preview(){if(summary())$('previewModal').classList.add('show')}function safe(v){return(v||'Packing_List').replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,60)||'Packing_List'}
-function pdf(){const d=validate();if(!d)return null;if(!window.jspdf?.jsPDF){status('PDF engine did not load. Check internet and refresh.','err');return null}const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'}),W=210,H=297,M=11,CW=188,N=[18,58,118],B=[10,99,200],I=[23,32,51],MU=[90,101,116],L=[247,250,252],LN=[205,215,225],Y=[255,243,191],A=[216,154,0];let y=0,g=selected();function head(){doc.setFillColor(...N);doc.rect(0,0,W,24,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(16);doc.text('SSSECURE',W/2,9.5,{align:'center'});doc.setFontSize(9.5);doc.text('Scaffold Delivery Quantification Form'.toUpperCase(),W/2,17,{align:'center'});y=29}function ensure(h){if(y+h>H-12){doc.addPage();head()}}function sec(t){ensure(10);doc.setFillColor(...B);doc.rect(M,y,CW,7.5,'F');doc.setTextColor(255,255,255);doc.setFontSize(9.5);doc.text(t,M+3,y+5.1);y+=10}function fld(l,v,hi=false){const text=String(v||'-');doc.setFontSize(9);const lines=doc.splitTextToSize(text,CW-6),h=Math.max(hi?14:12,7+lines.length*3.8);ensure(h+2);doc.setFillColor(...(hi?Y:L));doc.setDrawColor(...(hi?A:LN));doc.roundedRect(M,y,CW,h,1.5,1.5,'FD');doc.setTextColor(...MU);doc.setFontSize(6.8);doc.text(l.toUpperCase(),M+3,y+3.8);doc.setTextColor(...I);doc.setFontSize(hi?10.5:9);doc.text(lines,M+3,y+8.4);y+=h+2}function cat(x){const rh=6.5,hh=7.5;ensure(hh+x.items.length*rh+2);doc.setFillColor(...B);doc.roundedRect(M,y,CW,hh,1.2,1.2,'F');doc.setTextColor(255,255,255);doc.setFontSize(9.2);doc.text(x.category,M+3,y+5.1);y+=hh;x.items.forEach((i,n)=>{if(n%2===0){doc.setFillColor(...L);doc.rect(M,y,CW,rh,'F')}doc.setDrawColor(...LN);doc.line(M,y+rh,M+CW,y+rh);doc.setTextColor(...I);doc.setFontSize(8.8);doc.text(i.item,M+3,y+4.5);doc.setFont('helvetica','bold');doc.text(formatQty(i.qty,i.unit),M+CW-3,y+4.5,{align:'right'});y+=rh});y+=2}head();sec('DELIVERY DETAILS');fld('Client',d.client);fld('Site Address',d.siteAddress,true);fld('Prepared By',d.preparedBy);fld('Date',d.formDate);fld('Job Description',d.jobDescription||'-');fld('Special Delivery Instructions',d.specialInstructions||'-');sec('PACKING LIST - QUANTITIES REQUIRED');g.forEach(cat);return{blob:doc.output('blob'),filename:`SSSECURE_Packing_List_${safe(d.siteAddress)}.pdf`}}
-function dl(b,n){const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=n;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}async function gen(mode){const r=pdf();if(!r)return;const f=new File([r.blob],r.filename,{type:'application/pdf'});try{if(mode==='share'&&navigator.share&&(!navigator.canShare||navigator.canShare({files:[f]}))){await navigator.share({files:[f],title:'SSSECURE Packing List'});status('PDF shared.','ok')}else{dl(r.blob,r.filename);status('PDF saved.','ok')}}catch(e){if(e?.name!=='AbortError'){dl(r.blob,r.filename);status('PDF saved.','ok')}}}
-function filter(){const t=$('search').value.toLowerCase().trim().split(/\s+/).filter(Boolean);let v=0;document.querySelectorAll('.category').forEach(c=>{let n=0;c.querySelectorAll('.row').forEach(r=>{const m=!t.length||t.every(x=>r.dataset.search.includes(x));r.classList.toggle('hidden',!m);if(m)n++});c.classList.toggle('hidden',n===0);if(t.length&&n)c.open=true;v+=n});$('empty').style.display=v?'none':'block'}
-function clearAll(){if(!confirm('Clear all delivery details and quantities?'))return;localStorage.removeItem(STORE);state.quantities={};document.querySelectorAll('input[type=text],textarea').forEach(e=>e.value='');$('formDate').value=today();document.querySelectorAll('.qty').forEach(e=>{e.value='';e.classList.remove('active')});$('search').value='';filter();counts();status('Form cleared.','ok')}
-build();restore();if(!$('formDate').value)$('formDate').value=today();apply();$('formDate').addEventListener('input',e=>{maskDate(e.target);e.target.classList.remove('invalid');save()});
-document.addEventListener('input',e=>{if(e.target.matches('.qty')){const parts=e.target.dataset.key.split('|||'),m=itemMeta(parts[0],parts[1]),step=Number(m.step)||1;let n=parseFloat(e.target.value);if(Number.isFinite(n)&&n>0){n=Math.round(n/step)*step;state.quantities[e.target.dataset.key]=n}else delete state.quantities[e.target.dataset.key];e.target.classList.toggle('active',Number.isFinite(n)&&n>0);counts();save()}else if(e.target.matches('#client,#siteAddress,#preparedBy,#jobDescription,#specialInstructions'))save()});
-$('search').oninput=filter;$('clearSearch').onclick=()=>{$('search').value='';filter()};$('expandAll').onclick=()=>document.querySelectorAll('.category').forEach(x=>x.open=true);$('collapseAll').onclick=()=>document.querySelectorAll('.category').forEach(x=>x.open=false);$('reviewBtn').onclick=()=>{renderReview($('reviewBody'));$('reviewModal').classList.add('show')};$('saveBtn').onclick=()=>save(true);$('largeBtn').onclick=()=>{document.body.classList.toggle('large');const on=document.body.classList.contains('large');$('largeBtn').classList.toggle('active',on);$('largeBtn').textContent='LARGE PRINT: '+(on?'ON':'OFF')};$('clearBtn').onclick=clearAll;$('previewBtn').onclick=preview;$('pdfBtn').onclick=()=>gen('save');$('shareBtn').onclick=()=>gen('share');document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).classList.remove('show'));document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
+(() => {
+'use strict';
+
+const STORAGE_KEY='sssecure_scaffold_delivery_quant_v3';
+const LARGE_PRINT_KEY='sssecure_scaffold_large_print_v1';
+const JSPDF_URL='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+const catalogue=[
+  {category:'Screw Jacks',items:['Screw Jacks - Full','Screw Jacks - Half','Screw Jacks - Swivel','Base Boards - Hardwood','Joint Pins']},
+  {category:'Frames - Wide',items:['2.0m Frame','1.8m Frame','1.5m Frame','1.2m S/B Frame','0.9m Frame','0.75m Frame','0.6m Frame','0.3m Frame']},
+  {category:'Frames - Narrow',items:['2.0m Narrow','1.8m Narrow','1.5m Narrow','1.2m S/B Narrow','0.9m Narrow','0.75m Narrow','0.6m Narrow','0.3m Narrow']},
+  {category:'Braces',items:['1.2 Long Brace (Black)','Large Brace (Blue)','Small Brace (Green)','Extra Small Brace (Blue)','1.2 Small Brace (Green)']},
+  {category:'Hop-Ups',items:['3BD Hop-Up','2BD Hop-Up - Post Hole','2BD Hop-Up - Flat','2BD Hop-Up - No Angle','1BD Hop-Up - Post Hole','1BD Hop-Up - Flat','1x1 Corner Hop-Up','2x1 Left Hop-Up','2x1 Right Hop-Up','Two Step']},
+  {category:'Steel Boards',items:['1.8m Steel Boards','1.6m Steel Boards','1.2m Steel Boards','0.8m Steel Boards','1.8m Ramp Steels']},
+  {category:'Woods',items:['2.7m Woods','2.4m Woods','1.8m Woods','1.5m Woods','1.2m Woods','0.9m Woods']},
+  {category:'Modular',items:['3.0m Standard','2.0m Standard','1.0m Standard','2.4m Ledger','1.3m Transom','2.4m Transom','0.8m Modular Steel Board','1.3m Modular Steel Board','1.8m Modular Steel Board','2.4m Modular Steel Board','2.0m Modular Brace']},
+  {category:'Handrail',items:['Single Toggle Post','Double Toggle Post','1.8m Mesh','1.2m Mesh','0.8m Mesh','1.8m Rail','1.2m Rail','0.8m Rail']},
+  {category:'Tube',items:['0.3m Tube','0.6m Tube','0.9m Tube','1.2m Tube','1.5m Tube','1.8m Tube','2.1m Tube','2.4m Tube','2.7m Tube','3.0m Tube','3.3m Tube','3.6m Tube','3.9m Tube','4.2m Tube','4.8m Tube','5.1m Tube','5.4m Tube','5.7m Tube','6.0m Tube']},
+  {category:'Fittings',items:['Double Coupler','Swivel Coupler','Single Coupler','Joiner - External','Joiner - Internal','Beam Clamp','Pin Coupler','Toggle Coupler','Spade Coupler']},
+  {category:'Ladder & Access',items:['3.0m Ladder','3.3m Ladder','3.6m Ladder','3.9m Ladder','4.2m Ladder','4.5m Ladder','4.8m Ladder','5.1m Ladder','5.4m Ladder','5.7m Ladder','6.0m Ladder','Ladder Hooks','Ladder Hatch','Ladder Bracket','1.8m Safe Gate','1.2m Safe Gate','1.8m Hoist Gate','1.2m Hoist Gate','Orange Swing Gate']},
+  {category:'Miscellaneous',items:['4.0m Ladder Beam','6.0m Ladder Beam','8.0m Ladder Beam','Slab Posts','Slab Post 150mm','Parapet Post','Parapet Post Wide','Return Transoms','Shadecloth','Black Plastic','Cable Ties','Dyna Bolts','Rags / Carpet','Orange Bunting','Infills 1.8','Infills 1.2']}
+];
+
+const $=id=>document.getElementById(id);
+const state={quantities:{},openCategories:[]};
+let saveTimer=null;
+const isHostedContext=()=>/^https?:$/.test(location.protocol)||window.__SSSECURE_TEST_HOSTED__===true;
+
+function metaFor(category,item){
+  if(category==='Miscellaneous'){
+    if(['Shadecloth','Black Plastic','Orange Bunting'].includes(item)) return {unit:'lineal metres',unitLabel:'Lineal metres',step:1};
+    if(item==='Cable Ties') return {unit:'packs',unitLabel:'Packs (half-pack increments)',step:.5};
+    if(item==='Dyna Bolts') return {unit:'boxes',unitLabel:'Boxes (half-box increments)',step:.5};
+  }
+  return {unit:'',unitLabel:'',step:1};
+}
+
+function todayIso(){
+  const d=new Date();
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${day}/${m}/${y}`;
+}
+function formatDate(value){
+  if(!value) return '-';
+  if(/^\d{2}\/\d{2}\/\d{4}$/.test(value)) return value;
+  const [y,m,d]=value.split('-');
+  return y&&m&&d?`${d}/${m}/${y}`:value;
+}
+
+function escapeHtml(value){
+  return String(value??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+}
+function slugify(value){return value.toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+
+function buildInventory(){
+  const inventory=$('inventory');
+  inventory.innerHTML=catalogue.map((group,groupIndex)=>{
+    const catId=`cat-${slugify(group.category)}`;
+    const items=group.items.map(item=>{
+      const key=`${group.category}|||${item}`;
+      const meta=metaFor(group.category,item);
+      const unit=meta.unitLabel?`<div class="item-unit">${escapeHtml(meta.unitLabel)}</div>`:'';
+      const mode=meta.step===.5?'decimal':'numeric';
+      return `<div class="item-row" data-search="${escapeHtml(`${group.category} ${item} ${meta.unitLabel}`.toLowerCase())}"><div class="item-label-wrap"><div class="item-name">${escapeHtml(item)}</div>${unit}</div><div class="qty-control"><input aria-label="${escapeHtml(item)} quantity — enter directly" class="qty-input" data-key="${escapeHtml(key)}" data-step="${meta.step}" data-unit="${escapeHtml(meta.unit)}" inputmode="${mode}" max="9999" min="0" step="${meta.step}" type="number"/></div></div>`;
+    }).join('');
+    return `<details class="category" data-category="${escapeHtml(group.category)}" id="${catId}"${groupIndex===0?' open':''}><summary><span>${escapeHtml(group.category)}</span><span class="category-count" data-count-for="${escapeHtml(group.category)}">0 entered</span></summary><div class="items">${items}</div><a class="back-categories" href="#categoryNav">↑ Back to Categories</a></details>`;
+  }).join('');
+}
+
+function applyLargePrint(enabled,persist=true){
+  document.body.classList.toggle('large-print',Boolean(enabled));
+  const button=$('largePrintBtn');
+  if(button){button.classList.toggle('active',Boolean(enabled));button.setAttribute('aria-pressed',enabled?'true':'false');button.textContent=enabled?'LARGE PRINT: ON':'LARGE PRINT: OFF';}
+  if(persist){try{localStorage.setItem(LARGE_PRINT_KEY,enabled?'1':'0');}catch(error){console.error(error);}}
+}
+function decimalPlaces(step){const t=String(step);return t.includes('.')?t.split('.')[1].length:0;}
+function normaliseQty(value,step=1){const n=Number.parseFloat(value);if(!Number.isFinite(n)||n<=0)return 0;const snapped=Math.round(n/step)*step;return Math.max(0,Math.min(9999,Number(snapped.toFixed(decimalPlaces(step)))));}
+function formatQty(qty,unit=''){const number=Number.isInteger(qty)?String(qty):String(Number(qty.toFixed(2)));return unit?`${number} ${unit}`:number;}
+function showStatus(message,type='info'){const el=$('status');el.textContent=message;el.className=`status show ${type}`;clearTimeout(showStatus.timer);showStatus.timer=setTimeout(()=>el.className='status',3200);}
+function setQuantity(input,value,normaliseInput=true){const step=Number.parseFloat(input.dataset.step)||1;const qty=normaliseQty(value,step);const key=input.dataset.key;if(qty>0)state.quantities[key]=qty;else delete state.quantities[key];if(normaliseInput)input.value=qty||'';input.classList.toggle('active',qty>0);updateCounts();scheduleSave();}
+function selectedItems(){return catalogue.map(group=>({category:group.category,items:group.items.map(item=>{const key=`${group.category}|||${item}`;const qty=state.quantities[key]||0;const meta=metaFor(group.category,item);return {item,qty,unit:meta.unit||''};}).filter(e=>e.qty>0)})).filter(g=>g.items.length);}
+function updateCounts(){let total=0;catalogue.forEach(group=>{const count=group.items.filter(item=>(state.quantities[`${group.category}|||${item}`]||0)>0).length;total+=count;document.querySelectorAll('.category').forEach(details=>{if(details.dataset.category===group.category){const badge=details.querySelector('.category-count');if(badge)badge.textContent=`${count} entered`;}});});$('enteredCount').textContent=total;}
+function applyQuantities(){document.querySelectorAll('.qty-input').forEach(input=>{const qty=state.quantities[input.dataset.key]||0;input.value=qty||'';input.classList.toggle('active',qty>0);});updateCounts();}
+
+function collectForm(){return {client:$('client').value.trim(),siteAddress:$('siteAddress').value.trim(),preparedBy:$('preparedBy').value.trim(),formDate:$('formDate').value||todayIso(),jobDescription:$('jobDescription').value.trim(),specialInstructions:$('specialInstructions').value.trim(),quantities:{...state.quantities},openCategories:Array.from(document.querySelectorAll('.category[open]')).map(el=>el.dataset.category)};}
+function applyForm(data){if(!data)return;['client','siteAddress','preparedBy','formDate','jobDescription','specialInstructions'].forEach(id=>{if(data[id]!=null)$(id).value=data[id];});if(!$('formDate').value)$('formDate').value=todayIso();state.quantities=data.quantities||{};state.openCategories=Array.isArray(data.openCategories)?data.openCategories:[];document.querySelectorAll('.category').forEach((el,index)=>{el.open=state.openCategories.includes(el.dataset.category)||(state.openCategories.length===0&&index===0);});applyQuantities();}
+function saveDraft(show=false){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(collectForm()));if(show)showStatus('Draft saved on this device.','ok');}catch(error){console.error(error);showStatus('Draft could not be saved.','err');}}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveDraft(false),250);}
+function restoreDraft(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return false;applyForm(JSON.parse(raw));return true;}catch(error){console.error(error);return false;}}
+
+function filterInventory(){const term=$('searchInput').value.trim().toLowerCase();const tokens=term.split(/\s+/).filter(Boolean);$('clearSearch').style.display=term?'block':'none';let visible=0;document.querySelectorAll('.category').forEach(details=>{let matched=0;details.querySelectorAll('.item-row').forEach(row=>{const haystack=(row.dataset.search||'').toLowerCase();const match=!tokens.length||tokens.every(token=>haystack.includes(token));row.classList.toggle('hidden',!match);if(match)matched++;});details.classList.toggle('hidden',matched===0);if(tokens.length&&matched)details.open=true;visible+=matched;});$('emptySearch').style.display=visible?'none':'block';}
+function renderReview(){const body=$('reviewBody');body.innerHTML='';const groups=selectedItems();if(!groups.length){body.innerHTML='<div class="review-empty">No quantities have been entered yet.</div>';return;}groups.forEach(group=>{const box=document.createElement('div');box.className='review-category';const heading=document.createElement('h4');heading.textContent=group.category;box.appendChild(heading);group.items.forEach(entry=>{const line=document.createElement('div');line.className='review-line';const name=document.createElement('span');name.textContent=entry.item;const qty=document.createElement('strong');qty.textContent=formatQty(entry.qty,entry.unit);line.append(name,qty);box.appendChild(line);});body.appendChild(box);});}
+function validate(){const data=collectForm();const missing=[];if(!data.client)missing.push('Client');if(!data.siteAddress)missing.push('Site Address');if(!data.preparedBy)missing.push('Prepared By');if(!data.formDate)missing.push('Date');if(!selectedItems().length)missing.push('At least one equipment quantity');if(missing.length){showStatus(`Complete: ${missing.join(', ')}.`,'err');return null;}return data;}
+
+function renderPdfPreview(){const data=validate();if(!data)return false;const groups=selectedItems();const field=(label,value,wide=false)=>`<div class="pdf-preview-field${wide?' wide address-highlight':''}"><small>${escapeHtml(label)}</small><div>${escapeHtml(value||'-')}</div></div>`;const categories=groups.map(group=>`<div class="pdf-preview-category"><h5>${escapeHtml(group.category)}</h5>${group.items.map(entry=>`<div class="pdf-preview-line"><span>${escapeHtml(entry.item)}</span><strong>${escapeHtml(formatQty(entry.qty,entry.unit))}</strong></div>`).join('')}</div>`).join('');$('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION - ONE-PAGE YARD PACKING LIST</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div><div class="pdf-preview-details-grid">${field('Client',data.client)}${field('Prepared By',data.preparedBy)}${field('Date',formatDate(data.formDate))}${field('Site Address',data.siteAddress,true)}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}</div><div class="pdf-preview-section">QUANTITIES REQUIRED</div><div class="pdf-preview-quant-grid">${categories}</div></div></div><div class="preview-help">The emailed PDF uses larger bold delivery details, stronger category headings and enlarged quantities. Normal orders remain a one-page A4 portrait packing list.</div>`;$('pdfPreviewModal').classList.add('show');return true;}
+
+function loadJsPdf(){if(window.jspdf?.jsPDF)return Promise.resolve();return new Promise((resolve,reject)=>{document.querySelector('script[data-jspdf]')?.remove();const script=document.createElement('script');script.src=JSPDF_URL;script.dataset.jspdf='1';script.onload=()=>window.jspdf?.jsPDF?resolve():(script.remove(),reject(new Error('PDF engine loaded incorrectly. Refresh the page and try again.')));script.onerror=()=>{script.remove();reject(new Error('PDF engine could not load. Check internet connection and try again.'));};document.head.appendChild(script);});}
+function safeText(text){return String(text||'').replace(/[–—]/g,'-');}
+function pdfFilename(data){const clean=value=>safeText(value).replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,55)||'Form';return `SSSECURE_Delivery_Quantification_${clean(data.client)}_${clean(data.siteAddress)}.pdf`;}
+
+async function buildPdf(data){
+  await loadJsPdf();
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
+  const W=210,H=297,M=7,CW=W-(M*2);
+  const BLUE=[10,99,200],NAVY=[18,58,118],INK=[15,23,42],MUTED=[65,77,94],LINE=[194,206,219],SOFT=[247,250,252],ALT=[249,251,253];
+  const groups=selectedItems();
+  function fitOneLine(text,maxWidth,startSize=8,minSize=5.6,bold=true){let value=safeText(text||'-');let size=startSize;doc.setFont('helvetica',bold?'bold':'normal');while(size>minSize){doc.setFontSize(size);if(doc.getTextWidth(value)<=maxWidth)return{text:value,size};size-=.2;}doc.setFontSize(minSize);if(doc.getTextWidth(value)<=maxWidth)return{text:value,size:minSize};while(value.length>2&&doc.getTextWidth(value+'...')>maxWidth)value=value.slice(0,-1);return{text:value+'...',size:minSize};}
+  function fitWrappedText(text,maxWidth,maxLines,startSize=9,minSize=6.5){const value=safeText(text||'-');for(let size=startSize;size>=minSize;size-=.25){doc.setFont('helvetica','bold');doc.setFontSize(size);const lines=doc.splitTextToSize(value,maxWidth);if(lines.length<=maxLines)return{lines,size};}doc.setFont('helvetica','bold');doc.setFontSize(minSize);const lines=doc.splitTextToSize(value,maxWidth);if(lines.length<=maxLines)return{lines,size:minSize};const kept=lines.slice(0,maxLines);let last=kept[maxLines-1];while(last.length>1&&doc.getTextWidth(last+'...')>maxWidth)last=last.slice(0,-1);kept[maxLines-1]=last+'...';return{lines:kept,size:minSize};}
+  function drawDetail(label,value,x,y,w,h,maxLines=2,highlight=false){const fill=highlight?[255,243,191]:SOFT;const border=highlight?[216,154,0]:LINE;doc.setFillColor(...fill);doc.setDrawColor(...border);doc.setLineWidth(highlight?.6:.35);doc.roundedRect(x,y,w,h,1.4,1.4,'FD');doc.setTextColor(...(highlight?[122,75,0]:MUTED));doc.setFont('helvetica','bold');doc.setFontSize(highlight?7.8:6.8);doc.text(safeText(label).toUpperCase(),x+2.2,y+3.8);doc.setTextColor(...(highlight?NAVY:INK));const fitted=fitWrappedText(value,w-4.4,maxLines,highlight?11.2:(maxLines>2?8.6:9.2),highlight?8.2:6.5);doc.setFont('helvetica','bold');doc.setFontSize(fitted.size);doc.text(fitted.lines,x+2.2,y+8.2,{lineHeightFactor:1.15});}
+
+  doc.setFillColor(...NAVY);doc.rect(0,0,W,18,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(15.5);doc.text('SSSECURE',M,8.2);doc.setFontSize(9.2);doc.text('SCAFFOLD DELIVERY QUANTIFICATION',W-M,7,{align:'right'});doc.setFontSize(7);doc.text('YARD PACKING LIST',W-M,12,{align:'right'});
+  let y=21;doc.setFillColor(...BLUE);doc.rect(M,y,CW,6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('DELIVERY DETAILS',M+2.3,y+4.2);y+=7.5;
+  const gap=2.2;
+  const rowWidths=[38,35,29,CW-38-35-29-(gap*3)];
+  let x=M;
+  drawDetail('Client',data.client,x,y,rowWidths[0],14.5,2);x+=rowWidths[0]+gap;
+  drawDetail('Prepared By',data.preparedBy,x,y,rowWidths[1],14.5,2);x+=rowWidths[1]+gap;
+  drawDetail('Date',formatDate(data.formDate),x,y,rowWidths[2],14.5,1);x+=rowWidths[2]+gap;
+  drawDetail('Site Address',data.siteAddress,x,y,rowWidths[3],14.5,2,true);
+  y+=16.2;
+  const half=(CW-gap)/2;drawDetail('Job Description',data.jobDescription,M,y,half,17.5,3);drawDetail('Special Delivery Instructions',data.specialInstructions,M+half+gap,y,half,17.5,3);y+=19.2;
+  doc.setFillColor(...BLUE);doc.rect(M,y,CW,6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('QUANTITIES REQUIRED',M+2.3,y+4.2);const itemCount=groups.reduce((s,g)=>s+g.items.length,0);doc.setFontSize(7.4);doc.text(`${itemCount} ITEM${itemCount===1?'':'S'}`,W-M-2.3,y+4.2,{align:'right'});y+=7.4;
+  const listTop=y,listBottom=H-8,availableHeight=listBottom-listTop;
+  function metrics(columnCount){return columnCount===2?{columnCount,colGap:3,cardGap:2,headerH:8.2,rowH:5.65,nameSize:8.8,qtySize:10.2,minSize:6.8}:{columnCount,colGap:2.2,cardGap:1.4,headerH:6.2,rowH:4.55,nameSize:7.5,qtySize:8.5,minSize:6};}
+  function makePlan(columnCount){const m=metrics(columnCount);const heights=groups.map(g=>m.headerH+(g.items.length*m.rowH)+m.cardGap);if(heights.some(h=>h>availableHeight+.01))return null;const n=groups.length;if(n===0)return{columns:Array.from({length:columnCount},()=>[]),m};const prefix=[0];heights.forEach(h=>prefix.push(prefix[prefix.length-1]+h));const range=(a,b)=>prefix[b]-prefix[a];let best=null;if(columnCount===2){for(let i=1;i<n;i++){const hs=[range(0,i),range(i,n)],max=Math.max(...hs),min=Math.min(...hs);if(max>availableHeight+.01)continue;const score=max+(max-min)*.35;if(!best||score<best.score)best={cuts:[i],score};}}else{for(let i=1;i<n-1;i++)for(let j=i+1;j<n;j++){const hs=[range(0,i),range(i,j),range(j,n)],max=Math.max(...hs),min=Math.min(...hs);if(max>availableHeight+.01)continue;const score=max+(max-min)*.35;if(!best||score<best.score)best={cuts:[i,j],score};}}if(!best)return null;const bounds=[0,...best.cuts,n],columns=[];for(let c=0;c<columnCount;c++)columns.push(groups.slice(bounds[c],bounds[c+1]).map(g=>({category:g.category,items:g.items})));return{columns,m};}
+  const plan=makePlan(2)||makePlan(3);if(!plan)throw new Error('This unusually large order cannot remain readable on one page. Reduce the selected items or split it into two orders.');const {columns,m}=plan;const maxHeight=Math.max(...columns.map(col=>col.reduce((sum,seg)=>sum+m.headerH+(seg.items.length*m.rowH)+m.cardGap,0)));const maxScale=m.columnCount===2?1.16:1.06;const scale=Math.min(maxScale,(availableHeight/maxHeight)*.985);if(scale>1){m.headerH*=scale;m.rowH*=scale;m.cardGap*=scale;m.nameSize*=scale;m.qtySize*=scale;m.minSize*=Math.min(scale,1.08);}const colW=(CW-(m.colGap*(m.columnCount-1)))/m.columnCount,qtyW=m.columnCount===2?23:17,nameW=colW-qtyW-4.4;
+  columns.forEach((segments,columnIndex)=>{const cx=M+columnIndex*(colW+m.colGap);let cy=listTop;segments.forEach(segment=>{const cardH=m.headerH+(segment.items.length*m.rowH);doc.setFillColor(255,255,255);doc.setDrawColor(...LINE);doc.setLineWidth(.32);doc.roundedRect(cx,cy,colW,cardH,1.7,1.7,'FD');doc.setFillColor(...BLUE);doc.roundedRect(cx,cy,colW,m.headerH+1,1.7,1.7,'F');doc.rect(cx,cy+m.headerH-1,colW,2,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');const heading=fitOneLine(segment.category,colW-4.4,m.columnCount===2?10.6:8.7,m.minSize,true);doc.setFontSize(heading.size);doc.text(heading.text,cx+2.2,cy+(m.headerH*.70));let ry=cy+m.headerH;segment.items.forEach((entry,rowIndex)=>{if(rowIndex%2===1){doc.setFillColor(...ALT);doc.rect(cx,ry,colW,m.rowH,'F');}doc.setDrawColor(...LINE);doc.line(cx,ry+m.rowH,cx+colW,ry+m.rowH);doc.setTextColor(...INK);doc.setFont('helvetica','bold');const name=fitOneLine(entry.item,nameW,m.nameSize,m.minSize,true);doc.setFontSize(name.size);doc.text(name.text,cx+2.2,ry+(m.rowH*.70));const qty=fitOneLine(formatQty(entry.qty,entry.unit),qtyW,m.qtySize,m.minSize,true);doc.setFontSize(qty.size);doc.text(qty.text,cx+colW-2.2,ry+(m.rowH*.70),{align:'right'});ry+=m.rowH;});cy+=cardH+m.cardGap;});});
+  doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.text('SSSECURE SCAFFOLD DELIVERY QUANTIFICATION',M,H-3.5);doc.text('PAGE 1 OF 1',W-M,H-3.5,{align:'right'});return doc.output('blob');
+}
+
+function downloadBlob(blob,filename){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
+async function createPdf(mode){const data=validate();if(!data)return;if(mode==='share'&&!isHostedContext()){renderPdfPreview();showStatus('Direct iPhone email/share is blocked in this downloaded preview. Upload this file to GitHub and open the hosted link in Safari.','info');return;}saveDraft(false);const buttons=[$('pdfBtn'),$('shareBtn'),$('previewPdfBtn'),$('clearBtn')];buttons.forEach(b=>b.disabled=true);showStatus('Building PDF...','info');try{const blob=await buildPdf(data);const filename=pdfFilename(data);const file=new File([blob],filename,{type:'application/pdf'});if(mode==='share'){const supported=Boolean(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]})));if(supported){try{await navigator.share({title:'SSSECURE Scaffold Delivery Quantification',text:'Completed scaffold delivery quantification',files:[file]});showStatus('PDF shared successfully.','ok');return;}catch(error){if(error?.name==='AbortError'){showStatus('Sharing cancelled. The completed form is still saved.','info');return;}}}downloadBlob(blob,filename);renderPdfPreview();showStatus('Direct sharing was unavailable, so the PDF was saved. Open it from Downloads, tap Share, then choose Mail.','info');return;}downloadBlob(blob,filename);showStatus('PDF saved to Downloads.','ok');}catch(error){console.error(error);renderPdfPreview();showStatus(`${error.message||'PDF could not be created.'} The on-screen preview is available above.`,'err');}finally{buttons.forEach(b=>b.disabled=false);}}
+
+function clearForm(){if(!confirm('Clear all delivery details and every entered quantity?'))return;localStorage.removeItem(STORAGE_KEY);state.quantities={};document.querySelectorAll('input[type=text],textarea').forEach(el=>el.value='');$('formDate').value=todayIso();document.querySelectorAll('.qty-input').forEach(input=>{input.value='';input.classList.remove('active');});document.querySelectorAll('.category').forEach((el,index)=>el.open=index===0);$('searchInput').value='';filterInventory();updateCounts();showStatus('Form cleared.','ok');window.scrollTo({top:0,behavior:'smooth'});}
+
+buildInventory();
+document.addEventListener('click',event=>{const jump=event.target.closest('.category-jump');if(jump){event.preventDefault();$('searchInput').value='';filterInventory();const target=$(jump.dataset.target);if(target){target.classList.remove('hidden');target.open=true;target.scrollIntoView({behavior:'smooth',block:'start'});}return;}if(event.target.closest('.back-categories')){event.preventDefault();$('categoryNav').scrollIntoView({behavior:'smooth',block:'start'});}});
+document.addEventListener('input',event=>{if(event.target.matches('.qty-input')){const raw=Number.parseFloat(event.target.value);if(Number.isFinite(raw)&&raw>0)state.quantities[event.target.dataset.key]=raw;else delete state.quantities[event.target.dataset.key];event.target.classList.toggle('active',Number.isFinite(raw)&&raw>0);updateCounts();scheduleSave();}});
+document.addEventListener('change',event=>{if(event.target.matches('.qty-input'))setQuantity(event.target,event.target.value,true);});
+document.querySelectorAll('.category').forEach(el=>el.addEventListener('toggle',scheduleSave));
+['client','siteAddress','preparedBy','formDate','jobDescription','specialInstructions'].forEach(id=>$(id).addEventListener('input',scheduleSave));
+$('searchInput').addEventListener('input',filterInventory);$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';filterInventory();$('searchInput').focus();});$('expandAll').addEventListener('click',()=>document.querySelectorAll('.category:not(.hidden)').forEach(el=>el.open=true));$('collapseAll').addEventListener('click',()=>document.querySelectorAll('.category').forEach(el=>el.open=false));$('reviewBtn').addEventListener('click',()=>{renderReview();$('reviewModal').classList.add('show');});$('closeReview').addEventListener('click',()=>$('reviewModal').classList.remove('show'));$('reviewModal').addEventListener('click',e=>{if(e.target===$('reviewModal'))$('reviewModal').classList.remove('show');});$('previewPdfBtn').addEventListener('click',renderPdfPreview);$('closePdfPreview').addEventListener('click',()=>$('pdfPreviewModal').classList.remove('show'));$('pdfPreviewModal').addEventListener('click',e=>{if(e.target===$('pdfPreviewModal'))$('pdfPreviewModal').classList.remove('show');});$('saveDraftBtn').addEventListener('click',()=>saveDraft(true));$('largePrintBtn').addEventListener('click',()=>applyLargePrint(!document.body.classList.contains('large-print')));$('clearBtn').addEventListener('click',clearForm);$('pdfBtn').addEventListener('click',()=>createPdf('save'));$('shareBtn').addEventListener('click',()=>createPdf('share'));
+let savedLargePrint=false;try{savedLargePrint=localStorage.getItem(LARGE_PRINT_KEY)==='1';}catch(error){console.error(error);}applyLargePrint(savedLargePrint,false);const restored=restoreDraft();if(!restored){$('formDate').value=todayIso();applyQuantities();}else if(!$('formDate').value.trim()){$('formDate').value=todayIso();saveDraft(false);}if(restored)showStatus('Saved draft restored on this device.','ok');if(!isHostedContext())$('actionNote').textContent='Preview works here. EMAIL / SHARE PDF requires the hosted Safari version.';
 })();
-</script></body></html>
+</script>
+</body>
+</html>
