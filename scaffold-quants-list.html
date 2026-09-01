@@ -192,6 +192,13 @@ body.large-print .item-name{font-size:22px!important}.large-print .item-unit{fon
 
 /* SSSECURE STANDARD WORK PROCESS + PHOTO UPLOAD */
 .work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.work-grid label{display:flex;align-items:center;gap:9px;min-height:60px;padding:11px;border:2px solid #B7CBE1;border-radius:10px;background:#fff;font-weight:900;line-height:1.2}.work-grid input[type=checkbox]{width:25px;height:25px;accent-color:#0A63C8;flex:0 0 auto}.photo-input{display:block;width:100%;min-height:56px;padding:12px;border:2px dashed #8CA0B5;border-radius:10px;background:#F8FBFE;font-size:16px;font-weight:800}.photo-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.photo-preview{border:1px solid #D8E0E8;border-radius:9px;overflow:hidden;background:#F4F6F8}.photo-preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#EEF1F4}.photo-preview span{display:block;padding:7px 8px;font-size:13px;color:#687586;font-weight:800}.group-invalid{outline:3px solid rgba(180,35,24,.18);outline-offset:3px;border-radius:10px}.invalid{border-color:#B42318!important;background:#FFF8F7!important}@media(max-width:600px){.work-grid{grid-template-columns:1fr}.photo-preview-grid{grid-template-columns:1fr}}
+
+/* ANDROID PHOTO UPLOAD COMPATIBILITY */
+.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
+.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
+.photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
+.android-device .android-photo-help{display:block}
+
 </style>
 </head>
 <body>
@@ -239,7 +246,8 @@ body.large-print .item-name{font-size:22px!important}.large-print .item-unit{fon
 <div class="section-title">SITE / DELIVERY PHOTOS</div>
 <div class="pad">
   <label class="field-label" for="photos">Add up to 4 photos (optional)</label>
-  <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+  <label for="photos" class="photo-launch-label">TAP TO ADD / TAKE PHOTOS</label>
+<input id="photos" class="photo-input" type="file" accept="image/*" multiple>
   <div id="photoCount" style="margin-top:7px;color:#687586;font-size:13px;font-weight:800">0 of 4 photos added.</div>
   <div id="photoPreviewGrid" class="photo-preview-grid"></div>
 </div>
@@ -408,5 +416,26 @@ $('searchInput').addEventListener('input',filterInventory);$('clearSearch').addE
 let savedLargePrint=false;try{savedLargePrint=localStorage.getItem(LARGE_PRINT_KEY)==='1';}catch(error){console.error(error);}applyLargePrint(savedLargePrint,false);const restored=restoreDraft();if(!restored){$('formDate').value=todayIso();applyQuantities();}else if(!$('formDate').value.trim()){$('formDate').value=todayIso();saveDraft(false);}if(restored)showStatus('Saved draft restored on this device.','ok');if(!isHostedContext())$('actionNote').textContent='Preview works here. EMAIL / SHARE PDF requires the hosted Safari version.';
 })();
 </script>
+
+<script>
+(() => {
+  'use strict';
+  if(!/Android/i.test(navigator.userAgent)) return;
+  document.body.classList.add('android-device');
+  const host=document.querySelector('.wrap,.app')||document.body;
+  const box=document.createElement('div');
+  box.className='android-photo-help';
+  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
+  box.querySelector('button').addEventListener('click',()=>{
+    if(location.protocol==='https:'){
+      const target=location.href.replace(/^https:\/\//,'');
+      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
+    }
+  });
+  const firstChild=host.firstElementChild;
+  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
+})();
+</script>
+
 </body>
 </html>
