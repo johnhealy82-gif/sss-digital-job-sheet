@@ -209,6 +209,13 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   .asset-grid label,.size-grid label,.hoist-grid label{font-size:16px!important}
 }
 
+
+/* ANDROID PHOTO UPLOAD COMPATIBILITY */
+.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
+.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
+.photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
+.android-device .android-photo-help{display:block}
+
 </style>
 </head>
 <body>
@@ -250,7 +257,8 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   <div class="sec">INSPECTION PHOTOS<span class="section-note">At least 1 photo is required. Add up to 8 photos.</span></div>
   <div class="pad">
     <label id="photoPicker" class="photo-picker" for="photos">ADD PHOTOS / TAKE PHOTOS</label>
-    <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+    <label for="photos" class="photo-launch-label">TAP TO ADD / TAKE PHOTOS</label>
+<input id="photos" class="photo-input" type="file" accept="image/*" multiple>
     <div class="photo-note"><span id="photoCount" class="photo-count">0 of 8 photos added.</span> Photos will be placed clearly on separate PDF pages.</div>
     <div id="previewGrid" class="preview-grid"></div>
   </div>
@@ -387,6 +395,27 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     apply(enabled);
     try{localStorage.setItem(key,enabled?'1':'0');}catch(_){ }
   });
+})();
+</script>
+
+
+<script>
+(() => {
+  'use strict';
+  if(!/Android/i.test(navigator.userAgent)) return;
+  document.body.classList.add('android-device');
+  const host=document.querySelector('.wrap,.app')||document.body;
+  const box=document.createElement('div');
+  box.className='android-photo-help';
+  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
+  box.querySelector('button').addEventListener('click',()=>{
+    if(location.protocol==='https:'){
+      const target=location.href.replace(/^https:\/\//,'');
+      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
+    }
+  });
+  const firstChild=host.firstElementChild;
+  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
 })();
 </script>
 
