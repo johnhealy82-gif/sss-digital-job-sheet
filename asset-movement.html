@@ -366,6 +366,13 @@ body.large-print .header-address{font-size:30px}
 
 /* SSSECURE STANDARD WORK PROCESS */
 .work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.work-grid label{display:flex;align-items:center;gap:9px;min-height:62px;padding:12px;border:2px solid var(--bluegrey,#B7CBE1);border-radius:10px;background:#fff;font-weight:900;line-height:1.2}.work-grid input[type=checkbox]{width:27px;height:27px;accent-color:#0A63C8;flex:0 0 auto}@media(max-width:600px){.work-grid{grid-template-columns:1fr}}
+
+/* ANDROID PHOTO UPLOAD COMPATIBILITY */
+.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
+.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
+.photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
+.android-device .android-photo-help{display:block}
+
 </style>
 </head>
 <body>
@@ -523,7 +530,8 @@ body.large-print .header-address{font-size:30px}
             <div id="docketUploadSection" class="field conditional" hidden style="margin-top:12px">
               <label class="field-label" for="docketPhoto">Upload A Clear Photo Of The Original Brickies Kit Delivery Docket <span class="req">REQUIRED</span></label>
               <div class="photo-instruction">The full docket must be visible and readable so the office can compare the original quantities delivered against the quantities collected.</div>
-              <input id="docketPhoto" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp">
+              <label for="docketPhoto" class="photo-launch-label">TAP TO ADD / TAKE PHOTO</label>
+<input id="docketPhoto" class="photo-input" type="file" accept="image/*">
               <div class="photo-note"><span id="docketPhotoCount" class="photo-count">0 of 1 photo added.</span></div>
               <div id="docketPreview" class="preview-grid"></div>
             </div>
@@ -575,7 +583,8 @@ body.large-print .header-address{font-size:30px}
     <div class="sec">UPLOAD COMPLETION PHOTOS<span class="section-note">At least 1 photo is required. Add up to 4 photos.</span></div>
     <div class="pad">
       <div id="singlePhotoInstruction" class="photo-instruction">PHOTOS MUST CLEARLY SHOW: the toilet or shed asset number where applicable, the full asset or full brickies kit, and enough of the surrounding site to confirm its condition and exact location.</div>
-      <input id="singlePhotos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+      <label for="singlePhotos" class="photo-launch-label">TAP TO ADD / TAKE PHOTOS</label>
+<input id="singlePhotos" class="photo-input" type="file" accept="image/*" multiple>
       <div class="photo-note"><span id="singlePhotoCount" class="photo-count">0 of 4 photos added.</span></div>
       <div id="singlePreview" class="preview-grid"></div>
     </div>
@@ -587,13 +596,15 @@ body.large-print .header-address{font-size:30px}
       <div id="transferPhotoInstruction" class="photo-instruction">PHOTOS ARE REQUIRED AT BOTH SITES. They must clearly show the toilet or shed asset number where applicable, the full asset or full brickies kit, and enough of each site to confirm its condition and location before and after transfer.</div>
       <div class="field">
         <label class="field-label" for="fromPhotos">Transfer From Site Photos <span class="req">REQUIRED</span></label>
-        <input id="fromPhotos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+        <label for="fromPhotos" class="photo-launch-label">TAP TO ADD / TAKE PHOTOS</label>
+<input id="fromPhotos" class="photo-input" type="file" accept="image/*" multiple>
         <div class="photo-note"><span id="fromPhotoCount" class="photo-count">0 of 4 photos added.</span></div>
         <div id="fromPreview" class="preview-grid"></div>
       </div>
       <div class="field">
         <label class="field-label" for="toPhotos">Transfer To Site Photos <span class="req">REQUIRED</span></label>
-        <input id="toPhotos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+        <label for="toPhotos" class="photo-launch-label">TAP TO ADD / TAKE PHOTOS</label>
+<input id="toPhotos" class="photo-input" type="file" accept="image/*" multiple>
         <div class="photo-note"><span id="toPhotoCount" class="photo-count">0 of 4 photos added.</span></div>
         <div id="toPreview" class="preview-grid"></div>
       </div>
@@ -1627,6 +1638,27 @@ body.large-print .header-address{font-size:30px}
     apply(enabled);
     try{localStorage.setItem(key,enabled?'1':'0');}catch(_){ }
   });
+})();
+</script>
+
+
+<script>
+(() => {
+  'use strict';
+  if(!/Android/i.test(navigator.userAgent)) return;
+  document.body.classList.add('android-device');
+  const host=document.querySelector('.wrap,.app')||document.body;
+  const box=document.createElement('div');
+  box.className='android-photo-help';
+  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
+  box.querySelector('button').addEventListener('click',()=>{
+    if(location.protocol==='https:'){
+      const target=location.href.replace(/^https:\/\//,'');
+      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
+    }
+  });
+  const firstChild=host.firstElementChild;
+  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
 })();
 </script>
 
