@@ -106,6 +106,13 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
 .declaration-lock{display:none;position:absolute;inset:10px;z-index:5;align-items:center;justify-content:center;text-align:center;background:rgba(255,243,191,.96);border:2px solid #D89A00;border-radius:12px;color:#6B4300;font-size:20px!important;font-weight:900!important;line-height:1.45!important;padding:22px}
 .declaration-pad.locked .declaration-lock{display:flex}
 @media(max-width:650px){.evidence-grid{grid-template-columns:1fr}.head h1{font-size:31px!important}.head h2{font-size:20px!important}.sec{font-size:19px!important}.pad{padding:15px!important}input[type=text],input[type=date],textarea,.photo-input{font-size:18px!important}#address{font-size:21px!important}.work-grid label,.option-row label{font-size:16px!important}}
+
+/* ANDROID PHOTO UPLOAD COMPATIBILITY */
+.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
+.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
+.photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
+.android-device .android-photo-help{display:block}
+
 </style>
 </head>
 <body>
@@ -170,13 +177,15 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
       <div id="tagEvidenceCard" class="evidence-card">
         <div class="evidence-title">1. SCAFFOLD TAG PHOTO <span class="req">REQUIRED</span></div>
         <div class="evidence-instruction">Upload one clear, close photo showing the current scaffold tag is readable and up to date.</div>
-        <input id="tagPhoto" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp">
+        <label for="tagPhoto" class="photo-launch-label">TAP TO ADD / TAKE PHOTO</label>
+<input id="tagPhoto" class="photo-input" type="file" accept="image/*">
         <div id="tagPhotoPreview" class="evidence-preview"></div>
       </div>
       <div id="excessEvidenceCard" class="evidence-card">
         <div class="evidence-title">2. EXCESS GEAR PHOTO <span class="req">REQUIRED</span></div>
         <div class="evidence-instruction">Upload one clear, wide photo showing all excess gear has been removed from the scaffold and stacked correctly for pickup.</div>
-        <input id="excessGearPhoto" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp">
+        <label for="excessGearPhoto" class="photo-launch-label">TAP TO ADD / TAKE PHOTO</label>
+<input id="excessGearPhoto" class="photo-input" type="file" accept="image/*">
         <div id="excessGearPhotoPreview" class="evidence-preview"></div>
       </div>
     </div>
@@ -185,7 +194,8 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
   <div class="sec">ADDITIONAL COMPLETION PHOTOS<span class="section-note">Optional. Add up to 4 additional photos.</span></div>
   <div class="pad">
     <label id="photoPicker" class="photo-picker" for="photos">ADD ADDITIONAL PHOTOS / TAKE PHOTOS</label>
-    <input id="photos" class="photo-input" type="file" accept="image/jpeg,image/png,image/heic,image/heif,image/webp" multiple>
+    <label for="photos" class="photo-launch-label">TAP TO ADD / TAKE PHOTOS</label>
+<input id="photos" class="photo-input" type="file" accept="image/*" multiple>
     <div class="photo-note"><span id="photoCount" class="photo-count">0 of 4 additional photos added.</span> All evidence photos will be clearly labelled in the PDF.</div>
     <div id="previewGrid" class="preview-grid"></div>
   </div>
@@ -362,5 +372,26 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
   apply(enabled);button.addEventListener('click',()=>{enabled=!document.body.classList.contains('large-print');apply(enabled);try{localStorage.setItem(key,enabled?'1':'0');}catch(_){}});
 })();
 </script>
+
+<script>
+(() => {
+  'use strict';
+  if(!/Android/i.test(navigator.userAgent)) return;
+  document.body.classList.add('android-device');
+  const host=document.querySelector('.wrap,.app')||document.body;
+  const box=document.createElement('div');
+  box.className='android-photo-help';
+  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
+  box.querySelector('button').addEventListener('click',()=>{
+    if(location.protocol==='https:'){
+      const target=location.href.replace(/^https:\/\//,'');
+      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
+    }
+  });
+  const firstChild=host.firstElementChild;
+  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
+})();
+</script>
+
 </body>
 </html>
