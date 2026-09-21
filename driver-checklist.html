@@ -12,7 +12,7 @@
 <meta name="twitter:description" content="Complete and share the SSSECURE delivery or pickup checklist.">
 
 <title>SSSECURE Delivery Driver Completion Checklist</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 :root{--blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;--line:#d8e0e8;--muted:#687586}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
@@ -209,21 +209,78 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 }
 
 
-/* ANDROID PHOTO UPLOAD COMPATIBILITY */
-.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
-.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
 .photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
-.android-device .android-photo-help{display:block}
+#driverName{width:100%;min-height:56px;padding:14px;border:2px solid var(--bluegrey,#B7CBE1);border-radius:10px;font-size:18px;font-weight:800;background:#fff;color:var(--ink)}
+body.large-print #driverName{font-size:23px!important;min-height:64px!important;padding:18px!important}
+.draft-note{margin:0 15px 12px;color:#687586;font-size:13px;font-weight:800;line-height:1.4}
+.remove-photo{border:1px solid #c9d1da;background:#fff;color:#b42318;padding:7px 9px;font-size:12px;border-radius:7px;font-weight:800}
+.preview-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 8px;background:#fff}
+
+/* SSSECURE ANDROID / TOUCH HARDENING */
+button,label[for],summary,a,input[type="checkbox"],input[type="radio"],input[type="file"]{
+  touch-action:manipulation;-webkit-tap-highlight-color:rgba(10,99,200,.18)
+}
+input[type="text"],input[type="date"],input[type="number"],select,textarea{
+  touch-action:manipulation;-webkit-user-select:text;user-select:text
+}
+button,label[for],summary,a{cursor:pointer}
+
+/* SCRIPT-INDEPENDENT LARGE PRINT */
+.large-print-native{position:absolute!important;opacity:0!important;width:1px!important;height:1px!important;pointer-events:none!important}
+.large-print-toggle::after{content:": OFF"}
+#largePrintNative:checked ~ .wrap .large-print-toggle::after{content:": ON"}
+#largePrintNative:checked ~ .wrap .large-print-toggle{background:#123A76!important;color:#fff!important;border-color:#123A76!important}
+#largePrintNative:checked ~ .wrap{font-size:21px!important}
+#largePrintNative:checked ~ .wrap .head h1{font-size:39px!important}
+#largePrintNative:checked ~ .wrap .head h2{font-size:26px!important}
+#largePrintNative:checked ~ .wrap .sec{font-size:23px!important;padding:18px!important}
+#largePrintNative:checked ~ .wrap .field-label,
+#largePrintNative:checked ~ .wrap .question-title,
+#largePrintNative:checked ~ .wrap .gear-title,
+#largePrintNative:checked ~ .wrap .inspection-title,
+#largePrintNative:checked ~ .wrap .photo-picker,
+#largePrintNative:checked ~ .wrap .evidence-title{font-size:21px!important}
+#largePrintNative:checked ~ .wrap input[type=text],
+#largePrintNative:checked ~ .wrap input[type=date],
+#largePrintNative:checked ~ .wrap input[type=number],
+#largePrintNative:checked ~ .wrap select,
+#largePrintNative:checked ~ .wrap textarea,
+#largePrintNative:checked ~ .wrap .photo-input{font-size:23px!important;min-height:64px!important;padding:18px!important}
+#largePrintNative:checked ~ .wrap .work-grid label,
+#largePrintNative:checked ~ .wrap .option-grid label,
+#largePrintNative:checked ~ .wrap .option-row label,
+#largePrintNative:checked ~ .wrap .answer-row label,
+#largePrintNative:checked ~ .wrap .choice-grid label,
+#largePrintNative:checked ~ .wrap .asset-grid label,
+#largePrintNative:checked ~ .wrap .size-grid label,
+#largePrintNative:checked ~ .wrap .hoist-grid label{font-size:20px!important;min-height:72px!important}
+#largePrintNative:checked ~ .wrap input[type=checkbox],
+#largePrintNative:checked ~ .wrap input[type=radio]{width:29px!important;height:29px!important}
+#largePrintNative:checked ~ .wrap .photo-note,
+#largePrintNative:checked ~ .wrap .sig-help,
+#largePrintNative:checked ~ .wrap .question-note,
+#largePrintNative:checked ~ .wrap .photo-instruction,
+#largePrintNative:checked ~ .wrap .draft-note{font-size:19px!important}
+#largePrintNative:checked ~ .wrap .share,
+#largePrintNative:checked ~ .wrap .save,
+#largePrintNative:checked ~ .wrap .reset,
+#largePrintNative:checked ~ .wrap .clear,
+#largePrintNative:checked ~ .wrap .large-print-toggle{font-size:19px!important;min-height:60px!important}
+#largePrintNative:checked ~ .wrap #address,
+#largePrintNative:checked ~ .wrap #siteAddress,
+#largePrintNative:checked ~ .wrap #fromAddress,
+#largePrintNative:checked ~ .wrap #toAddress{font-size:26px!important;padding:20px!important}
 
 </style>
 </head>
 <body>
+<input id="largePrintNative" class="large-print-native" type="checkbox" aria-label="Large Print">
 <div class="wrap">
-  <div class="head"><h1>SSSECURE</h1><h2>Delivery Driver Completion Checklist</h2></div><div class="large-print-strip"><button type="button" id="largePrintToggle" class="large-print-toggle" aria-pressed="false">LARGE PRINT: OFF</button></div>
+  <div class="head"><h1>SSSECURE</h1><h2>Delivery Driver Completion Checklist</h2></div><div class="large-print-strip"><label for="largePrintNative" id="largePrintToggle" class="large-print-toggle">LARGE PRINT</label></div>
 
   <div class="sec">JOB DETAILS</div>
   <div class="pad">
-    <div class="field"><label class="field-label" for="driverName">Driver Name</label><input id="driverName" type="text" autocomplete="name"></div>
+    <div class="field"><label class="field-label" for="driverName">Driver Name</label><select id="driverName" aria-label="Driver Name"><option value="">Select Driver</option><option value="Ali">Ali</option><option value="Abdul">Abdul</option><option value="Jeremy">Jeremy</option><option value="Evan">Evan</option><option value="Yard Delivery">Yard Delivery</option></select></div>
     <div class="field"><label class="field-label" for="siteAddress">Site Address</label><input id="siteAddress" type="text" autocomplete="street-address"></div>
     <div class="field"><label class="field-label" for="date">Date</label><input id="date" type="date"></div>
   </div>
@@ -332,7 +389,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   </div>
 
   <div class="sec">COMMENTS</div>
-  <div class="pad"><textarea id="comments" placeholder="Only add comments if something is incomplete or needs attention."></textarea></div>
+  <div class="pad"><textarea id="comments" maxlength="1500" placeholder="Only add comments if something is incomplete or needs attention."></textarea></div>
 
   <div class="sec">PHOTOS</div>
   <div class="pad">
@@ -343,6 +400,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   </div>
 
   <div id="status" class="status"></div>
+  <div id="draftNote" class="draft-note" aria-live="polite"></div>
   <div class="share-area">
     <button type="button" id="resetBtn" class="reset">RESET</button>
     <button type="button" id="saveBtn" class="save">SAVE PDF</button>
@@ -358,6 +416,8 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   const pad2 = n => String(n).padStart(2,"0");
   $("date").value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
   let selectedPhotos = [];
+  const MAX_PHOTOS=4,MAX_PHOTO_BYTES=20*1024*1024,STORAGE_KEY="sssecureDriverChecklistDraftV2";
+  let saveTimer=null;
 
   const movement = () => document.querySelector('input[name="movementType"]:checked')?.value || "";
   const jobs = () => Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el => el.value);
@@ -374,6 +434,10 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     $("baseOutSection").hidden = !showBaseOut;
     $("thirdLiftSection").hidden = !showThirdLift;
     $("dismantleAllSection").hidden = !showDismantleAll;
+    const clearGroup=name=>document.querySelectorAll(`input[name="${name}"]`).forEach(input=>input.checked=false);
+    if(!showBaseOut){clearGroup("slabGearUpTop");clearGroup("baseOutClear");}
+    if(!showThirdLift)clearGroup("thirdLiftGear");
+    if(!showDismantleAll)clearGroup("dismantleSiteCheck");
     $("completedQuestion").textContent = type === "Delivery" ? "Is The Delivery Fully Completed?" : type === "Pickup" ? "Is The Pickup Fully Completed?" : "Is The Delivery Or Pickup Fully Completed?";
     $("photosQuestion").textContent = type === "Delivery" ? "Have Delivery Photos Been Taken?" : type === "Pickup" ? "Have Pickup Photos Been Taken?" : "Have Delivery Or Pickup Photos Been Taken?";
 
@@ -393,21 +457,12 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     }
   });
 
-  $("photos").addEventListener("change", e => {
-    selectedPhotos = Array.from(e.target.files || []).slice(0,4);
-    const grid = $("previewGrid");
-    grid.innerHTML = "";
-    selectedPhotos.forEach((file,index) => {
-      const url = URL.createObjectURL(file);
-      const box = document.createElement("div");
-      box.className = "preview";
-      box.innerHTML = `<img alt="Photo ${index+1}"><span>Photo ${index+1}</span>`;
-      const img = box.querySelector("img");
-      img.src = url;
-      img.onload = () => URL.revokeObjectURL(url);
-      grid.appendChild(box);
-    });
-  });
+  const photoKey=file=>`${file.name}|${file.size}|${file.lastModified}`;
+  function renderPhotoPreviews(){
+    const grid=$("previewGrid");grid.innerHTML="";
+    selectedPhotos.forEach((file,index)=>{const url=URL.createObjectURL(file),box=document.createElement("div");box.className="preview";const img=document.createElement("img");img.alt=`Photo ${index+1}`;img.src=url;img.onload=()=>URL.revokeObjectURL(url);const meta=document.createElement("div");meta.className="preview-meta";const label=document.createElement("span");label.textContent=`Photo ${index+1}`;const remove=document.createElement("button");remove.type="button";remove.className="remove-photo";remove.textContent="Remove";remove.onclick=()=>{selectedPhotos.splice(index,1);renderPhotoPreviews();scheduleSave();};meta.append(label,remove);box.append(img,meta);grid.appendChild(box);});
+  }
+  $("photos").addEventListener("change",e=>{const existing=new Set(selectedPhotos.map(photoKey));for(const file of Array.from(e.target.files||[])){if(selectedPhotos.length>=MAX_PHOTOS)break;if(file.size>MAX_PHOTO_BYTES)continue;if(!(file.type||"").startsWith("image/")&&!/\.(jpe?g|png|heic|heif|webp)$/i.test(file.name||""))continue;const key=photoKey(file);if(existing.has(key))continue;selectedPhotos.push(file);existing.add(key);}e.target.value="";renderPhotoPreviews();scheduleSave();});
 
   function collect(){
     return {
@@ -427,6 +482,10 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
       comments:$("comments").value
     };
   }
+
+  function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,250);}
+  function saveDraft(){try{const data=collect();localStorage.setItem(STORAGE_KEY,JSON.stringify(data));$("draftNote").textContent="Draft saved on this device. Photos must be added again after refresh.";}catch(_){}}
+  function restoreDraft(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return false;const d=JSON.parse(raw);["driverName","siteAddress","date","comments"].forEach(id=>{if(d[id]!=null)$(id).value=d[id];});document.querySelectorAll('input[name="movementType"]').forEach(el=>el.checked=el.value===d.movementType);document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=Array.isArray(d.jobTypes)&&d.jobTypes.includes(el.value));updateConditionalSections();["slabGearUpTop","baseOutClear","thirdLiftGear","dismantleSiteCheck","fullyCompleted","clearAccess","photosTaken","photoDistance"].forEach(name=>{if(d[name]){const el=Array.from(document.querySelectorAll(`input[name="${name}"]`)).find(x=>x.value===d[name]);if(el)el.checked=true;}});updateConditionalSections();$("draftNote").textContent="Saved draft restored. Photos must be added again.";return true;}catch(_){try{localStorage.removeItem(STORAGE_KEY)}catch(__){}return false;}}
 
   function clearValidation(){
     document.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));
@@ -468,8 +527,13 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
       if(!selectedPhotos.length) markField("photos","Add at least one delivery or pickup photo.");
     }
 
-    const relevantAnswers=[data.slabGearUpTop,data.baseOutClear,data.thirdLiftGear,data.dismantleSiteCheck,data.fullyCompleted,data.clearAccess,data.photosTaken,data.photoDistance];
-    if(relevantAnswers.includes("No") && !data.comments.trim()) markField("comments","Comments are required whenever any answer is No.");
+    const relevantAnswers=[data.fullyCompleted,data.clearAccess,data.photosTaken];
+    if(isDelivery&&data.jobTypes.includes("Base Out")) relevantAnswers.push(data.slabGearUpTop,data.baseOutClear);
+    if(isDelivery&&(data.jobTypes.includes("3rd Lift Up")||data.jobTypes.includes("3rd Lift Down"))) relevantAnswers.push(data.thirdLiftGear);
+    if(data.jobTypes.includes("Dismantle All")) relevantAnswers.push(data.dismantleSiteCheck);
+    if(data.photosTaken==="Yes") relevantAnswers.push(data.photoDistance);
+    const smallJob=data.jobTypes.includes("Small Job / Modification");
+    if((relevantAnswers.includes("No")||smallJob)&&!data.comments.trim()) markField("comments",smallJob?"Describe the Small Job / Modification and any incomplete items or issues.":"Comments are required whenever any relevant answer is No.");
 
     if(errors.length){
       status(`Complete ${errors.length} highlighted item${errors.length===1?"":"s"}: ${errors.slice(0,5).map(e=>e.message).join(" ")}${errors.length>5?" Check the remaining highlighted sections.":""}`,"err");
@@ -530,12 +594,39 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
     };
   }
 
-  async function buildPdf(data){
-    if(!window.jspdf?.jsPDF){
-      throw new Error("PDF engine did not load. Refresh the page and try again.");
-    }
+  const JSPDF_SOURCES=[
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+  'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+  'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
+];
+let jspdfLoadPromise=null;
+function loadJsPdf(){
+  if(window.jspdf && window.jspdf.jsPDF) return Promise.resolve();
+  if(jspdfLoadPromise) return jspdfLoadPromise;
+  jspdfLoadPromise=new Promise((resolve,reject)=>{
+    let index=0;
+    const tryNext=()=>{
+      if(window.jspdf && window.jspdf.jsPDF){resolve();return;}
+      if(index>=JSPDF_SOURCES.length){reject(new Error('PDF engine could not load. Check internet connection and try again.'));return;}
+      const script=document.createElement('script');
+      script.src=JSPDF_SOURCES[index++];
+      script.async=true;
+      script.crossOrigin='anonymous';
+      const timer=setTimeout(()=>{script.remove();tryNext();},10000);
+      script.onload=()=>{clearTimeout(timer);if(window.jspdf && window.jspdf.jsPDF)resolve();else{script.remove();tryNext();}};
+      script.onerror=()=>{clearTimeout(timer);script.remove();tryNext();};
+      document.head.appendChild(script);
+    };
+    tryNext();
+  }).catch(error=>{jspdfLoadPromise=null;throw error;});
+  return jspdfLoadPromise;
+}
 
+async function buildPdf(data){
+    await loadJsPdf();
     const {jsPDF} = window.jspdf;
+    const largePdf=document.body.classList.contains("large-print");
+    let commentsContinuation=false;
     const doc = new jsPDF({
       orientation:"portrait",
       unit:"mm",
@@ -643,7 +734,8 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
       doc.setFillColor(...LIGHT);
       doc.setDrawColor(...LINE);
       doc.roundedRect(margin,y,contentW,h,1.4,1.4,"FD");
-      const fitted = fitLines(value || "No additional comments.",contentW-5,h-5,9.3,6.4);
+      doc.setFont("helvetica","normal");doc.setFontSize(largePdf?10.2:9.3);const allCommentLines=doc.splitTextToSize(value||"No additional comments.",contentW-5);commentsContinuation=allCommentLines.length>Math.floor((h-5)/((largePdf?10.2:9.3)*0.3528*1.16));
+      const fitted = commentsContinuation?{lines:[...allCommentLines.slice(0,Math.max(1,Math.floor((h-5)/((largePdf?10.2:9.3)*0.3528*1.16))-1)),"See COMMENTS CONTINUATION page."],size:largePdf?10.2:9.3,lineHeight:(largePdf?10.2:9.3)*0.3528*1.16}:fitLines(value || "No additional comments.",contentW-5,h-5,largePdf?10.2:9.3,6.4);
       doc.setTextColor(...INK);
       doc.setFont("helvetica","normal");
       doc.setFontSize(fitted.size);
@@ -709,6 +801,9 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 
     section("COMMENTS");
     commentPanel(data.comments || "No additional comments.",31);
+
+    async function addTextContinuation(title,text){let remaining=doc.splitTextToSize(String(text||""),contentW-8);const fontSize=largePdf?11:9.5,lineH=fontSize*0.3528*1.35,maxLines=Math.floor((pageH-50)/lineH);while(remaining.length){doc.addPage();doc.setFillColor(...BLUE);doc.rect(0,0,pageW,23,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(12.5);doc.text(`SSSECURE - ${title}`,pageW/2,9.5,{align:"center"});doc.setFontSize(10.2);doc.setTextColor(255,243,191);doc.text(doc.splitTextToSize(data.siteAddress||"Site address not entered",180),pageW/2,16.2,{align:"center"});doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(fontSize);doc.text(remaining.splice(0,maxLines),margin,31,{lineHeightFactor:1.35});}}
+    if(commentsContinuation&&data.comments)await addTextContinuation("COMMENTS CONTINUATION",data.comments);
 
     const photos = [];
     for(const file of selectedPhotos){
@@ -829,12 +924,13 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 
   function resetForm(){
     if(!window.confirm("Clear every field, selection, comment and photo from this form?")) return;
+    try{localStorage.removeItem(STORAGE_KEY)}catch(_){}
 
     $("driverName").value = "";
     $("siteAddress").value = "";
     $("comments").value = "";
 
-    document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(input => {
+    document.querySelectorAll('input[type="radio"],input[type="checkbox"]:not(#largePrintNative)').forEach(input => {
       input.checked = false;
     });
 
@@ -852,10 +948,10 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   }
 
   document.addEventListener("input",event=>{
-    if(event.target.matches("input,textarea")){event.target.classList.remove("invalid");event.target.closest(".group-invalid")?.classList.remove("group-invalid");}
+    if(event.target.matches("input,textarea,select")){event.target.classList.remove("invalid");event.target.closest(".group-invalid")?.classList.remove("group-invalid");scheduleSave();}
   });
   document.addEventListener("change",event=>{
-    if(event.target.matches('input[type="radio"],input[type="checkbox"]')) event.target.closest(".group-invalid")?.classList.remove("group-invalid");
+    if(event.target.matches('input[type="radio"],input[type="checkbox"],select')){event.target.closest(".group-invalid")?.classList.remove("group-invalid");scheduleSave();}
     if(event.target.id==="photos" && selectedPhotos.length) event.target.classList.remove("invalid");
   });
 
@@ -863,7 +959,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   $("shareBtn").addEventListener("click", () => generatePdf("share"));
   $("resetBtn").addEventListener("click", resetForm);
 
-  updateConditionalSections();
+  if(!restoreDraft()) updateConditionalSections();
 })();
 </script>
 
@@ -871,45 +967,26 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 (() => {
   'use strict';
   const key='sssecure_large_print_standard_v2';
-  const button=document.getElementById('largePrintToggle');
-  if(!button) return;
+  const control=document.getElementById('largePrintNative');
+  const label=document.getElementById('largePrintToggle');
+  if(!control||!label)return;
   const apply=enabled=>{
-    document.body.classList.toggle('large-print',enabled);
-    button.classList.toggle('active',enabled);
-    button.setAttribute('aria-pressed',enabled?'true':'false');
-    button.textContent=enabled?'LARGE PRINT: ON':'LARGE PRINT: OFF';
+    control.checked=Boolean(enabled);
+    document.body.classList.toggle('large-print',Boolean(enabled));
+    label.classList.toggle('active',Boolean(enabled));
   };
   let enabled=false;
   try{enabled=localStorage.getItem(key)==='1';}catch(_){ }
   apply(enabled);
-  button.addEventListener('click',()=>{
-    enabled=!document.body.classList.contains('large-print');
-    apply(enabled);
-    try{localStorage.setItem(key,enabled?'1':'0');}catch(_){ }
+  control.addEventListener('change',()=>{
+    apply(control.checked);
+    try{localStorage.setItem(key,control.checked?'1':'0');}catch(_){ }
   });
 })();
 </script>
 
 
-<script>
-(() => {
-  'use strict';
-  if(!/Android/i.test(navigator.userAgent)) return;
-  document.body.classList.add('android-device');
-  const host=document.querySelector('.wrap,.app')||document.body;
-  const box=document.createElement('div');
-  box.className='android-photo-help';
-  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
-  box.querySelector('button').addEventListener('click',()=>{
-    if(location.protocol==='https:'){
-      const target=location.href.replace(/^https:\/\//,'');
-      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
-    }
-  });
-  const firstChild=host.firstElementChild;
-  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
-})();
-</script>
+
 
 </body>
 </html>
