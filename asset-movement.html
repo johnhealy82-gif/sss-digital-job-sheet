@@ -7,7 +7,7 @@
 <meta property="og:title" content="SSSECURE Asset Movement Checklist">
 <meta property="og:description" content="Delivery, pickup or transfer of SSSECURE toilets, sheds, brickies kits and hoists.">
 <title>SSSECURE Asset Movement Checklist</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 :root{
   --blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;
@@ -271,19 +271,19 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 .asset-type-grid .asset-yellow input{accent-color:#D89A00!important}
 .asset-type-grid .asset-red input{accent-color:#C62828!important}
 
-.asset-type-grid .asset-blue:has(input:checked){
+.asset-type-grid .asset-blue.selected{
   background:#DCEBFA!important;
   border:3px solid #0A63C8!important;
   color:#123A76!important;
   box-shadow:0 0 0 3px rgba(10,99,200,.14)!important;
 }
-.asset-type-grid .asset-yellow:has(input:checked){
+.asset-type-grid .asset-yellow.selected{
   background:#FFF3BF!important;
   border:3px solid #D89A00!important;
   color:#6B4600!important;
   box-shadow:0 0 0 3px rgba(216,154,0,.16)!important;
 }
-.asset-type-grid .asset-red:has(input:checked){
+.asset-type-grid .asset-red.selected{
   background:#FDE3E1!important;
   border:3px solid #C62828!important;
   color:#7A1F1F!important;
@@ -301,7 +301,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   background:#D89A00!important;color:#fff!important;
 }
 #assetDetailSection.asset-tone-yellow > .pad{background:#FFF9DF!important}
-#assetDetailSection.asset-tone-yellow #kitSizeGroup label:has(input:checked){
+#assetDetailSection.asset-tone-yellow #kitSizeGroup label.selected{
   background:#FFF3BF!important;border:3px solid #D89A00!important;color:#6B4600!important;
   box-shadow:0 0 0 3px rgba(216,154,0,.12)!important;
 }
@@ -311,7 +311,7 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
   background:#FDE3E1!important;border:3px solid #C62828!important;color:#7A1F1F!important;
   box-shadow:0 0 0 3px rgba(198,40,40,.10)!important;
 }
-#assetDetailSection.asset-tone-red #hoistTypeGroup label:has(input:checked){
+#assetDetailSection.asset-tone-red #hoistTypeGroup label.selected{
   background:#FDE3E1!important;border:3px solid #C62828!important;color:#7A1F1F!important;
 }
 
@@ -319,31 +319,12 @@ body.large-print #address,body.large-print #siteAddress,body.large-print #fromAd
 body.large-print .asset-type-grid .asset-type .asset-name{font-size:21px!important}
 
 
-/* TOP HEADER COLOUR — CSS ONLY
-   No JavaScript or form logic changed. */
-body:has(input[name="asset"][value="Toilet"]:checked) .head,
-body:has(input[name="asset"][value="Shed"]:checked) .head{
-  background:#9FD4FF!important;
-  color:#123A76!important;
-}
-body:has(input[name="asset"][value="Toilet"]:checked) .head h1,
-body:has(input[name="asset"][value="Toilet"]:checked) .head h2,
-body:has(input[name="asset"][value="Shed"]:checked) .head h1,
-body:has(input[name="asset"][value="Shed"]:checked) .head h2{
-  color:#123A76!important;
-}
-body:has(input[name="asset"][value="Brickies Kit"]:checked) .head{
-  background:#F5C542!important;
-  color:#123A76!important;
-}
-body:has(input[name="asset"][value="Brickies Kit"]:checked) .head h1,
-body:has(input[name="asset"][value="Brickies Kit"]:checked) .head h2{
-  color:#123A76!important;
-}
-body:has(input[name="asset"][value="Hoist"]:checked) .head{
-  background:#B42318!important;
-  color:#FFFFFF!important;
-}
+/* TOP HEADER COLOUR — ANDROID-SAFE CLASS STYLING */
+.head.asset-header-blue{background:#9FD4FF!important;color:#123A76!important}
+.head.asset-header-blue h1,.head.asset-header-blue h2{color:#123A76!important}
+.head.asset-header-yellow{background:#F5C542!important;color:#123A76!important}
+.head.asset-header-yellow h1,.head.asset-header-yellow h2{color:#123A76!important}
+.head.asset-header-red{background:#B42318!important;color:#FFFFFF!important}
 
 /* Requested field/header updates only. */
 #driverName{
@@ -364,23 +345,83 @@ body.large-print .header-address{font-size:30px}
 }
 
 
-/* ANDROID PHOTO UPLOAD COMPATIBILITY */
-.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
-.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
 .photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
-.android-device .android-photo-help{display:block}
+.draft-note{margin:0 15px 12px;color:#687586;font-size:13px;font-weight:800;line-height:1.4}
+body.large-print .draft-note{font-size:16px!important}
 
+/* SSSECURE ANDROID / TOUCH HARDENING */
+button,label[for],summary,a,input[type="checkbox"],input[type="radio"],input[type="file"]{
+  touch-action:manipulation;-webkit-tap-highlight-color:rgba(10,99,200,.18)
+}
+input[type="text"],input[type="date"],input[type="number"],select,textarea{
+  touch-action:manipulation;-webkit-user-select:text;user-select:text
+}
+button,label[for],summary,a{cursor:pointer}
+
+/* SCRIPT-INDEPENDENT LARGE PRINT */
+.large-print-native{position:absolute!important;opacity:0!important;width:1px!important;height:1px!important;pointer-events:none!important}
+.large-print-toggle::after{content:": OFF"}
+#largePrintNative:checked ~ .wrap .large-print-toggle::after{content:": ON"}
+#largePrintNative:checked ~ .wrap .large-print-toggle{background:#123A76!important;color:#fff!important;border-color:#123A76!important}
+#largePrintNative:checked ~ .wrap{font-size:21px!important}
+#largePrintNative:checked ~ .wrap .head h1{font-size:39px!important}
+#largePrintNative:checked ~ .wrap .head h2{font-size:26px!important}
+#largePrintNative:checked ~ .wrap .sec{font-size:23px!important;padding:18px!important}
+#largePrintNative:checked ~ .wrap .field-label,
+#largePrintNative:checked ~ .wrap .question-title,
+#largePrintNative:checked ~ .wrap .gear-title,
+#largePrintNative:checked ~ .wrap .inspection-title,
+#largePrintNative:checked ~ .wrap .photo-picker,
+#largePrintNative:checked ~ .wrap .evidence-title{font-size:21px!important}
+#largePrintNative:checked ~ .wrap input[type=text],
+#largePrintNative:checked ~ .wrap input[type=date],
+#largePrintNative:checked ~ .wrap input[type=number],
+#largePrintNative:checked ~ .wrap select,
+#largePrintNative:checked ~ .wrap textarea,
+#largePrintNative:checked ~ .wrap .photo-input{font-size:23px!important;min-height:64px!important;padding:18px!important}
+#largePrintNative:checked ~ .wrap .work-grid label,
+#largePrintNative:checked ~ .wrap .option-grid label,
+#largePrintNative:checked ~ .wrap .option-row label,
+#largePrintNative:checked ~ .wrap .answer-row label,
+#largePrintNative:checked ~ .wrap .choice-grid label,
+#largePrintNative:checked ~ .wrap .asset-grid label,
+#largePrintNative:checked ~ .wrap .size-grid label,
+#largePrintNative:checked ~ .wrap .hoist-grid label{font-size:20px!important;min-height:72px!important}
+#largePrintNative:checked ~ .wrap input[type=checkbox],
+#largePrintNative:checked ~ .wrap input[type=radio]{width:29px!important;height:29px!important}
+#largePrintNative:checked ~ .wrap .photo-note,
+#largePrintNative:checked ~ .wrap .sig-help,
+#largePrintNative:checked ~ .wrap .question-note,
+#largePrintNative:checked ~ .wrap .photo-instruction,
+#largePrintNative:checked ~ .wrap .draft-note{font-size:19px!important}
+#largePrintNative:checked ~ .wrap .share,
+#largePrintNative:checked ~ .wrap .save,
+#largePrintNative:checked ~ .wrap .reset,
+#largePrintNative:checked ~ .wrap .clear,
+#largePrintNative:checked ~ .wrap .large-print-toggle{font-size:19px!important;min-height:60px!important}
+#largePrintNative:checked ~ .wrap #address,
+#largePrintNative:checked ~ .wrap #siteAddress,
+#largePrintNative:checked ~ .wrap #fromAddress,
+#largePrintNative:checked ~ .wrap #toAddress{font-size:26px!important;padding:20px!important}
+
+@media(max-width:600px){.head{position:relative!important;top:auto!important;z-index:auto!important}}
+
+
+/* MOBILE FIXED-BAR TAP SAFETY */
+.action-area{pointer-events:none}
+.action-area button{pointer-events:auto}
 </style>
 </head>
 <body>
+<input id="largePrintNative" class="large-print-native" type="checkbox" aria-label="Large Print">
 <div class="wrap">
-  <div class="head"><h1>SSSECURE</h1><h2>Asset Movement Checklist</h2><div id="headerAddress" class="header-address" aria-live="polite" hidden></div></div><div class="large-print-strip"><button type="button" id="largePrintToggle" class="large-print-toggle" aria-pressed="false">LARGE PRINT: OFF</button></div>
+  <div class="head"><h1>SSSECURE</h1><h2>Asset Movement Checklist</h2><div id="headerAddress" class="header-address" aria-live="polite" hidden></div></div><div class="large-print-strip"><label for="largePrintNative" id="largePrintToggle" class="large-print-toggle">LARGE PRINT</label></div>
   <div id="errorSummary" class="error-summary" role="alert"></div>
 
   <div class="sec">DRIVER DETAILS</div>
   <div class="pad">
     <div class="field"><label class="field-label" for="driverName">Driver Name <span class="req">REQUIRED</span></label><select id="driverName" aria-label="Driver Name"><option value="">Select Driver</option><option value="Ali">Ali</option><option value="Abdul">Abdul</option><option value="Jeremy">Jeremy</option><option value="Evan">Evan</option><option value="Yard Delivery">Yard Delivery</option></select></div>
-    <div class="field"><label class="field-label" for="dateTime">Date &amp; Time</label><input id="dateTime" type="text" autocomplete="off"></div>
+    <div class="field"><label class="field-label" for="dateTime">Date &amp; Time <span class="req">REQUIRED</span></label><input id="dateTime" type="text" autocomplete="off"></div>
   </div>
 
   <div class="sec">MOVEMENT</div>
@@ -389,6 +430,7 @@ body.large-print .header-address{font-size:30px}
     <label><input type="radio" name="movement" value="Pickup">Pickup</label>
     <label><input type="radio" name="movement" value="Transfer">Transfer</label>
   </div></div>
+
 
   <div id="singleAddressSection" class="conditional" hidden>
     <div id="singleAddressHeading" class="sec">SITE ADDRESS</div>
@@ -605,6 +647,7 @@ body.large-print .header-address{font-size:30px}
   </div>
 
   <div id="status" class="status" role="status" aria-live="polite"></div>
+  <div id="draftNote" class="draft-note" aria-live="polite"></div>
 
   <div class="action-area">
     <button type="button" id="resetBtn" class="reset">RESET</button>
@@ -623,6 +666,7 @@ body.large-print .header-address{font-size:30px}
   const MAX_PHOTO_BYTES = 20 * 1024 * 1024;
   let singleFiles = [], fromFiles = [], toFiles = [], docketFiles = [];
   let singleUrls = [], fromUrls = [], toUrls = [], docketUrls = [];
+  const STORAGE_KEY="sssecureAssetMovementDraftV2";let saveTimer=null;
 
   const radioValue = name => document.querySelector(`input[name="${name}"]:checked`)?.value || "";
   const checkedValues = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
@@ -702,6 +746,7 @@ body.large-print .header-address{font-size:30px}
   }
 
   function buildHoistQuestions(mv) {
+    const previous={};document.querySelectorAll('#hoistChecksList input[type="radio"]:checked').forEach(input=>previous[input.name]=input.value);
     const list = $("hoistChecksList");
     list.innerHTML = "";
     currentHoistQuestions = getHoistQuestions(mv);
@@ -733,6 +778,7 @@ body.large-print .header-address{font-size:30px}
     });
 
     document.querySelectorAll('#hoistChecksList input[type="radio"]').forEach(input => {
+      if(previous[input.name]===input.value)input.checked=true;
       input.addEventListener("change", () => {
         const id = input.name.replace("hoistCheck_", "");
         $(`hoistGroup_${id}`)?.classList.remove("group-invalid");
@@ -816,10 +862,22 @@ body.large-print .header-address{font-size:30px}
     if(available !== "Yes") clearDocketPhoto();
   }
 
+  function syncSelectionStyles(){
+    document.querySelectorAll('.asset-type-grid .asset-type').forEach(label=>label.classList.toggle('selected',Boolean(label.querySelector('input:checked'))));
+    document.querySelectorAll('#kitSizeGroup label,#hoistTypeGroup label').forEach(label=>label.classList.toggle('selected',Boolean(label.querySelector('input:checked'))));
+    const head=document.querySelector('.head');
+    head.classList.remove('asset-header-blue','asset-header-yellow','asset-header-red');
+    const as=asset();
+    if(as==='Toilet'||as==='Shed')head.classList.add('asset-header-blue');
+    if(as==='Brickies Kit')head.classList.add('asset-header-yellow');
+    if(as==='Hoist')head.classList.add('asset-header-red');
+  }
+
   function updateForm() {
     const mv = movement();
     const as = asset();
     const ready = Boolean(mv && as);
+    syncSelectionStyles();
 
     $("singleAddressSection").hidden = !mv || mv === "Transfer";
     $("transferAddressSection").hidden = mv !== "Transfer";
@@ -917,6 +975,7 @@ body.large-print .header-address{font-size:30px}
   }
 
   document.addEventListener("change", event => {
+    if(event.target.matches('input[type="radio"],input[type="checkbox"]')) syncSelectionStyles();
     if(event.target.matches(
       'input[name="movement"],input[name="asset"],input[name="damage"],input[name="fullKit"]'
     )) {
@@ -1040,6 +1099,12 @@ body.large-print .header-address{font-size:30px}
     };
   }
 
+  function draftControls(){return Array.from(document.querySelectorAll('input:not([type="file"]),textarea,select')).map(el=>({id:el.id||"",name:el.name||"",type:el.type||el.tagName.toLowerCase(),value:el.value,checked:"checked" in el?el.checked:null}));}
+  function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveDraft,250);}
+  function saveDraft(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({controls:draftControls()}));$("draftNote").textContent="Draft saved on this device. Photos must be added again after refresh.";}catch(_){}}
+  function applyDraftControls(controls,onlyCore=false){for(const d of controls||[]){let el=null;if(d.id)el=$(d.id);if(!el&&d.name&&["movement","asset"].includes(d.name))el=Array.from(document.querySelectorAll(`input[name="${d.name}"]`)).find(x=>x.value===d.value);if(!el)continue;if(onlyCore&&!(d.id&&["driverName","dateTime","siteAddress","fromAddress","toAddress","assetNumber","hoistNumber","damageDetails","hoistDamageDetails","officeDetails"].includes(d.id))&&!["movement","asset"].includes(d.name))continue;if(el.type==="radio"||el.type==="checkbox")el.checked=Boolean(d.checked);else el.value=d.value??"";}}
+  function restoreDraft(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return false;const d=JSON.parse(raw);applyDraftControls(d.controls,true);updateForm();applyDraftControls(d.controls,false);updateForm();applyDraftControls(d.controls,false);updateMissingQuantities();updateDocketSection();updateHoistDamageDetails();updateHeaderAddress();$("draftNote").textContent="Saved draft restored. Photos must be added again.";return true;}catch(error){console.error(error);try{localStorage.removeItem(STORAGE_KEY)}catch(_){}return false;}}
+
   function clearValidation() {
     document.querySelectorAll(".invalid").forEach(el => el.classList.remove("invalid"));
     document.querySelectorAll(".group-invalid").forEach(el => el.classList.remove("group-invalid"));
@@ -1062,6 +1127,7 @@ body.large-print .header-address{font-size:30px}
     };
 
     if(!data.driverName) markField("driverName","Driver Name is required.");
+    if(!data.dateTime.trim()) markField("dateTime","Date & Time is required.");
     if(!data.movement) markGroup("movementGroup","Select Delivery, Pickup or Transfer.");
 
     if(data.movement === "Transfer") {
@@ -1209,10 +1275,39 @@ body.large-print .header-address{font-size:30px}
       .slice(0,55) || "Completed";
   }
 
-  async function buildPdf(data) {
-    if(!window.jspdf?.jsPDF) throw new Error("PDF engine did not load. Refresh the page and try again.");
+  const JSPDF_SOURCES=[
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+  'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+  'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
+];
+let jspdfLoadPromise=null;
+function loadJsPdf(){
+  if(window.jspdf && window.jspdf.jsPDF) return Promise.resolve();
+  if(jspdfLoadPromise) return jspdfLoadPromise;
+  jspdfLoadPromise=new Promise((resolve,reject)=>{
+    let index=0;
+    const tryNext=()=>{
+      if(window.jspdf && window.jspdf.jsPDF){resolve();return;}
+      if(index>=JSPDF_SOURCES.length){reject(new Error('PDF engine could not load. Check internet connection and try again.'));return;}
+      const script=document.createElement('script');
+      script.src=JSPDF_SOURCES[index++];
+      script.async=true;
+      script.crossOrigin='anonymous';
+      const timer=setTimeout(()=>{script.remove();tryNext();},10000);
+      script.onload=()=>{clearTimeout(timer);if(window.jspdf && window.jspdf.jsPDF)resolve();else{script.remove();tryNext();}};
+      script.onerror=()=>{clearTimeout(timer);script.remove();tryNext();};
+      document.head.appendChild(script);
+    };
+    tryNext();
+  }).catch(error=>{jspdfLoadPromise=null;throw error;});
+  return jspdfLoadPromise;
+}
+
+async function buildPdf(data) {
+    await loadJsPdf();
 
     const {jsPDF} = window.jspdf;
+    const largePdf=document.body.classList.contains("large-print");
     const doc = new jsPDF({orientation:"portrait",unit:"mm",format:"a4",compress:true});
     const pageW=210,pageH=297,margin=11,contentW=188;
     const BLUE=[18,58,118],GREEN=[10,99,200],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];
@@ -1244,7 +1339,13 @@ body.large-print .header-address{font-size:30px}
       y=29;
     }
 
+    function continuationHeader(title="CHECKLIST CONTINUED") {
+      doc.addPage();doc.setFillColor(...headerTheme.bg);doc.rect(0,0,pageW,23,"F");doc.setTextColor(...headerTheme.fg);doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("SSSECURE",pageW/2,9.5,{align:"center"});doc.setFontSize(9.5);doc.text(title,pageW/2,16.5,{align:"center"});y=28;
+    }
+    function ensureSpace(required,title="CHECKLIST CONTINUED"){if(y+required>pageH-12)continuationHeader(title);}
+
     function section(title) {
+      ensureSpace(10);
       doc.setFillColor(...GREEN);
       doc.rect(margin,y,contentW,7,"F");
       doc.setTextColor(255,255,255);
@@ -1305,7 +1406,7 @@ body.large-print .header-address{font-size:30px}
       doc.setFontSize((highlight || customTone)?8.1:labelSize);
       doc.text(String(label).toUpperCase(),innerX,boxY+3.6);
 
-      const fitted=fitLines(value,maxW,maxH,(highlight || customTone)?11.5:valueSize,(highlight || customTone)?8.5:minValueSize);
+      const fitted=fitLines(value,maxW,maxH,(highlight || customTone)?(largePdf?12.2:11.5):(largePdf?valueSize+0.8:valueSize),(highlight || customTone)?(largePdf?9:8.5):minValueSize);
       doc.setTextColor(...valueColor);
       doc.setFont("helvetica","bold");
       doc.setFontSize(fitted.size);
@@ -1316,13 +1417,15 @@ body.large-print .header-address{font-size:30px}
     }
 
     function questionBox(label,value,h=17) {
-      box(label,value,margin,y,contentW,h,{valueSize:8.1,minValueSize:5.6});
+      ensureSpace(h+2);
+      box(label,value,margin,y,contentW,h,{valueSize:largePdf?8.8:8.1,minValueSize:5.6});
       y+=h+2;
     }
 
     function compactCheckRow(label,value) {
       const lines=doc.splitTextToSize(String(label),151);
       const h=Math.max(8.5,4.4+lines.length*3.05);
+      ensureSpace(h+1);
       doc.setFillColor(...LIGHT);
       doc.setDrawColor(...LINE);
       doc.roundedRect(margin,y,contentW,h,1.2,1.2,"FD");
@@ -1407,7 +1510,15 @@ body.large-print .header-address{font-size:30px}
     section("CONFIRMATION");
     questionBox("Driver Confirmation",data.confirmation ? "Confirmed" : "Not Confirmed",15);
 
-    if(y>pageH-13) throw new Error("Page 1 summary layout exceeded one page.");
+    // Summary is allowed to continue automatically onto additional A4 pages when needed.
+
+    const detailContinuations=[];
+    function needsFullDetail(value,maxWidth=contentW-5,maxHeight=12,minSize=5.7){if(!value)return false;doc.setFont("helvetica","normal");doc.setFontSize(minSize);const lines=doc.splitTextToSize(String(value),maxWidth),lh=minSize*0.3528*1.16;return lines.length*lh>maxHeight;}
+    if(data.damageDetails&&needsFullDetail(data.damageDetails))detailContinuations.push(["VISIBLE DAMAGE - FULL DETAILS",data.damageDetails]);
+    if(data.hoistDamageDetails&&needsFullDetail(data.hoistDamageDetails))detailContinuations.push(["HOIST DAMAGE - FULL DETAILS",data.hoistDamageDetails]);
+    if(data.officeDetails&&needsFullDetail(data.officeDetails))detailContinuations.push(["OFFICE ATTENTION - FULL DETAILS",data.officeDetails]);
+    function addTextPages(title,text){let remaining=doc.splitTextToSize(String(text||""),contentW-8),fontSize=largePdf?11:9.5,lineH=fontSize*.3528*1.35,maxLines=Math.floor((pageH-50)/lineH);while(remaining.length){doc.addPage();doc.setFillColor(...headerTheme.bg);doc.rect(0,0,pageW,23,"F");doc.setTextColor(...headerTheme.fg);doc.setFont("helvetica","bold");doc.setFontSize(12.5);doc.text(`SSSECURE - ${title}`,pageW/2,9.5,{align:"center"});doc.setFontSize(9.5);doc.setTextColor(...headerTheme.address);const addr=data.movement==="Transfer"?data.toAddress:data.siteAddress;doc.text(doc.splitTextToSize(addr||"Site address not entered",180),pageW/2,16.2,{align:"center"});doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(fontSize);doc.text(remaining.splice(0,maxLines),margin,31,{lineHeightFactor:1.35});}}
+    detailContinuations.forEach(([title,text])=>addTextPages(title,text));
 
     const photoGroups = [];
     if(data.asset === "Brickies Kit" && data.fullKit === "No" && data.docketAvailable === "Yes" && docketFiles.length) {
@@ -1548,11 +1659,12 @@ body.large-print .header-address{font-size:30px}
 
   function resetForm() {
     if(!window.confirm("Clear every field, selection and photo from this form?")) return;
+    try{localStorage.removeItem(STORAGE_KEY)}catch(_){}
 
     document.querySelectorAll('input[type="text"],input[type="number"],textarea').forEach(el => {
       if(el.id !== "dateTime") el.value="";
     });
-    document.querySelectorAll('input[type="radio"],input[type="checkbox"]').forEach(el => el.checked=false);
+    document.querySelectorAll('input[type="radio"],input[type="checkbox"]:not(#largePrintNative)').forEach(el => el.checked=false);
     $("driverName").value="";
 
     singleFiles=[];fromFiles=[];toFiles=[];docketFiles=[];
@@ -1574,11 +1686,12 @@ body.large-print .header-address{font-size:30px}
   }
 
   document.addEventListener("input", event => {
-    if(event.target.matches("input,textarea")) event.target.classList.remove("invalid");
+    if(event.target.matches("input,textarea,select")){event.target.classList.remove("invalid");scheduleSave();}
     if(["siteAddress","fromAddress","toAddress"].includes(event.target.id)) updateHeaderAddress();
   });
 
   document.addEventListener("change", event => {
+    if(!event.target.matches('input[type="file"]'))scheduleSave();
     if(event.target.id === "driverName") event.target.classList.remove("invalid");
     const names=["movement","asset","kitSize","hoistType","movementCheck","damage","fullKit","missingItem","docketAvailable","siteSafety","officeIssue"];
     if(names.includes(event.target.name)) {
@@ -1600,8 +1713,7 @@ body.large-print .header-address{font-size:30px}
     clearUrls(singleUrls);clearUrls(fromUrls);clearUrls(toUrls);clearUrls(docketUrls);
   });
 
-  setDateTime();
-  updateForm();
+  if(!restoreDraft()){setDateTime();updateForm();}
 })();
 </script>
 
@@ -1609,45 +1721,26 @@ body.large-print .header-address{font-size:30px}
 (() => {
   'use strict';
   const key='sssecure_large_print_standard_v2';
-  const button=document.getElementById('largePrintToggle');
-  if(!button) return;
+  const control=document.getElementById('largePrintNative');
+  const label=document.getElementById('largePrintToggle');
+  if(!control||!label)return;
   const apply=enabled=>{
-    document.body.classList.toggle('large-print',enabled);
-    button.classList.toggle('active',enabled);
-    button.setAttribute('aria-pressed',enabled?'true':'false');
-    button.textContent=enabled?'LARGE PRINT: ON':'LARGE PRINT: OFF';
+    control.checked=Boolean(enabled);
+    document.body.classList.toggle('large-print',Boolean(enabled));
+    label.classList.toggle('active',Boolean(enabled));
   };
   let enabled=false;
   try{enabled=localStorage.getItem(key)==='1';}catch(_){ }
   apply(enabled);
-  button.addEventListener('click',()=>{
-    enabled=!document.body.classList.contains('large-print');
-    apply(enabled);
-    try{localStorage.setItem(key,enabled?'1':'0');}catch(_){ }
+  control.addEventListener('change',()=>{
+    apply(control.checked);
+    try{localStorage.setItem(key,control.checked?'1':'0');}catch(_){ }
   });
 })();
 </script>
 
 
-<script>
-(() => {
-  'use strict';
-  if(!/Android/i.test(navigator.userAgent)) return;
-  document.body.classList.add('android-device');
-  const host=document.querySelector('.wrap,.app')||document.body;
-  const box=document.createElement('div');
-  box.className='android-photo-help';
-  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
-  box.querySelector('button').addEventListener('click',()=>{
-    if(location.protocol==='https:'){
-      const target=location.href.replace(/^https:\/\//,'');
-      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
-    }
-  });
-  const firstChild=host.firstElementChild;
-  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
-})();
-</script>
+
 
 </body>
 </html>
