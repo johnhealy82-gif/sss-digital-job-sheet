@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0A63C8">
 <title>SSSECURE Job Completion Checklist</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 :root{
   --blue:#0A63C8;--green:#1F8F4D;--bg:#eef3f7;--ink:#172033;
@@ -107,18 +107,91 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
 .declaration-pad.locked .declaration-lock{display:flex}
 @media(max-width:650px){.evidence-grid{grid-template-columns:1fr}.head h1{font-size:31px!important}.head h2{font-size:20px!important}.sec{font-size:19px!important}.pad{padding:15px!important}input[type=text],input[type=date],textarea,.photo-input{font-size:18px!important}#address{font-size:21px!important}.work-grid label,.option-row label{font-size:16px!important}}
 
-/* ANDROID PHOTO UPLOAD COMPATIBILITY */
-.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
-.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
 .photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
-.android-device .android-photo-help{display:block}
+/* LARGE PRINT — operational enlarged mode */
+body.large-print{font-size:21px!important;line-height:1.6!important}
+body.large-print .head h1{font-size:40px!important}
+body.large-print .head h2{font-size:26px!important}
+body.large-print .sec{font-size:23px!important;padding:18px 19px!important}
+body.large-print .section-note{font-size:15px!important;line-height:1.4!important}
+body.large-print .field-label,body.large-print .gear-title,body.large-print .photo-picker,body.large-print .evidence-title{font-size:22px!important}
+body.large-print input[type=text],body.large-print input[type=date],body.large-print textarea,body.large-print .photo-input{font-size:23px!important;min-height:68px!important;padding:18px!important}
+body.large-print #address{font-size:25px!important;min-height:110px!important}
+body.large-print textarea{min-height:135px!important}
+body.large-print .work-grid label,body.large-print .option-row label{font-size:20px!important;min-height:76px!important;padding:15px!important}
+body.large-print input[type=checkbox],body.large-print input[type=radio]{width:32px!important;height:32px!important}
+body.large-print .photo-note,body.large-print .sig-help,body.large-print .evidence-instruction,body.large-print .declaration-text{font-size:20px!important}
+body.large-print .share,body.large-print .save,body.large-print .reset,body.large-print .clear,body.large-print .action-area button{font-size:20px!important;min-height:64px!important}
+body.large-print .req{font-size:12px!important;padding:2px 6px!important}
+body.large-print .footer,body.large-print .draft-note{font-size:16px!important}
 
+
+/* SSSECURE ANDROID / TOUCH HARDENING */
+button,label[for],summary,a,input[type="checkbox"],input[type="radio"],input[type="file"]{
+  touch-action:manipulation;-webkit-tap-highlight-color:rgba(10,99,200,.18)
+}
+input[type="text"],input[type="date"],input[type="number"],select,textarea{
+  touch-action:manipulation;-webkit-user-select:text;user-select:text
+}
+button,label[for],summary,a{cursor:pointer}
+
+/* SCRIPT-INDEPENDENT LARGE PRINT */
+.large-print-native{position:absolute!important;opacity:0!important;width:1px!important;height:1px!important;pointer-events:none!important}
+.large-print-toggle::after{content:": OFF"}
+#largePrintNative:checked ~ .wrap .large-print-toggle::after{content:": ON"}
+#largePrintNative:checked ~ .wrap .large-print-toggle{background:#123A76!important;color:#fff!important;border-color:#123A76!important}
+#largePrintNative:checked ~ .wrap{font-size:21px!important}
+#largePrintNative:checked ~ .wrap .head h1{font-size:39px!important}
+#largePrintNative:checked ~ .wrap .head h2{font-size:26px!important}
+#largePrintNative:checked ~ .wrap .sec{font-size:23px!important;padding:18px!important}
+#largePrintNative:checked ~ .wrap .field-label,
+#largePrintNative:checked ~ .wrap .question-title,
+#largePrintNative:checked ~ .wrap .gear-title,
+#largePrintNative:checked ~ .wrap .inspection-title,
+#largePrintNative:checked ~ .wrap .photo-picker,
+#largePrintNative:checked ~ .wrap .evidence-title{font-size:21px!important}
+#largePrintNative:checked ~ .wrap input[type=text],
+#largePrintNative:checked ~ .wrap input[type=date],
+#largePrintNative:checked ~ .wrap input[type=number],
+#largePrintNative:checked ~ .wrap select,
+#largePrintNative:checked ~ .wrap textarea,
+#largePrintNative:checked ~ .wrap .photo-input{font-size:23px!important;min-height:64px!important;padding:18px!important}
+#largePrintNative:checked ~ .wrap .work-grid label,
+#largePrintNative:checked ~ .wrap .option-grid label,
+#largePrintNative:checked ~ .wrap .option-row label,
+#largePrintNative:checked ~ .wrap .answer-row label,
+#largePrintNative:checked ~ .wrap .choice-grid label,
+#largePrintNative:checked ~ .wrap .asset-grid label,
+#largePrintNative:checked ~ .wrap .size-grid label,
+#largePrintNative:checked ~ .wrap .hoist-grid label{font-size:20px!important;min-height:72px!important}
+#largePrintNative:checked ~ .wrap input[type=checkbox],
+#largePrintNative:checked ~ .wrap input[type=radio]{width:29px!important;height:29px!important}
+#largePrintNative:checked ~ .wrap .photo-note,
+#largePrintNative:checked ~ .wrap .sig-help,
+#largePrintNative:checked ~ .wrap .question-note,
+#largePrintNative:checked ~ .wrap .photo-instruction,
+#largePrintNative:checked ~ .wrap .draft-note{font-size:19px!important}
+#largePrintNative:checked ~ .wrap .share,
+#largePrintNative:checked ~ .wrap .save,
+#largePrintNative:checked ~ .wrap .reset,
+#largePrintNative:checked ~ .wrap .clear,
+#largePrintNative:checked ~ .wrap .large-print-toggle{font-size:19px!important;min-height:60px!important}
+#largePrintNative:checked ~ .wrap #address,
+#largePrintNative:checked ~ .wrap #siteAddress,
+#largePrintNative:checked ~ .wrap #fromAddress,
+#largePrintNative:checked ~ .wrap #toAddress{font-size:26px!important;padding:20px!important}
+
+
+/* MOBILE FIXED-BAR TAP SAFETY */
+.action-area{pointer-events:none}
+.action-area button{pointer-events:auto}
 </style>
 </head>
 <body>
+<input id="largePrintNative" class="large-print-native" type="checkbox" aria-label="Large Print">
 <div class="wrap">
   <div class="head"><h1>SSSECURE</h1><h2>Job Completion Checklist</h2></div>
-  <div class="large-print-strip"><button type="button" id="largePrintToggle" class="large-print-toggle" aria-pressed="false">LARGE PRINT: OFF</button></div>
+  <div class="large-print-strip"><label for="largePrintNative" id="largePrintToggle" class="large-print-toggle">LARGE PRINT</label></div>
 
   <div id="errorSummary" class="error-summary" role="alert"></div>
 
@@ -263,14 +336,14 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
     };
   }
   function scheduleSave(){ clearTimeout(saveTimer); saveTimer=setTimeout(saveDraft,250); }
-  function saveDraft(){ try{ const data=collect(false); data.signature=getSignatureData(); localStorage.setItem(STORAGE_KEY,JSON.stringify(data)); $("draftNote").textContent="Draft saved on this device."; setTimeout(()=>{$("draftNote").textContent="";},1400);}catch(_){} }
+  function saveDraft(){ try{ const data=collect(false); delete data.signature; localStorage.setItem(STORAGE_KEY,JSON.stringify(data)); $("draftNote").textContent="Draft saved on this device."; setTimeout(()=>{$("draftNote").textContent="";},1400);}catch(_){} }
   async function restoreDraft(){
     try{
       const raw=localStorage.getItem(STORAGE_KEY); if(!raw) return; const data=JSON.parse(raw);
       fieldIds.forEach(id=>{if(typeof data[id]==="string") $(id).value=data[id];});
       document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=Array.isArray(data.jobTypes)&&data.jobTypes.includes(el.value));
       ["gearPickup","gearBlocking"].forEach(group=>{ if(data[group]){ const match=Array.from(document.querySelectorAll(`input[name="${group}"]`)).find(el=>el.value===data[group]); if(match) match.checked=true;}});
-      printNameWasManuallyEdited=Boolean(data.printName&&data.printName!==data.scaffolder); updateDeclarationName(); $("draftNote").textContent="Saved draft restored. Photos must be added again.";
+      printNameWasManuallyEdited=Boolean(data.printName&&data.printName!==data.scaffolder); updateDeclarationName(); $("draftNote").textContent="Saved draft restored. Photos and signature must be added again.";
     }catch(_){try{localStorage.removeItem(STORAGE_KEY);}catch(__){}}
   }
   function clearValidation(){ document.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid")); document.querySelectorAll(".group-invalid").forEach(el=>el.classList.remove("group-invalid")); $("errorSummary").className="error-summary"; $("errorSummary").textContent=""; }
@@ -286,7 +359,10 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
     if(!data.jobTypes.length) markGroup("workGroup","Select at least one type of work completed.");
     if(!data.gearPickup) markGroup("gearPickupGroup","Select how the gear has been stacked.");
     if(!data.gearBlocking) markGroup("gearBlockingGroup","Answer whether the gear is blocking access.");
-    if(data.gearBlocking==="Yes"&&!data.comments) markField("comments","Explain why the gear is blocking access.");
+    const smallJob=data.jobTypes.includes("Small Job / Modification");
+    if((data.gearBlocking==="Yes"||smallJob)&&!data.comments){
+      markField("comments",smallJob&&data.gearBlocking==="Yes"?"Describe the Small Job / Modification and explain why the gear is blocking access.":smallJob?"Describe the Small Job / Modification work completed.":"Explain why the gear is blocking access.");
+    }
     if(!tagPhoto){$("tagPhoto").classList.add("invalid");errors.push({message:"Upload a clear scaffold tag photo.",element:$("tagPhoto")});}
     if(!excessGearPhoto){$("excessGearPhoto").classList.add("invalid");errors.push({message:"Upload a clear excess gear photo.",element:$("excessGearPhoto")});}
     if(!data.printName) markField("printName","Print Name is required.");
@@ -338,16 +414,52 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
   function loadImageFile(file){return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file),img=new Image();img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error(`Could not read ${file.name}`))};img.src=url;});}
   async function photoToJpeg(file,maxDimension=1800,quality=.86){const img=await loadImageFile(file),sw=img.naturalWidth||img.width,sh=img.naturalHeight||img.height,scale=Math.min(1,maxDimension/Math.max(sw,sh)),w=Math.max(1,Math.round(sw*scale)),h=Math.max(1,Math.round(sh*scale)),canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;const ctx=canvas.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0,w,h);return{dataUrl:canvas.toDataURL("image/jpeg",quality),width:w,height:h};}
   function safeFilenamePart(value){return(value||"Completed").normalize("NFKD").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"").slice(0,55)||"Completed";}
-  async function buildPdf(data){
-    if(!window.jspdf?.jsPDF)throw new Error("PDF engine did not load. Refresh the page and try again.");
+  const JSPDF_SOURCES=[
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+  'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+  'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
+];
+let jspdfLoadPromise=null;
+function loadJsPdf(){
+  if(window.jspdf && window.jspdf.jsPDF) return Promise.resolve();
+  if(jspdfLoadPromise) return jspdfLoadPromise;
+  jspdfLoadPromise=new Promise((resolve,reject)=>{
+    let index=0;
+    const tryNext=()=>{
+      if(window.jspdf && window.jspdf.jsPDF){resolve();return;}
+      if(index>=JSPDF_SOURCES.length){reject(new Error('PDF engine could not load. Check internet connection and try again.'));return;}
+      const script=document.createElement('script');
+      script.src=JSPDF_SOURCES[index++];
+      script.async=true;
+      script.crossOrigin='anonymous';
+      const timer=setTimeout(()=>{script.remove();tryNext();},10000);
+      script.onload=()=>{clearTimeout(timer);if(window.jspdf && window.jspdf.jsPDF)resolve();else{script.remove();tryNext();}};
+      script.onerror=()=>{clearTimeout(timer);script.remove();tryNext();};
+      document.head.appendChild(script);
+    };
+    tryNext();
+  }).catch(error=>{jspdfLoadPromise=null;throw error;});
+  return jspdfLoadPromise;
+}
+
+async function buildPdf(data){
+    await loadJsPdf();
     const {jsPDF}=window.jspdf,doc=new jsPDF({orientation:"portrait",unit:"mm",format:"a4",compress:true});
+    const largePdf=document.body.classList.contains("large-print");
+    let commentsContinuation=false;
     const pageW=210,pageH=297,margin=11,contentW=188,BLUE=[18,58,118],GREEN=[10,99,200],INK=[23,32,51],MUTED=[90,101,116],LIGHT=[246,248,250],LINE=[216,224,232];let y=0;
     function header(){doc.setFillColor(...BLUE);doc.rect(0,0,pageW,24,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(16);doc.text("SSSECURE",pageW/2,10,{align:"center"});doc.setFontSize(10.3);doc.text("JOB COMPLETION CHECKLIST",pageW/2,18,{align:"center"});y=29;}
     function section(title){doc.setFillColor(...GREEN);doc.rect(margin,y,contentW,7,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(10);doc.text(title,margin+3,y+4.9);y+=9;}
     function fit(text,maxWidth,start=9,min=6){let size=start,lines;while(size>=min){doc.setFontSize(size);lines=doc.splitTextToSize(String(text||"-"),maxWidth);if(lines.length<=3)return{size,lines};size-=.25;}return{size:min,lines:doc.splitTextToSize(String(text||"-"),maxWidth).slice(0,3)};}
-    function box(label,value,x,yy,w,h,highlight=false){doc.setFillColor(...(highlight?[255,243,191]:LIGHT));doc.setDrawColor(...(highlight?[216,154,0]:LINE));doc.roundedRect(x,yy,w,h,1.5,1.5,"FD");doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(7.2);doc.text(label.toUpperCase(),x+2.4,yy+3.6);const f=fit(value,w-4.8,highlight?11.5:9.4,highlight?8:6);doc.setTextColor(...INK);doc.setFontSize(f.size);f.lines.forEach((line,i)=>doc.text(line,x+2.4,yy+7+i*3.5));}
-    function panel(text,x,yy,w,h){doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(x,yy,w,h,1.5,1.5,"FD");doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(8.5);const lines=doc.splitTextToSize(text||"No additional comments.",w-5).slice(0,10);doc.text(lines,x+2.5,yy+4.5);}
-    header();section("JOB DETAILS");const gap=3,half=(contentW-gap)/2;box("Client / Builder",data.client,margin,y,half,14);box("Date",formatDateAU(data.date),margin+half+gap,y,half,14);y+=16;box("Site Address",data.address,margin,y,contentW,17,true);y+=19;box("Subcontracting Crew",data.crew,margin,y,half,14);box("Competent Scaffolder",data.scaffolder,margin+half+gap,y,half,14);y+=16;box("Work Completed",data.jobTypes.join(", "),margin,y,contentW,17);y+=19;section("COMMENTS");panel(data.comments,margin,y,contentW,38);y+=40;section("GEAR STACKING");box("Gear Stacked Correctly For",data.gearPickup,margin,y,half,15);box("Gear Blocking Driveway / Entrance",data.gearBlocking,margin+half+gap,y,half,15);y+=17;section("DECLARATION");panel(`I, ${data.scaffolder}, confirm that the work completed by my crew has been checked. I understand that any incomplete work, or any work that does not comply with Australian and New Zealand Standards and requires a return visit for rectification, will be completed at the crew's own expense.`,margin,y,contentW,43);y+=45;box("Print Name",data.printName,margin,235,82,29);doc.setDrawColor(141,152,166);doc.roundedRect(96,235,103,29,1.5,1.5,"D");doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(6.2);doc.text("SIGNATURE",98.4,238.6);if(data.signature)doc.addImage(data.signature,"PNG",99,240,97,21.5,undefined,"FAST");
+    function box(label,value,x,yy,w,h,highlight=false){doc.setFillColor(...(highlight?[255,243,191]:LIGHT));doc.setDrawColor(...(highlight?[216,154,0]:LINE));doc.roundedRect(x,yy,w,h,1.5,1.5,"FD");doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(7.2);doc.text(label.toUpperCase(),x+2.4,yy+3.6);const f=fit(value,w-4.8,highlight?(largePdf?12.2:11.5):(largePdf?10.1:9.4),highlight?(largePdf?8.6:8):6);doc.setTextColor(...INK);doc.setFontSize(f.size);f.lines.forEach((line,i)=>doc.text(line,x+2.4,yy+7+i*3.5));}
+    function panel(text,x,yy,w,h,trackComments=false){doc.setFillColor(...LIGHT);doc.setDrawColor(...LINE);doc.roundedRect(x,yy,w,h,1.5,1.5,"FD");doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(largePdf?9.5:8.5);const all=doc.splitTextToSize(text||"No additional comments.",w-5),needsMore=all.length>10;if(trackComments)commentsContinuation=needsMore;const lines=needsMore&&trackComments?[...all.slice(0,9),"See COMMENTS CONTINUATION page."]:all.slice(0,10);doc.text(lines,x+2.5,yy+4.5);}
+    function addTextContinuation(title,text){
+      let remaining=doc.splitTextToSize(String(text||""),contentW-8);
+      const fontSize=largePdf?11:9.5,lineH=fontSize*0.3528*1.35,maxLines=Math.floor((pageH-50)/lineH);
+      while(remaining.length){doc.addPage();doc.setFillColor(...BLUE);doc.rect(0,0,pageW,23,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text(`SSSECURE - ${title}`,pageW/2,9.5,{align:"center"});doc.setFontSize(9.5);doc.setTextColor(255,243,191);doc.text(doc.splitTextToSize(data.address||"Site address not entered",180),pageW/2,16.2,{align:"center"});doc.setTextColor(...INK);doc.setFont("helvetica","normal");doc.setFontSize(fontSize);const pageLines=remaining.splice(0,maxLines);doc.text(pageLines,margin,31,{lineHeightFactor:1.35});}
+    }
+    header();section("JOB DETAILS");const gap=3,half=(contentW-gap)/2;box("Client / Builder",data.client,margin,y,half,14);box("Date",formatDateAU(data.date),margin+half+gap,y,half,14);y+=16;box("Site Address",data.address,margin,y,contentW,17,true);y+=19;box("Subcontracting Crew",data.crew,margin,y,half,14);box("Competent Scaffolder",data.scaffolder,margin+half+gap,y,half,14);y+=16;box("Work Completed",data.jobTypes.join(", "),margin,y,contentW,17);y+=19;section("COMMENTS");panel(data.comments,margin,y,contentW,38,true);y+=40;section("GEAR STACKING");box("Gear Stacked Correctly For",data.gearPickup,margin,y,half,15);box("Gear Blocking Driveway / Entrance",data.gearBlocking,margin+half+gap,y,half,15);y+=17;section("DECLARATION");panel(`I, ${data.scaffolder}, confirm that the work completed by my crew has been checked. I understand that any incomplete work, or any work that does not comply with Australian and New Zealand Standards and requires a return visit for rectification, will be completed at the crew's own expense.`,margin,y,contentW,43);y+=45;box("Print Name",data.printName,margin,235,82,29);doc.setDrawColor(141,152,166);doc.roundedRect(96,235,103,29,1.5,1.5,"D");doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(6.2);doc.text("SIGNATURE",98.4,238.6);if(data.signature)doc.addImage(data.signature,"PNG",99,240,97,21.5,undefined,"FAST");
+    if(commentsContinuation&&data.comments)await addTextContinuation("COMMENTS CONTINUATION",data.comments);
     const images=[{file:tagPhoto,label:"SCAFFOLD TAG PHOTO"},{file:excessGearPhoto,label:"EXCESS GEAR / STACKING PHOTO"},...additionalPhotos.map((file,i)=>({file,label:`ADDITIONAL COMPLETION PHOTO ${i+1}`}))];
     for(let i=0;i<images.length;i++){const p=await photoToJpeg(images[i].file);if(i%2===0){doc.addPage();doc.setFillColor(...BLUE);doc.rect(0,0,pageW,23,"F");doc.setTextColor(255,255,255);doc.setFont("helvetica","bold");doc.setFontSize(13);doc.text("SSSECURE - COMPLETION PHOTOS",pageW/2,9.5,{align:"center"});doc.setFontSize(10.2);doc.setTextColor(255,243,191);doc.text(doc.splitTextToSize(data.address,180),pageW/2,16.2,{align:"center"});}const slot=i%2,boxX=15,boxY=29+slot*128,boxW=180,boxH=109;doc.setFillColor(243,245,247);doc.setDrawColor(...LINE);doc.roundedRect(boxX,boxY,boxW,boxH,2,2,"FD");const scale=Math.min((boxW-4)/p.width,(boxH-4)/p.height),dw=p.width*scale,dh=p.height*scale;doc.addImage(p.dataUrl,"JPEG",boxX+(boxW-dw)/2,boxY+(boxH-dh)/2,dw,dh,undefined,"FAST");doc.setTextColor(...MUTED);doc.setFont("helvetica","bold");doc.setFontSize(9);doc.text(images[i].label,boxX,boxY+boxH+5);}
     const pages=doc.getNumberOfPages();for(let p=1;p<=pages;p++){doc.setPage(p);doc.setTextColor(...MUTED);doc.setFontSize(7);doc.text(`SSSECURE Job Completion Checklist | Page ${p} of ${pages}`,pageW/2,pageH-5.5,{align:"center"});}
@@ -355,7 +467,7 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
   }
   function downloadBlob(blob,filename){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.style.display="none";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
   async function generate(mode){clearStatus();const data=collect();if(!validate(data)){status("The PDF has not been created. Complete the highlighted items first.","err",true);return;}const buttons=[$("resetBtn"),$("saveBtn"),$("shareBtn")];buttons.forEach(b=>b.disabled=true);try{const blob=await buildPdf(data),filename=`SSSECURE_Job_Completion_${safeFilenamePart(data.address)}.pdf`,file=new File([blob],filename,{type:"application/pdf"});if(mode==="share"&&navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share({title:"SSSECURE Job Completion Checklist",text:"Completed SSSECURE job completion checklist",files:[file]});status("PDF shared successfully.","ok",true);}catch(error){if(error?.name==="AbortError")status("Sharing was cancelled.","info");else{downloadBlob(blob,filename);status("PDF saved to Downloads.","ok",true);}}}else{downloadBlob(blob,filename);status("PDF saved to Downloads.","ok",true);}}catch(error){console.error(error);status(error?.message||"The PDF could not be created. Refresh the page and try again.","err",true);}finally{buttons.forEach(b=>b.disabled=false);}}
-  function resetForm(){if(!confirm("Clear every field, photo and signature from this form?"))return;try{localStorage.removeItem(STORAGE_KEY)}catch(_){}fieldIds.forEach(id=>$(id).value="");document.querySelectorAll('input[type="checkbox"],input[type="radio"]').forEach(el=>el.checked=false);additionalPhotos=[];tagPhoto=null;excessGearPhoto=null;$("tagPhoto").value="";$("excessGearPhoto").value="";renderAllPreviews();updateDeclarationLock();clearSignatureData();clearValidation();clearStatus();setDefaultDate();updateDeclarationName();}
+  function resetForm(){if(!confirm("Clear every field, photo and signature from this form?"))return;try{localStorage.removeItem(STORAGE_KEY)}catch(_){}fieldIds.forEach(id=>$(id).value="");document.querySelectorAll('input[type="checkbox"]:not(#largePrintNative),input[type="radio"]').forEach(el=>el.checked=false);additionalPhotos=[];tagPhoto=null;excessGearPhoto=null;$("tagPhoto").value="";$("excessGearPhoto").value="";renderAllPreviews();updateDeclarationLock();clearSignatureData();clearValidation();clearStatus();setDefaultDate();updateDeclarationName();}
   $("scaffolder").addEventListener("input",()=>{updateDeclarationName();syncPrintName();scheduleSave();});
   $("printName").addEventListener("input",()=>{printNameWasManuallyEdited=true;scheduleSave();});
   fieldIds.filter(id=>!["scaffolder","printName"].includes(id)).forEach(id=>$(id).addEventListener("input",scheduleSave));
@@ -366,32 +478,27 @@ label[for="address"]{color:#7A4B00!important;font-size:20px!important;font-weigh
 </script>
 <script>
 (() => {
-  const key='sssecure_large_print_standard_v2',button=document.getElementById('largePrintToggle');if(!button)return;
-  const apply=enabled=>{document.body.classList.toggle('large-print',enabled);button.classList.toggle('active',enabled);button.setAttribute('aria-pressed',enabled?'true':'false');button.textContent=enabled?'LARGE PRINT: ON':'LARGE PRINT: OFF';};
-  let enabled=false;try{enabled=localStorage.getItem(key)==='1';}catch(_){}
-  apply(enabled);button.addEventListener('click',()=>{enabled=!document.body.classList.contains('large-print');apply(enabled);try{localStorage.setItem(key,enabled?'1':'0');}catch(_){}});
+  'use strict';
+  const key='sssecure_large_print_standard_v2';
+  const control=document.getElementById('largePrintNative');
+  const label=document.getElementById('largePrintToggle');
+  if(!control||!label)return;
+  const apply=enabled=>{
+    control.checked=Boolean(enabled);
+    document.body.classList.toggle('large-print',Boolean(enabled));
+    label.classList.toggle('active',Boolean(enabled));
+  };
+  let enabled=false;
+  try{enabled=localStorage.getItem(key)==='1';}catch(_){ }
+  apply(enabled);
+  control.addEventListener('change',()=>{
+    apply(control.checked);
+    try{localStorage.setItem(key,control.checked?'1':'0');}catch(_){ }
+  });
 })();
 </script>
 
-<script>
-(() => {
-  'use strict';
-  if(!/Android/i.test(navigator.userAgent)) return;
-  document.body.classList.add('android-device');
-  const host=document.querySelector('.wrap,.app')||document.body;
-  const box=document.createElement('div');
-  box.className='android-photo-help';
-  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
-  box.querySelector('button').addEventListener('click',()=>{
-    if(location.protocol==='https:'){
-      const target=location.href.replace(/^https:\/\//,'');
-      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
-    }
-  });
-  const firstChild=host.firstElementChild;
-  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
-})();
-</script>
+
 
 </body>
 </html>
