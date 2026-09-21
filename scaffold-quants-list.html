@@ -191,20 +191,61 @@ body.large-print .item-name{font-size:22px!important}.large-print .item-unit{fon
 @media(max-width:430px){.prepared-date-grid{gap:10px!important}.prepared-date-grid label.field-label{font-size:16px!important;gap:4px!important}.prepared-date-grid label.field-label .req{font-size:8px!important;padding:2px 4px!important}}
 
 /* SSSECURE STANDARD WORK PROCESS + PHOTO UPLOAD */
-.work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.work-grid label{display:flex;align-items:center;gap:9px;min-height:60px;padding:11px;border:2px solid #B7CBE1;border-radius:10px;background:#fff;font-weight:900;line-height:1.2}.work-grid input[type=checkbox]{width:25px;height:25px;accent-color:#0A63C8;flex:0 0 auto}.photo-input{display:block;width:100%;min-height:56px;padding:12px;border:2px dashed #8CA0B5;border-radius:10px;background:#F8FBFE;font-size:16px;font-weight:800}.photo-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.photo-preview{border:1px solid #D8E0E8;border-radius:9px;overflow:hidden;background:#F4F6F8}.photo-preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#EEF1F4}.photo-preview span{display:block;padding:7px 8px;font-size:13px;color:#687586;font-weight:800}.group-invalid{outline:3px solid rgba(180,35,24,.18);outline-offset:3px;border-radius:10px}.invalid{border-color:#B42318!important;background:#FFF8F7!important}@media(max-width:600px){.work-grid{grid-template-columns:1fr}.photo-preview-grid{grid-template-columns:1fr}}
+.work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.work-grid label{display:flex;align-items:center;gap:9px;min-height:60px;padding:11px;border:2px solid #B7CBE1;border-radius:10px;background:#fff;font-weight:900;line-height:1.2}.work-grid input[type=checkbox]{width:25px;height:25px;accent-color:#0A63C8;flex:0 0 auto}.photo-input{display:block;width:100%;min-height:56px;padding:12px;border:2px dashed #8CA0B5;border-radius:10px;background:#F8FBFE;font-size:16px;font-weight:800}.photo-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.photo-preview{border:1px solid #D8E0E8;border-radius:9px;overflow:hidden;background:#F4F6F8}.photo-preview img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:#EEF1F4}.photo-preview span{display:block;font-size:13px;color:#687586;font-weight:800}.photo-preview-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 8px;background:#fff}.remove-photo{border:1px solid #c9d1da;background:#fff;color:#b42318;padding:7px 9px;font-size:12px;border-radius:7px;font-weight:800}.group-invalid{outline:3px solid rgba(180,35,24,.18);outline-offset:3px;border-radius:10px}.invalid{border-color:#B42318!important;background:#FFF8F7!important}@media(max-width:600px){.work-grid{grid-template-columns:1fr}.photo-preview-grid{grid-template-columns:1fr}}
 
-/* ANDROID PHOTO UPLOAD COMPATIBILITY */
-.android-photo-help{display:none;margin:12px 15px;padding:14px;border:2px solid #D89A00;border-radius:10px;background:#FFF3BF;color:#5E3B00;font-weight:900;line-height:1.4}
-.android-photo-help button{display:block;width:100%;margin-top:10px;border:0;border-radius:9px;padding:13px;background:#0A63C8;color:#fff;font-size:16px;font-weight:900}
 .photo-launch-label{display:block;width:100%;margin:8px 0 7px;padding:13px 12px;border-radius:9px;background:#0A63C8;color:#fff;text-align:center;font-size:16px;font-weight:900;cursor:pointer}
-.android-device .android-photo-help{display:block}
 
+/* SSSECURE ANDROID / TOUCH HARDENING */
+button,label[for],summary,a,input[type="checkbox"],input[type="radio"],input[type="file"]{
+  touch-action:manipulation;-webkit-tap-highlight-color:rgba(10,99,200,.18)
+}
+input[type="text"],input[type="date"],input[type="number"],select,textarea{
+  touch-action:manipulation;-webkit-user-select:text;user-select:text
+}
+button,label[for],summary,a{cursor:pointer}
+
+/* SCRIPT-INDEPENDENT LARGE PRINT + ANDROID SAFE SELECTORS */
+.large-print-native{position:absolute!important;opacity:0!important;width:1px!important;height:1px!important;pointer-events:none!important}
+.large-print-btn::after{content:": OFF"}
+#largePrintNative:checked ~ .app .large-print-btn::after{content:": ON"}
+#largePrintNative:checked ~ .app .large-print-btn{background:#123A76!important;color:#fff!important;border-color:#123A76!important}
+#largePrintNative:checked ~ .app{font-size:21px!important}
+#largePrintNative:checked ~ .app .header h1{font-size:39px!important}
+#largePrintNative:checked ~ .app .header h2{font-size:26px!important}
+#largePrintNative:checked ~ .app .section-title{font-size:23px!important;padding:18px!important}
+#largePrintNative:checked ~ .app .field-label,
+#largePrintNative:checked ~ .app .category-nav-title{font-size:21px!important}
+#largePrintNative:checked ~ .app input[type=text],
+#largePrintNative:checked ~ .app input[type=date],
+#largePrintNative:checked ~ .app input[type=number],
+#largePrintNative:checked ~ .app textarea{font-size:23px!important;min-height:64px!important;padding:18px!important}
+#largePrintNative:checked ~ .app .category summary{font-size:23px!important;padding:19px!important}
+#largePrintNative:checked ~ .app .item-name{font-size:22px!important}
+#largePrintNative:checked ~ .app .item-unit{font-size:18px!important}
+#largePrintNative:checked ~ .app .qty-input{height:66px!important;font-size:28px!important}
+#largePrintNative:checked ~ .app .category-jump{font-size:18px!important;min-height:61px!important}
+#largePrintNative:checked ~ .app .category-actions button,
+#largePrintNative:checked ~ .app .tool-btn,
+#largePrintNative:checked ~ .app .large-print-btn{font-size:18px!important;padding:16px 11px!important}
+#largePrintNative:checked ~ .app .photo-instruction{font-size:19px!important}
+
+
+/* MOBILE FIXED-BAR TAP SAFETY */
+.action-bar{pointer-events:none}
+.action-bar .action-grid button{pointer-events:auto}
+.action-bar .action-note{pointer-events:none}
+
+/* LARGE PRINT — NON-STICKY ANDROID-SAFE POSITION */
+.large-print-strip{display:flex;justify-content:flex-end;padding:12px 15px;background:#DCEBFA;border-bottom:1px solid #B7CBE1}
+.large-print-strip .large-print-btn{width:auto!important;min-width:190px;margin:0!important;text-align:center;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
+<input id="largePrintNative" class="large-print-native" type="checkbox" aria-label="Large Print">
 <div class="app">
 <div class="header"><h1>SSSECURE</h1><h2>Scaffold Delivery Quantification Form</h2></div>
-<noscript><div class="no-script-note">Categories and quantity fields remain usable. Search, automatic saving and PDF buttons require the hosted Safari version.</div></noscript>
+<div class="large-print-strip"><label for="largePrintNative" id="largePrintBtn" class="large-print-btn">LARGE PRINT</label></div>
+<noscript><div class="no-script-note">Large Print remains available. Categories, quantity entry, search, draft saving and PDF buttons require JavaScript in the browser.</div></noscript>
 <div class="section-title">DELIVERY DETAILS</div>
 <div class="pad">
 <div class="field"><label class="field-label" for="client">Client <span class="req">REQUIRED</span></label><input id="client" maxlength="120" type="text"/></div>
@@ -239,7 +280,7 @@ body.large-print .item-name{font-size:22px!important}.large-print .item-unit{fon
 <div class="sticky-tools">
 <div class="search-wrap"><input id="searchInput" placeholder="Search equipment — e.g. 2.4 tube, ladder, hop-up" type="text"/><button aria-label="Clear search" class="clear-search" id="clearSearch" type="button">×</button></div>
 <div class="tool-row"><button class="tool-btn review-btn" id="reviewBtn" type="button">VIEW ENTERED ITEMS (<span id="enteredCount">0</span>)</button><button class="tool-btn draft-btn" id="saveDraftBtn" type="button">SAVE DRAFT</button></div>
-<button aria-pressed="false" class="large-print-btn" id="largePrintBtn" type="button">LARGE PRINT: OFF</button>
+
 </div>
 <div id="inventory"></div>
 <div class="empty-search" id="emptySearch">No equipment matched that search.</div>
@@ -255,7 +296,7 @@ body.large-print .item-name{font-size:22px!important}.large-print .item-unit{fon
 <div aria-live="polite" class="status" id="status" role="status"></div>
 <div class="footer">SSSECURE Scaffold Delivery Quantification Form - READABILITY V4</div>
 </div>
-<div class="action-bar"><div class="action-grid"><button class="clear-btn" id="clearBtn" type="button">CLEAR FORM</button><button class="preview-btn" id="previewPdfBtn" type="button">PREVIEW PDF</button><button class="pdf-btn" id="pdfBtn" type="button">SAVE PDF</button><button class="share-btn" id="shareBtn" type="button">EMAIL / SHARE PDF</button></div><div class="action-note" id="actionNote">Draft saves automatically on this device.</div></div>
+<div class="action-bar"><div class="action-grid"><button class="clear-btn" id="clearBtn" type="button">CLEAR FORM</button><button class="preview-btn" id="previewPdfBtn" type="button">PREVIEW PDF</button><button class="pdf-btn" id="pdfBtn" type="button">SAVE PDF</button><button class="share-btn" id="shareBtn" type="button">EMAIL / SHARE PDF</button></div><div class="action-note" id="actionNote">Draft saves automatically on this device. Photos must be added again after refresh / reopen.</div></div>
 <div aria-labelledby="reviewTitle" aria-modal="true" class="modal" id="reviewModal" role="dialog"><div class="modal-card"><div class="modal-head"><h3 id="reviewTitle">Entered Equipment</h3><button class="modal-close" id="closeReview" type="button">×</button></div><div class="modal-body" id="reviewBody"></div></div></div>
 <div aria-labelledby="pdfPreviewTitle" aria-modal="true" class="modal" id="pdfPreviewModal" role="dialog"><div class="modal-card"><div class="modal-head"><h3 id="pdfPreviewTitle">PDF Preview</h3><button class="modal-close" id="closePdfPreview" type="button">×</button></div><div class="modal-body" id="pdfPreviewBody"></div></div></div>
 <script>
@@ -263,9 +304,10 @@ body.large-print .item-name{font-size:22px!important}.large-print .item-unit{fon
 'use strict';
 
 const STORAGE_KEY='sssecure_scaffold_delivery_quant_v3';
-let selectedPhotos=[]; let photoUrls=[]; const MAX_PHOTOS=4;
+let selectedPhotos=[]; let photoUrls=[]; const MAX_PHOTOS=4, MAX_PHOTO_BYTES=20*1024*1024;
 const LARGE_PRINT_KEY='sssecure_scaffold_large_print_v1';
-const JSPDF_URL='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+const JSPDF_SOURCES=['https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js','https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js','https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'];
+let jspdfLoadPromise=null;
 const catalogue=[
   {category:'Screw Jacks',items:['Screw Jacks - Full','Screw Jacks - Half','Screw Jacks - Swivel','Base Boards - Hardwood','Joint Pins']},
   {category:'Frames - Wide',items:['2.0m Frame','1.8m Frame','1.5m Frame','1.2m S/B Frame','0.9m Frame','0.75m Frame','0.6m Frame','0.3m Frame']},
@@ -297,11 +339,15 @@ function metaFor(category,item){
 }
 
 function todayIso(){
-  const d=new Date();
-  const y=d.getFullYear();
-  const m=String(d.getMonth()+1).padStart(2,'0');
-  const day=String(d.getDate()).padStart(2,'0');
-  return `${day}/${m}/${y}`;
+  const parts=new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Perth',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).reduce((a,p)=>{if(p.type!=='literal')a[p.type]=p.value;return a;},{});
+  return `${parts.day}/${parts.month}/${parts.year}`;
+}
+function validDateAU(value){
+  const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec((value||'').trim());
+  if(!m)return false;
+  const day=Number(m[1]),month=Number(m[2]),year=Number(m[3]);
+  const d=new Date(Date.UTC(year,month-1,day));
+  return d.getUTCFullYear()===year&&d.getUTCMonth()===month-1&&d.getUTCDate()===day;
 }
 function formatDate(value){
   if(!value) return '-';
@@ -331,11 +377,12 @@ function buildInventory(){
 }
 
 function applyLargePrint(enabled,persist=true){
+  const control=$('largePrintNative');
+  if(control)control.checked=Boolean(enabled);
   document.body.classList.toggle('large-print',Boolean(enabled));
-  const button=$('largePrintBtn');
-  if(button){button.classList.toggle('active',Boolean(enabled));button.setAttribute('aria-pressed',enabled?'true':'false');button.textContent=enabled?'LARGE PRINT: ON':'LARGE PRINT: OFF';}
   if(persist){try{localStorage.setItem(LARGE_PRINT_KEY,enabled?'1':'0');}catch(error){console.error(error);}}
 }
+
 function decimalPlaces(step){const t=String(step);return t.includes('.')?t.split('.')[1].length:0;}
 function normaliseQty(value,step=1){const n=Number.parseFloat(value);if(!Number.isFinite(n)||n<=0)return 0;const snapped=Math.round(n/step)*step;return Math.max(0,Math.min(9999,Number(snapped.toFixed(decimalPlaces(step)))));}
 function formatQty(qty,unit=''){const number=Number.isInteger(qty)?String(qty):String(Number(qty.toFixed(2)));return unit?`${number} ${unit}`:number;}
@@ -345,7 +392,7 @@ function selectedItems(){return catalogue.map(group=>({category:group.category,i
 function updateCounts(){let total=0;catalogue.forEach(group=>{const count=group.items.filter(item=>(state.quantities[`${group.category}|||${item}`]||0)>0).length;total+=count;document.querySelectorAll('.category').forEach(details=>{if(details.dataset.category===group.category){const badge=details.querySelector('.category-count');if(badge)badge.textContent=`${count} entered`;}});});$('enteredCount').textContent=total;}
 function applyQuantities(){document.querySelectorAll('.qty-input').forEach(input=>{const qty=state.quantities[input.dataset.key]||0;input.value=qty||'';input.classList.toggle('active',qty>0);});updateCounts();}
 
-function collectForm(){return {client:$('client').value.trim(),siteAddress:$('siteAddress').value.trim(),preparedBy:$('preparedBy').value.trim(),formDate:$('formDate').value||todayIso(),jobTypes:Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el=>el.value),jobDescription:$('jobDescription').value.trim(),specialInstructions:$('specialInstructions').value.trim(),quantities:{...state.quantities},openCategories:Array.from(document.querySelectorAll('.category[open]')).map(el=>el.dataset.category)};}
+function collectForm(){return {client:$('client').value.trim(),siteAddress:$('siteAddress').value.trim(),preparedBy:$('preparedBy').value.trim(),formDate:$('formDate').value.trim(),jobTypes:Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el=>el.value),jobDescription:$('jobDescription').value.trim(),specialInstructions:$('specialInstructions').value.trim(),quantities:{...state.quantities},openCategories:Array.from(document.querySelectorAll('.category[open]')).map(el=>el.dataset.category)};}
 function applyForm(data){if(!data)return;['client','siteAddress','preparedBy','formDate','jobDescription','specialInstructions'].forEach(id=>{if(data[id]!=null)$(id).value=data[id];});document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=Array.isArray(data.jobTypes)&&data.jobTypes.includes(el.value));if(!$('formDate').value)$('formDate').value=todayIso();state.quantities=data.quantities||{};state.openCategories=Array.isArray(data.openCategories)?data.openCategories:[];document.querySelectorAll('.category').forEach((el,index)=>{el.open=state.openCategories.includes(el.dataset.category)||(state.openCategories.length===0&&index===0);});applyQuantities();}
 function saveDraft(show=false){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(collectForm()));if(show)showStatus('Draft saved on this device.','ok');}catch(error){console.error(error);showStatus('Draft could not be saved.','err');}}
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveDraft(false),250);}
@@ -353,11 +400,11 @@ function restoreDraft(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)
 
 function filterInventory(){const term=$('searchInput').value.trim().toLowerCase();const tokens=term.split(/\s+/).filter(Boolean);$('clearSearch').style.display=term?'block':'none';let visible=0;document.querySelectorAll('.category').forEach(details=>{let matched=0;details.querySelectorAll('.item-row').forEach(row=>{const haystack=(row.dataset.search||'').toLowerCase();const match=!tokens.length||tokens.every(token=>haystack.includes(token));row.classList.toggle('hidden',!match);if(match)matched++;});details.classList.toggle('hidden',matched===0);if(tokens.length&&matched)details.open=true;visible+=matched;});$('emptySearch').style.display=visible?'none':'block';}
 function renderReview(){const body=$('reviewBody');body.innerHTML='';const groups=selectedItems();if(!groups.length){body.innerHTML='<div class="review-empty">No quantities have been entered yet.</div>';return;}groups.forEach(group=>{const box=document.createElement('div');box.className='review-category';const heading=document.createElement('h4');heading.textContent=group.category;box.appendChild(heading);group.items.forEach(entry=>{const line=document.createElement('div');line.className='review-line';const name=document.createElement('span');name.textContent=entry.item;const qty=document.createElement('strong');qty.textContent=formatQty(entry.qty,entry.unit);line.append(name,qty);box.appendChild(line);});body.appendChild(box);});}
-function validate(){const data=collectForm();const missing=[];if(!data.client)missing.push('Client');if(!data.siteAddress)missing.push('Site Address');if(!data.preparedBy)missing.push('Prepared By');if(!data.formDate)missing.push('Date');if(!data.jobTypes.length)missing.push('At least one Work Process');if(!selectedItems().length)missing.push('At least one equipment quantity');if(missing.length){showStatus(`Complete: ${missing.join(', ')}.`,'err');return null;}return data;}
+function validate(){const data=collectForm();const missing=[];if(!data.client)missing.push('Client');if(!data.siteAddress)missing.push('Site Address');if(!data.preparedBy)missing.push('Prepared By');if(!data.formDate)missing.push('Date');else if(!validDateAU(data.formDate))missing.push('Valid Date (DD/MM/YYYY)');if(!data.jobTypes.length)missing.push('At least one Work Process');if(data.jobTypes.includes('Small Job / Modification')&&!data.jobDescription&&!data.specialInstructions)missing.push('Small Job / Modification details');if(!selectedItems().length)missing.push('At least one equipment quantity');if(missing.length){showStatus(`Complete: ${missing.join(', ')}.`,'err');return null;}return data;}
 
 function renderPdfPreview(){const data=validate();if(!data)return false;const groups=selectedItems();const field=(label,value,wide=false)=>`<div class="pdf-preview-field${wide?' wide address-highlight':''}"><small>${escapeHtml(label)}</small><div>${escapeHtml(value||'-')}</div></div>`;const categories=groups.map(group=>`<div class="pdf-preview-category"><h5>${escapeHtml(group.category)}</h5>${group.items.map(entry=>`<div class="pdf-preview-line"><span>${escapeHtml(entry.item)}</span><strong>${escapeHtml(formatQty(entry.qty,entry.unit))}</strong></div>`).join('')}</div>`).join('');$('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION - ONE-PAGE YARD PACKING LIST</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div><div class="pdf-preview-details-grid">${field('Client',data.client)}${field('Prepared By',data.preparedBy)}${field('Date',formatDate(data.formDate))}${field('Site Address',data.siteAddress,true)}${field('Work Process',data.jobTypes.join(', '))}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}</div><div class="pdf-preview-section">QUANTITIES REQUIRED</div><div class="pdf-preview-quant-grid">${categories}</div></div></div><div class="preview-help">The emailed PDF uses larger bold delivery details, stronger category headings and enlarged quantities. Normal orders remain a one-page A4 portrait packing list.</div>`;$('pdfPreviewModal').classList.add('show');return true;}
 
-function loadJsPdf(){if(window.jspdf?.jsPDF)return Promise.resolve();return new Promise((resolve,reject)=>{document.querySelector('script[data-jspdf]')?.remove();const script=document.createElement('script');script.src=JSPDF_URL;script.dataset.jspdf='1';script.onload=()=>window.jspdf?.jsPDF?resolve():(script.remove(),reject(new Error('PDF engine loaded incorrectly. Refresh the page and try again.')));script.onerror=()=>{script.remove();reject(new Error('PDF engine could not load. Check internet connection and try again.'));};document.head.appendChild(script);});}
+function loadJsPdf(){if(window.jspdf&&window.jspdf.jsPDF)return Promise.resolve();if(jspdfLoadPromise)return jspdfLoadPromise;jspdfLoadPromise=new Promise((resolve,reject)=>{let index=0;const tryNext=()=>{if(window.jspdf&&window.jspdf.jsPDF){resolve();return;}if(index>=JSPDF_SOURCES.length){reject(new Error('PDF engine could not load. Check internet connection and try again.'));return;}const script=document.createElement('script');script.src=JSPDF_SOURCES[index++];script.async=true;script.crossOrigin='anonymous';const timer=setTimeout(()=>{script.remove();tryNext();},10000);script.onload=()=>{clearTimeout(timer);if(window.jspdf&&window.jspdf.jsPDF)resolve();else{script.remove();tryNext();}};script.onerror=()=>{clearTimeout(timer);script.remove();tryNext();};document.head.appendChild(script);};tryNext();}).catch(error=>{jspdfLoadPromise=null;throw error;});return jspdfLoadPromise;}
 function safeText(text){return String(text||'').replace(/[–—]/g,'-');}
 function pdfFilename(data){const clean=value=>safeText(value).replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,55)||'Form';return `SSSECURE_Delivery_Quantification_${clean(data.client)}_${clean(data.siteAddress)}.pdf`;}
 
@@ -365,12 +412,13 @@ async function buildPdf(data){
   await loadJsPdf();
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
+  const largePdf=document.body.classList.contains('large-print');
   const W=210,H=297,M=7,CW=W-(M*2);
   const BLUE=[10,99,200],NAVY=[18,58,118],INK=[15,23,42],MUTED=[65,77,94],LINE=[194,206,219],SOFT=[247,250,252],ALT=[249,251,253];
   const groups=selectedItems();
   function fitOneLine(text,maxWidth,startSize=8,minSize=5.6,bold=true){let value=safeText(text||'-');let size=startSize;doc.setFont('helvetica',bold?'bold':'normal');while(size>minSize){doc.setFontSize(size);if(doc.getTextWidth(value)<=maxWidth)return{text:value,size};size-=.2;}doc.setFontSize(minSize);if(doc.getTextWidth(value)<=maxWidth)return{text:value,size:minSize};while(value.length>2&&doc.getTextWidth(value+'...')>maxWidth)value=value.slice(0,-1);return{text:value+'...',size:minSize};}
   function fitWrappedText(text,maxWidth,maxLines,startSize=9,minSize=6.5){const value=safeText(text||'-');for(let size=startSize;size>=minSize;size-=.25){doc.setFont('helvetica','bold');doc.setFontSize(size);const lines=doc.splitTextToSize(value,maxWidth);if(lines.length<=maxLines)return{lines,size};}doc.setFont('helvetica','bold');doc.setFontSize(minSize);const lines=doc.splitTextToSize(value,maxWidth);if(lines.length<=maxLines)return{lines,size:minSize};const kept=lines.slice(0,maxLines);let last=kept[maxLines-1];while(last.length>1&&doc.getTextWidth(last+'...')>maxWidth)last=last.slice(0,-1);kept[maxLines-1]=last+'...';return{lines:kept,size:minSize};}
-  function drawDetail(label,value,x,y,w,h,maxLines=2,highlight=false){const fill=highlight?[255,243,191]:SOFT;const border=highlight?[216,154,0]:LINE;doc.setFillColor(...fill);doc.setDrawColor(...border);doc.setLineWidth(highlight?.6:.35);doc.roundedRect(x,y,w,h,1.4,1.4,'FD');doc.setTextColor(...(highlight?[122,75,0]:MUTED));doc.setFont('helvetica','bold');doc.setFontSize(highlight?7.8:6.8);doc.text(safeText(label).toUpperCase(),x+2.2,y+3.8);doc.setTextColor(...(highlight?NAVY:INK));const fitted=fitWrappedText(value,w-4.4,maxLines,highlight?11.2:(maxLines>2?8.6:9.2),highlight?8.2:6.5);doc.setFont('helvetica','bold');doc.setFontSize(fitted.size);doc.text(fitted.lines,x+2.2,y+8.2,{lineHeightFactor:1.15});}
+  function drawDetail(label,value,x,y,w,h,maxLines=2,highlight=false){const fill=highlight?[255,243,191]:SOFT;const border=highlight?[216,154,0]:LINE;doc.setFillColor(...fill);doc.setDrawColor(...border);doc.setLineWidth(highlight?.6:.35);doc.roundedRect(x,y,w,h,1.4,1.4,'FD');doc.setTextColor(...(highlight?[122,75,0]:MUTED));doc.setFont('helvetica','bold');doc.setFontSize(highlight?7.8:6.8);doc.text(safeText(label).toUpperCase(),x+2.2,y+3.8);doc.setTextColor(...(highlight?NAVY:INK));const fitted=fitWrappedText(value,w-4.4,maxLines,highlight?(largePdf?12:11.2):(maxLines>2?(largePdf?9.3:8.6):(largePdf?10:9.2)),highlight?(largePdf?8.8:8.2):(largePdf?7:6.5));doc.setFont('helvetica','bold');doc.setFontSize(fitted.size);doc.text(fitted.lines,x+2.2,y+8.2,{lineHeightFactor:1.15});}
 
   doc.setFillColor(...NAVY);doc.rect(0,0,W,18,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(15.5);doc.text('SSSECURE',M,8.2);doc.setFontSize(9.2);doc.text('SCAFFOLD DELIVERY QUANTIFICATION',W-M,7,{align:'right'});doc.setFontSize(7);doc.text('YARD PACKING LIST',W-M,12,{align:'right'});
   let y=21;doc.setFillColor(...BLUE);doc.rect(M,y,CW,6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('DELIVERY DETAILS',M+2.3,y+4.2);y+=7.5;
@@ -386,24 +434,31 @@ async function buildPdf(data){
   drawDetail('Work Process',data.jobTypes.join(', '),M,y,CW,14,2);y+=16;
   doc.setFillColor(...BLUE);doc.rect(M,y,CW,6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.text('QUANTITIES REQUIRED',M+2.3,y+4.2);const itemCount=groups.reduce((s,g)=>s+g.items.length,0);doc.setFontSize(7.4);doc.text(`${itemCount} ITEM${itemCount===1?'':'S'}`,W-M-2.3,y+4.2,{align:'right'});y+=7.4;
   const listTop=y,listBottom=H-8,availableHeight=listBottom-listTop;
-  function metrics(columnCount){return columnCount===2?{columnCount,colGap:3,cardGap:2,headerH:8.2,rowH:5.65,nameSize:8.8,qtySize:10.2,minSize:6.8}:{columnCount,colGap:2.2,cardGap:1.4,headerH:6.2,rowH:4.55,nameSize:7.5,qtySize:8.5,minSize:6};}
-  function makePlan(columnCount){const m=metrics(columnCount);const heights=groups.map(g=>m.headerH+(g.items.length*m.rowH)+m.cardGap);if(heights.some(h=>h>availableHeight+.01))return null;const n=groups.length;if(n===0)return{columns:Array.from({length:columnCount},()=>[]),m};const prefix=[0];heights.forEach(h=>prefix.push(prefix[prefix.length-1]+h));const range=(a,b)=>prefix[b]-prefix[a];let best=null;if(columnCount===2){for(let i=1;i<n;i++){const hs=[range(0,i),range(i,n)],max=Math.max(...hs),min=Math.min(...hs);if(max>availableHeight+.01)continue;const score=max+(max-min)*.35;if(!best||score<best.score)best={cuts:[i],score};}}else{for(let i=1;i<n-1;i++)for(let j=i+1;j<n;j++){const hs=[range(0,i),range(i,j),range(j,n)],max=Math.max(...hs),min=Math.min(...hs);if(max>availableHeight+.01)continue;const score=max+(max-min)*.35;if(!best||score<best.score)best={cuts:[i,j],score};}}if(!best)return null;const bounds=[0,...best.cuts,n],columns=[];for(let c=0;c<columnCount;c++)columns.push(groups.slice(bounds[c],bounds[c+1]).map(g=>({category:g.category,items:g.items})));return{columns,m};}
+  function metrics(columnCount){if(columnCount===2)return{columnCount,colGap:3,cardGap:2,headerH:8.2,rowH:5.65,nameSize:largePdf?9.6:8.8,qtySize:largePdf?11:10.2,minSize:largePdf?7.1:6.8};return{columnCount,colGap:2.2,cardGap:1.4,headerH:6.2,rowH:4.55,nameSize:largePdf?8.1:7.5,qtySize:largePdf?9.1:8.5,minSize:largePdf?6.3:6};}
+  function makePlan(columnCount){const m=metrics(columnCount);const heights=groups.map(g=>m.headerH+(g.items.length*m.rowH)+m.cardGap);if(heights.some(h=>h>availableHeight+.01))return null;const n=groups.length;if(n===0)return{columns:Array.from({length:columnCount},()=>[]),m};if(n<=columnCount){const columns=Array.from({length:columnCount},()=>[]);groups.forEach((g,i)=>columns[i].push({category:g.category,items:g.items}));return{columns,m};}const prefix=[0];heights.forEach(h=>prefix.push(prefix[prefix.length-1]+h));const range=(a,b)=>prefix[b]-prefix[a];let best=null;if(columnCount===2){for(let i=1;i<n;i++){const hs=[range(0,i),range(i,n)],max=Math.max(...hs),min=Math.min(...hs);if(max>availableHeight+.01)continue;const score=max+(max-min)*.35;if(!best||score<best.score)best={cuts:[i],score};}}else{for(let i=1;i<n-1;i++)for(let j=i+1;j<n;j++){const hs=[range(0,i),range(i,j),range(j,n)],max=Math.max(...hs),min=Math.min(...hs);if(max>availableHeight+.01)continue;const score=max+(max-min)*.35;if(!best||score<best.score)best={cuts:[i,j],score};}}if(!best)return null;const bounds=[0,...best.cuts,n],columns=[];for(let c=0;c<columnCount;c++)columns.push(groups.slice(bounds[c],bounds[c+1]).map(g=>({category:g.category,items:g.items})));return{columns,m};}
   const plan=makePlan(2)||makePlan(3);if(!plan)throw new Error('This unusually large order cannot remain readable on one page. Reduce the selected items or split it into two orders.');const {columns,m}=plan;const maxHeight=Math.max(...columns.map(col=>col.reduce((sum,seg)=>sum+m.headerH+(seg.items.length*m.rowH)+m.cardGap,0)));const maxScale=m.columnCount===2?1.16:1.06;const scale=Math.min(maxScale,(availableHeight/maxHeight)*.985);if(scale>1){m.headerH*=scale;m.rowH*=scale;m.cardGap*=scale;m.nameSize*=scale;m.qtySize*=scale;m.minSize*=Math.min(scale,1.08);}const colW=(CW-(m.colGap*(m.columnCount-1)))/m.columnCount,qtyW=m.columnCount===2?23:17,nameW=colW-qtyW-4.4;
   columns.forEach((segments,columnIndex)=>{const cx=M+columnIndex*(colW+m.colGap);let cy=listTop;segments.forEach(segment=>{const cardH=m.headerH+(segment.items.length*m.rowH);doc.setFillColor(255,255,255);doc.setDrawColor(...LINE);doc.setLineWidth(.32);doc.roundedRect(cx,cy,colW,cardH,1.7,1.7,'FD');doc.setFillColor(...BLUE);doc.roundedRect(cx,cy,colW,m.headerH+1,1.7,1.7,'F');doc.rect(cx,cy+m.headerH-1,colW,2,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');const heading=fitOneLine(segment.category,colW-4.4,m.columnCount===2?10.6:8.7,m.minSize,true);doc.setFontSize(heading.size);doc.text(heading.text,cx+2.2,cy+(m.headerH*.70));let ry=cy+m.headerH;segment.items.forEach((entry,rowIndex)=>{if(rowIndex%2===1){doc.setFillColor(...ALT);doc.rect(cx,ry,colW,m.rowH,'F');}doc.setDrawColor(...LINE);doc.line(cx,ry+m.rowH,cx+colW,ry+m.rowH);doc.setTextColor(...INK);doc.setFont('helvetica','bold');const name=fitOneLine(entry.item,nameW,m.nameSize,m.minSize,true);doc.setFontSize(name.size);doc.text(name.text,cx+2.2,ry+(m.rowH*.70));const qty=fitOneLine(formatQty(entry.qty,entry.unit),qtyW,m.qtySize,m.minSize,true);doc.setFontSize(qty.size);doc.text(qty.text,cx+colW-2.2,ry+(m.rowH*.70),{align:'right'});ry+=m.rowH;});cy+=cardH+m.cardGap;});});
-  doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.text('SSSECURE SCAFFOLD DELIVERY QUANTIFICATION',M,H-3.5);doc.text('PAGE 1 OF 1',W-M,H-3.5,{align:'right'});
+  doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.text('SSSECURE SCAFFOLD DELIVERY QUANTIFICATION',M,H-3.5);
+  const detailContinuations=[];
+  function needsContinuation(value,maxWidth,maxLines,minSize=6.5){if(!value)return false;doc.setFont('helvetica','bold');doc.setFontSize(minSize);return doc.splitTextToSize(safeText(value),maxWidth).length>maxLines;}
+  if(needsContinuation(data.jobDescription,half-4.4,3))detailContinuations.push(['JOB DESCRIPTION - FULL TEXT',data.jobDescription]);
+  if(needsContinuation(data.specialInstructions,half-4.4,3))detailContinuations.push(['SPECIAL DELIVERY INSTRUCTIONS - FULL TEXT',data.specialInstructions]);
+  function addTextPages(title,text){let remaining=doc.splitTextToSize(safeText(text),CW-10),fontSize=largePdf?11:9.5,lineH=fontSize*.3528*1.35,maxLines=Math.floor((H-45)/lineH);while(remaining.length){doc.addPage();doc.setFillColor(...NAVY);doc.rect(0,0,W,20,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text('SSSECURE - '+title,W/2,9,{align:'center'});doc.setFontSize(8.5);doc.setTextColor(255,243,191);doc.text(doc.splitTextToSize(data.siteAddress||'Site',180),W/2,15,{align:'center'});doc.setTextColor(...INK);doc.setFont('helvetica','normal');doc.setFontSize(fontSize);doc.text(remaining.splice(0,maxLines),M+5,27,{lineHeightFactor:1.35});}}
+  detailContinuations.forEach(([title,text])=>addTextPages(title,text));
   if(selectedPhotos.length){for(let i=0;i<selectedPhotos.length;i++){if(i%2===0){doc.addPage();doc.setFillColor(...NAVY);doc.rect(0,0,W,20,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text('SSSECURE - SITE / DELIVERY PHOTOS',W/2,9,{align:'center'});doc.setFontSize(8.5);doc.text(doc.splitTextToSize(data.siteAddress||'Site',180),W/2,15,{align:'center'});}const ph=await photoToJpegFinal(selectedPhotos[i]);const slot=i%2,boxX=15,boxY=27+slot*128,boxW=180,boxH=110;doc.setFillColor(245,247,249);doc.rect(boxX,boxY,boxW,boxH,'F');const sc=Math.min((boxW-4)/ph.width,(boxH-4)/ph.height),dw=ph.width*sc,dh=ph.height*sc;doc.addImage(ph.dataUrl,'JPEG',boxX+(boxW-dw)/2,boxY+(boxH-dh)/2,dw,dh,undefined,'FAST');doc.setTextColor(...MUTED);doc.setFontSize(8);doc.text(`Photo ${i+1}`,boxX,boxY+boxH+5);}}
-return doc.output('blob');
+const totalPages=doc.getNumberOfPages();for(let p=1;p<=totalPages;p++){doc.setPage(p);doc.setTextColor(...MUTED);doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.text(`PAGE ${p} OF ${totalPages}`,W-M,H-3.5,{align:'right'});}return doc.output('blob');
 }
 
 function downloadBlob(blob,filename){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
 
-function renderPhotoPreviews(){photoUrls.forEach(u=>URL.revokeObjectURL(u));photoUrls=[];const grid=$('photoPreviewGrid');grid.innerHTML='';selectedPhotos.forEach((file,i)=>{const url=URL.createObjectURL(file);photoUrls.push(url);const box=document.createElement('div');box.className='photo-preview';const img=document.createElement('img');img.src=url;img.alt=`Photo ${i+1}`;const label=document.createElement('span');label.textContent=`Photo ${i+1}`;box.append(img,label);grid.appendChild(box);});$('photoCount').textContent=`${selectedPhotos.length} of ${MAX_PHOTOS} photos added.`;}
-$('photos').addEventListener('change',e=>{const incoming=Array.from(e.target.files||[]);for(const file of incoming){if(selectedPhotos.length>=MAX_PHOTOS)break;if((file.type||'').startsWith('image/')||/\.(jpe?g|png|heic|heif|webp)$/i.test(file.name||''))selectedPhotos.push(file);}e.target.value='';renderPhotoPreviews();});
+function photoKey(file){return `${file.name}|${file.size}|${file.lastModified}`;}
+function renderPhotoPreviews(){photoUrls.forEach(u=>URL.revokeObjectURL(u));photoUrls=[];const grid=$('photoPreviewGrid');grid.innerHTML='';selectedPhotos.forEach((file,i)=>{const url=URL.createObjectURL(file);photoUrls.push(url);const box=document.createElement('div');box.className='photo-preview';const img=document.createElement('img');img.src=url;img.alt=`Photo ${i+1}`;const meta=document.createElement('div');meta.className='photo-preview-meta';const label=document.createElement('span');label.textContent=`Photo ${i+1}`;const remove=document.createElement('button');remove.type='button';remove.className='remove-photo';remove.textContent='Remove';remove.onclick=()=>{selectedPhotos.splice(i,1);renderPhotoPreviews();};meta.append(label,remove);box.append(img,meta);grid.appendChild(box);});$('photoCount').textContent=`${selectedPhotos.length} of ${MAX_PHOTOS} photos added.`;}
+$('photos').addEventListener('change',e=>{const incoming=Array.from(e.target.files||[]),existing=new Set(selectedPhotos.map(photoKey));for(const file of incoming){if(selectedPhotos.length>=MAX_PHOTOS)break;if(file.size>MAX_PHOTO_BYTES)continue;if(!((file.type||'').startsWith('image/')||/\.(jpe?g|png|heic|heif|webp)$/i.test(file.name||'')))continue;const key=photoKey(file);if(existing.has(key))continue;selectedPhotos.push(file);existing.add(key);}e.target.value='';renderPhotoPreviews();});
 function loadPhotoImage(file){return new Promise((resolve,reject)=>{const u=URL.createObjectURL(file),img=new Image();img.onload=()=>{URL.revokeObjectURL(u);resolve(img)};img.onerror=()=>{URL.revokeObjectURL(u);reject(new Error('Could not read photo'))};img.src=u;});}
 async function photoToJpegFinal(file,maxDim=1600,quality=.84){const img=await loadPhotoImage(file),sw=img.naturalWidth||img.width,sh=img.naturalHeight||img.height,scale=Math.min(1,maxDim/Math.max(sw,sh)),w=Math.max(1,Math.round(sw*scale)),h=Math.max(1,Math.round(sh*scale)),c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(img,0,0,w,h);return{dataUrl:c.toDataURL('image/jpeg',quality),width:w,height:h};}
 async function createPdf(mode){const data=validate();if(!data)return;if(mode==='share'&&!isHostedContext()){renderPdfPreview();showStatus('Direct iPhone email/share is blocked in this downloaded preview. Upload this file to GitHub and open the hosted link in Safari.','info');return;}saveDraft(false);const buttons=[$('pdfBtn'),$('shareBtn'),$('previewPdfBtn'),$('clearBtn')];buttons.forEach(b=>b.disabled=true);showStatus('Building PDF...','info');try{const blob=await buildPdf(data);const filename=pdfFilename(data);const file=new File([blob],filename,{type:'application/pdf'});if(mode==='share'){const supported=Boolean(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]})));if(supported){try{await navigator.share({title:'SSSECURE Scaffold Delivery Quantification',text:'Completed scaffold delivery quantification',files:[file]});showStatus('PDF shared successfully.','ok');return;}catch(error){if(error?.name==='AbortError'){showStatus('Sharing cancelled. The completed form is still saved.','info');return;}}}downloadBlob(blob,filename);renderPdfPreview();showStatus('Direct sharing was unavailable, so the PDF was saved. Open it from Downloads, tap Share, then choose Mail.','info');return;}downloadBlob(blob,filename);showStatus('PDF saved to Downloads.','ok');}catch(error){console.error(error);renderPdfPreview();showStatus(`${error.message||'PDF could not be created.'} The on-screen preview is available above.`,'err');}finally{buttons.forEach(b=>b.disabled=false);}}
 
-function clearForm(){document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=false);selectedPhotos=[];renderPhotoPreviews();if(!confirm('Clear all delivery details and every entered quantity?'))return;localStorage.removeItem(STORAGE_KEY);state.quantities={};document.querySelectorAll('input[type=text],textarea').forEach(el=>el.value='');$('formDate').value=todayIso();document.querySelectorAll('.qty-input').forEach(input=>{input.value='';input.classList.remove('active');});document.querySelectorAll('.category').forEach((el,index)=>el.open=index===0);$('searchInput').value='';filterInventory();updateCounts();showStatus('Form cleared.','ok');window.scrollTo({top:0,behavior:'smooth'});}
+function clearForm(){if(!confirm('Clear all delivery details, work processes, photos and every entered quantity?'))return;document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=false);selectedPhotos=[];renderPhotoPreviews();localStorage.removeItem(STORAGE_KEY);state.quantities={};document.querySelectorAll('input[type=text],textarea').forEach(el=>el.value='');$('preparedBy').value='John Healy';$('formDate').value=todayIso();document.querySelectorAll('.qty-input').forEach(input=>{input.value='';input.classList.remove('active');});document.querySelectorAll('.category').forEach((el,index)=>el.open=index===0);$('searchInput').value='';filterInventory();updateCounts();showStatus('Form cleared.','ok');window.scrollTo({top:0,behavior:'smooth'});}
 
 buildInventory();
 document.addEventListener('click',event=>{const jump=event.target.closest('.category-jump');if(jump){event.preventDefault();$('searchInput').value='';filterInventory();const target=$(jump.dataset.target);if(target){target.classList.remove('hidden');target.open=true;target.scrollIntoView({behavior:'smooth',block:'start'});}return;}if(event.target.closest('.back-categories')){event.preventDefault();$('categoryNav').scrollIntoView({behavior:'smooth',block:'start'});}});
@@ -412,30 +467,12 @@ document.addEventListener('change',event=>{if(event.target.matches('.qty-input')
 document.querySelectorAll('.category').forEach(el=>el.addEventListener('toggle',scheduleSave));
 ['client','siteAddress','preparedBy','formDate','jobDescription','specialInstructions'].forEach(id=>$(id).addEventListener('input',scheduleSave));
 document.querySelectorAll('input[name="jobType"]').forEach(el=>el.addEventListener('change',scheduleSave));
-$('searchInput').addEventListener('input',filterInventory);$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';filterInventory();$('searchInput').focus();});$('expandAll').addEventListener('click',()=>document.querySelectorAll('.category:not(.hidden)').forEach(el=>el.open=true));$('collapseAll').addEventListener('click',()=>document.querySelectorAll('.category').forEach(el=>el.open=false));$('reviewBtn').addEventListener('click',()=>{renderReview();$('reviewModal').classList.add('show');});$('closeReview').addEventListener('click',()=>$('reviewModal').classList.remove('show'));$('reviewModal').addEventListener('click',e=>{if(e.target===$('reviewModal'))$('reviewModal').classList.remove('show');});$('previewPdfBtn').addEventListener('click',renderPdfPreview);$('closePdfPreview').addEventListener('click',()=>$('pdfPreviewModal').classList.remove('show'));$('pdfPreviewModal').addEventListener('click',e=>{if(e.target===$('pdfPreviewModal'))$('pdfPreviewModal').classList.remove('show');});$('saveDraftBtn').addEventListener('click',()=>saveDraft(true));$('largePrintBtn').addEventListener('click',()=>applyLargePrint(!document.body.classList.contains('large-print')));$('clearBtn').addEventListener('click',clearForm);$('pdfBtn').addEventListener('click',()=>createPdf('save'));$('shareBtn').addEventListener('click',()=>createPdf('share'));
-let savedLargePrint=false;try{savedLargePrint=localStorage.getItem(LARGE_PRINT_KEY)==='1';}catch(error){console.error(error);}applyLargePrint(savedLargePrint,false);const restored=restoreDraft();if(!restored){$('formDate').value=todayIso();applyQuantities();}else if(!$('formDate').value.trim()){$('formDate').value=todayIso();saveDraft(false);}if(restored)showStatus('Saved draft restored on this device.','ok');if(!isHostedContext())$('actionNote').textContent='Preview works here. EMAIL / SHARE PDF requires the hosted Safari version.';
+$('searchInput').addEventListener('input',filterInventory);$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';filterInventory();$('searchInput').focus();});$('expandAll').addEventListener('click',()=>document.querySelectorAll('.category:not(.hidden)').forEach(el=>el.open=true));$('collapseAll').addEventListener('click',()=>document.querySelectorAll('.category').forEach(el=>el.open=false));$('reviewBtn').addEventListener('click',()=>{renderReview();$('reviewModal').classList.add('show');});$('closeReview').addEventListener('click',()=>$('reviewModal').classList.remove('show'));$('reviewModal').addEventListener('click',e=>{if(e.target===$('reviewModal'))$('reviewModal').classList.remove('show');});$('previewPdfBtn').addEventListener('click',renderPdfPreview);$('closePdfPreview').addEventListener('click',()=>$('pdfPreviewModal').classList.remove('show'));$('pdfPreviewModal').addEventListener('click',e=>{if(e.target===$('pdfPreviewModal'))$('pdfPreviewModal').classList.remove('show');});$('saveDraftBtn').addEventListener('click',()=>saveDraft(true));$('largePrintNative').addEventListener('change',()=>applyLargePrint($('largePrintNative').checked));$('clearBtn').addEventListener('click',clearForm);$('pdfBtn').addEventListener('click',()=>createPdf('save'));$('shareBtn').addEventListener('click',()=>createPdf('share'));
+let savedLargePrint=false;try{savedLargePrint=localStorage.getItem(LARGE_PRINT_KEY)==='1';}catch(error){console.error(error);}applyLargePrint(savedLargePrint,false);const restored=restoreDraft();if(!restored){$('preparedBy').value='John Healy';$('formDate').value=todayIso();applyQuantities();}else{if(!$('preparedBy').value.trim())$('preparedBy').value='John Healy';if(!$('formDate').value.trim())$('formDate').value=todayIso();saveDraft(false);showStatus('Saved draft restored. Photos must be added again.','ok');}if(!isHostedContext())$('actionNote').textContent='Preview works here. EMAIL / SHARE PDF requires the hosted Safari version. Photos must be added again after refresh / reopen.';
 })();
 </script>
 
-<script>
-(() => {
-  'use strict';
-  if(!/Android/i.test(navigator.userAgent)) return;
-  document.body.classList.add('android-device');
-  const host=document.querySelector('.wrap,.app')||document.body;
-  const box=document.createElement('div');
-  box.className='android-photo-help';
-  box.innerHTML='<div>ANDROID PHOTO UPLOAD: If tapping a photo field does not open your camera/gallery in this viewer, open the live form in Chrome.</div><button type="button">OPEN THIS FORM IN CHROME</button>';
-  box.querySelector('button').addEventListener('click',()=>{
-    if(location.protocol==='https:'){
-      const target=location.href.replace(/^https:\/\//,'');
-      location.href='intent://'+target+'#Intent;scheme=https;package=com.android.chrome;end';
-    }
-  });
-  const firstChild=host.firstElementChild;
-  if(firstChild) firstChild.insertAdjacentElement('afterend',box); else host.prepend(box);
-})();
-</script>
+
 
 </body>
 </html>
