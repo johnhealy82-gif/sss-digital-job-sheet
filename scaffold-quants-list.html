@@ -6,6 +6,7 @@
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#0A63C8" name="theme-color"/>
 <title>SSSECURE Scaffold Delivery Quantification Form</title>
+<!-- SSSECURE QUANTS TWO-COLUMN FINAL 2026-09-24 -->
 <meta name="sssecure-build" content="quants-two-column-lock-2026-09-24-v2">
 <style>
 :root{--blue:#0A63C8;--navy:#123A76;--green:#0A63C8;--orange:#E85D0F;--bg:#EEF3F7;--card:#FFFFFF;--ink:#172033;--muted:#667085;--line:#D8E0E8;--soft:#F7FAFC;--danger:#B42318;--shadow:0 3px 16px rgba(0,0,0,.12)}
@@ -303,6 +304,7 @@ button,label[for],summary,a{cursor:pointer}
 <script>
 (() => {
 'use strict';
+const BUILD_ID='quants-two-column-2026-09-24-v3';document.documentElement.dataset.build=BUILD_ID;
 
 const STORAGE_KEY='sssecure_scaffold_delivery_quant_v3';
 let selectedPhotos=[]; let photoUrls=[]; const MAX_PHOTOS=4, MAX_PHOTO_BYTES=20*1024*1024;
@@ -342,6 +344,11 @@ function metaFor(category,item){
 function todayIso(){
   const parts=new Intl.DateTimeFormat('en-AU',{timeZone:'Australia/Perth',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).reduce((a,p)=>{if(p.type!=='literal')a[p.type]=p.value;return a;},{});
   return `${parts.day}/${parts.month}/${parts.year}`;
+}
+function refreshTodayDate(){
+  const field=$('formDate');
+  if(field) field.value=todayIso();
+  return field ? field.value : todayIso();
 }
 function validDateAU(value){
   const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec((value||'').trim());
@@ -394,14 +401,14 @@ function updateCounts(){let total=0;catalogue.forEach(group=>{const count=group.
 function applyQuantities(){document.querySelectorAll('.qty-input').forEach(input=>{const qty=state.quantities[input.dataset.key]||0;input.value=qty||'';input.classList.toggle('active',qty>0);});updateCounts();}
 
 function collectForm(){return {client:$('client').value.trim(),siteAddress:$('siteAddress').value.trim(),preparedBy:$('preparedBy').value.trim(),formDate:$('formDate').value.trim(),jobTypes:Array.from(document.querySelectorAll('input[name="jobType"]:checked')).map(el=>el.value),jobDescription:$('jobDescription').value.trim(),specialInstructions:$('specialInstructions').value.trim(),quantities:{...state.quantities},openCategories:Array.from(document.querySelectorAll('.category[open]')).map(el=>el.dataset.category)};}
-function applyForm(data){if(!data)return;['client','siteAddress','preparedBy','formDate','jobDescription','specialInstructions'].forEach(id=>{if(data[id]!=null)$(id).value=data[id];});document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=Array.isArray(data.jobTypes)&&data.jobTypes.includes(el.value));if(!$('formDate').value)$('formDate').value=todayIso();state.quantities=data.quantities||{};state.openCategories=Array.isArray(data.openCategories)?data.openCategories:[];document.querySelectorAll('.category').forEach((el,index)=>{el.open=state.openCategories.includes(el.dataset.category)||(state.openCategories.length===0&&index===0);});applyQuantities();}
+function applyForm(data){if(!data)return;['client','siteAddress','preparedBy','jobDescription','specialInstructions'].forEach(id=>{if(data[id]!=null)$(id).value=data[id];});document.querySelectorAll('input[name="jobType"]').forEach(el=>el.checked=Array.isArray(data.jobTypes)&&data.jobTypes.includes(el.value));$('formDate').value=todayIso();state.quantities=data.quantities||{};state.openCategories=Array.isArray(data.openCategories)?data.openCategories:[];document.querySelectorAll('.category').forEach((el,index)=>{el.open=state.openCategories.includes(el.dataset.category)||(state.openCategories.length===0&&index===0);});applyQuantities();}
 function saveDraft(show=false){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(collectForm()));if(show)showStatus('Draft saved on this device.','ok');}catch(error){console.error(error);showStatus('Draft could not be saved.','err');}}
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveDraft(false),250);}
 function restoreDraft(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return false;applyForm(JSON.parse(raw));return true;}catch(error){console.error(error);return false;}}
 
 function filterInventory(){const term=$('searchInput').value.trim().toLowerCase();const tokens=term.split(/\s+/).filter(Boolean);$('clearSearch').style.display=term?'block':'none';let visible=0;document.querySelectorAll('.category').forEach(details=>{let matched=0;details.querySelectorAll('.item-row').forEach(row=>{const haystack=(row.dataset.search||'').toLowerCase();const match=!tokens.length||tokens.every(token=>haystack.includes(token));row.classList.toggle('hidden',!match);if(match)matched++;});details.classList.toggle('hidden',matched===0);if(tokens.length&&matched)details.open=true;visible+=matched;});$('emptySearch').style.display=visible?'none':'block';}
 function renderReview(){const body=$('reviewBody');body.innerHTML='';const groups=selectedItems();if(!groups.length){body.innerHTML='<div class="review-empty">No quantities have been entered yet.</div>';return;}groups.forEach(group=>{const box=document.createElement('div');box.className='review-category';const heading=document.createElement('h4');heading.textContent=group.category;box.appendChild(heading);group.items.forEach(entry=>{const line=document.createElement('div');line.className='review-line';const name=document.createElement('span');name.textContent=entry.item;const qty=document.createElement('strong');qty.textContent=formatQty(entry.qty,entry.unit);line.append(name,qty);box.appendChild(line);});body.appendChild(box);});}
-function validate(){const data=collectForm();const missing=[];if(!data.client)missing.push('Client');if(!data.siteAddress)missing.push('Site Address');if(!data.preparedBy)missing.push('Prepared By');if(!data.formDate)missing.push('Date');else if(!validDateAU(data.formDate))missing.push('Valid Date (DD/MM/YYYY)');if(!data.jobTypes.length)missing.push('At least one Work Process');if(data.jobTypes.includes('Small Job / Modification')&&!data.jobDescription&&!data.specialInstructions)missing.push('Small Job / Modification details');if(!selectedItems().length)missing.push('At least one equipment quantity');if(missing.length){showStatus(`Complete: ${missing.join(', ')}.`,'err');return null;}return data;}
+function validate(){refreshTodayDate();const data=collectForm();const missing=[];if(!data.client)missing.push('Client');if(!data.siteAddress)missing.push('Site Address');if(!data.preparedBy)missing.push('Prepared By');if(!data.formDate)missing.push('Date');else if(!validDateAU(data.formDate))missing.push('Valid Date (DD/MM/YYYY)');if(!data.jobTypes.length)missing.push('At least one Work Process');if(data.jobTypes.includes('Small Job / Modification')&&!data.jobDescription&&!data.specialInstructions)missing.push('Small Job / Modification details');if(!selectedItems().length)missing.push('At least one equipment quantity');if(missing.length){showStatus(`Complete: ${missing.join(', ')}.`,'err');return null;}return data;}
 
 function renderPdfPreview(){const data=validate();if(!data)return false;const groups=selectedItems();const field=(label,value,wide=false)=>`<div class="pdf-preview-field${wide?' wide address-highlight':''}"><small>${escapeHtml(label)}</small><div>${escapeHtml(value||'-')}</div></div>`;const categories=groups.map(group=>`<div class="pdf-preview-category"><h5>${escapeHtml(group.category)}</h5>${group.items.map(entry=>`<div class="pdf-preview-line"><span>${escapeHtml(entry.item)}</span><strong>${escapeHtml(formatQty(entry.qty,entry.unit))}</strong></div>`).join('')}</div>`).join('');$('pdfPreviewBody').innerHTML=`<div class="pdf-preview-sheet"><div class="pdf-preview-header"><h4>SSSECURE</h4><p>SCAFFOLD DELIVERY QUANTIFICATION - ONE-PAGE YARD PACKING LIST</p></div><div class="pdf-preview-content"><div class="pdf-preview-section">DELIVERY DETAILS</div><div class="pdf-preview-details-grid">${field('Client',data.client)}${field('Prepared By',data.preparedBy)}${field('Date',formatDate(data.formDate))}${field('Site Address',data.siteAddress,true)}${field('Work Process',data.jobTypes.join(', '))}${field('Job Description',data.jobDescription)}${field('Special Delivery Instructions',data.specialInstructions)}</div><div class="pdf-preview-section">QUANTITIES REQUIRED</div><div class="pdf-preview-quant-grid">${categories}</div></div></div><div class="preview-help">The emailed PDF uses larger bold delivery details, stronger category headings and enlarged quantities. Normal orders remain a one-page A4 portrait packing list.</div>`;$('pdfPreviewModal').classList.add('show');return true;}
 
@@ -410,6 +417,8 @@ function safeText(text){return String(text||'').replace(/[–—]/g,'-');}
 function pdfFilename(data){const clean=value=>safeText(value).replace(/[^a-z0-9]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,55)||'Form';return `SSSECURE_Delivery_Quantification_${clean(data.client)}_${clean(data.siteAddress)}.pdf`;}
 
 async function buildPdf(data){
+  refreshTodayDate();
+  data.formDate=$('formDate').value.trim();
   await loadJsPdf();
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({unit:'mm',format:'a4',orientation:'portrait',compress:true});
@@ -497,7 +506,7 @@ document.querySelectorAll('.category').forEach(el=>el.addEventListener('toggle',
 ['client','siteAddress','preparedBy','formDate','jobDescription','specialInstructions'].forEach(id=>$(id).addEventListener('input',scheduleSave));
 document.querySelectorAll('input[name="jobType"]').forEach(el=>el.addEventListener('change',scheduleSave));
 $('searchInput').addEventListener('input',filterInventory);$('clearSearch').addEventListener('click',()=>{$('searchInput').value='';filterInventory();$('searchInput').focus();});$('expandAll').addEventListener('click',()=>document.querySelectorAll('.category:not(.hidden)').forEach(el=>el.open=true));$('collapseAll').addEventListener('click',()=>document.querySelectorAll('.category').forEach(el=>el.open=false));$('reviewBtn').addEventListener('click',()=>{renderReview();$('reviewModal').classList.add('show');});$('closeReview').addEventListener('click',()=>$('reviewModal').classList.remove('show'));$('reviewModal').addEventListener('click',e=>{if(e.target===$('reviewModal'))$('reviewModal').classList.remove('show');});$('previewPdfBtn').addEventListener('click',renderPdfPreview);$('closePdfPreview').addEventListener('click',()=>$('pdfPreviewModal').classList.remove('show'));$('pdfPreviewModal').addEventListener('click',e=>{if(e.target===$('pdfPreviewModal'))$('pdfPreviewModal').classList.remove('show');});$('saveDraftBtn').addEventListener('click',()=>saveDraft(true));$('largePrintNative').addEventListener('change',()=>applyLargePrint($('largePrintNative').checked));$('clearBtn').addEventListener('click',clearForm);$('pdfBtn').addEventListener('click',()=>createPdf('save'));$('shareBtn').addEventListener('click',()=>createPdf('share'));
-let savedLargePrint=false;try{savedLargePrint=localStorage.getItem(LARGE_PRINT_KEY)==='1';}catch(error){console.error(error);}applyLargePrint(savedLargePrint,false);const restored=restoreDraft();if(!restored){$('preparedBy').value='John Healy';$('formDate').value=todayIso();applyQuantities();}else{if(!$('preparedBy').value.trim())$('preparedBy').value='John Healy';if(!$('formDate').value.trim())$('formDate').value=todayIso();saveDraft(false);showStatus('Saved draft restored. Photos must be added again.','ok');}if(!isHostedContext())$('actionNote').textContent='Preview works here. EMAIL / SHARE PDF requires the hosted Safari version. Photos must be added again after refresh / reopen.';
+let savedLargePrint=false;try{savedLargePrint=localStorage.getItem(LARGE_PRINT_KEY)==='1';}catch(error){console.error(error);}applyLargePrint(savedLargePrint,false);const restored=restoreDraft();if(!$('preparedBy').value.trim())$('preparedBy').value='John Healy';refreshTodayDate();if(!restored)applyQuantities();else showStatus('Saved draft restored. Date refreshed to today. Photos must be added again.','ok');saveDraft(false);window.addEventListener('focus',()=>{refreshTodayDate();saveDraft(false);});document.addEventListener('visibilitychange',()=>{if(!document.hidden){refreshTodayDate();saveDraft(false);}});if(!isHostedContext())$('actionNote').textContent='Preview works here. EMAIL / SHARE PDF requires the hosted version. Photos must be added again after refresh / reopen.';
 })();
 </script>
 
