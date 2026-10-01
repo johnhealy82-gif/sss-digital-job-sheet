@@ -7,7 +7,7 @@
 <style>
 :root{
   --navy:#123A76; --gold:#E6A800; --ink:#172033; --muted:#5d6b7c;
-  --line:#b8c7d8; --soft:#f4f8fc; --green:#edf8ef; --blue:#edf6ff; --red:#b42318;
+  --line:#b8c7d8; --soft:#f4f8fc; --green:#edf8ef; --blue:#edf6ff; --red:#b42318; --delivery:#2E7D32; --pickup:#1565C0;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -24,7 +24,7 @@ button{cursor:pointer}
 .hero{border:3px solid #e0bd38;background:#fff7cd;border-radius:18px;padding:18px;margin-bottom:18px}
 .hero h1{margin:0 0 6px;color:var(--navy);font-size:34px;line-height:1.05}
 .hero p{margin:0;font-weight:800;color:#594a17}
-.section-title{background:var(--gold);color:#fff;font-weight:900;font-size:24px;padding:13px 15px;border-radius:14px 14px 0 0}
+.section-title{background:var(--gold);color:#fff;font-weight:900;font-size:24px;padding:13px 15px;border-radius:14px 14px 0 0}.section-title.delivery-title{background:var(--delivery)}.section-title.pickup-title{background:var(--pickup)}
 .card{border:2px solid var(--line);border-top:0;background:var(--soft);border-radius:0 0 14px 14px;padding:16px;margin-bottom:18px}
 .field{margin-bottom:16px}.field:last-child{margin-bottom:0}
 .label{display:block;font-size:20px;font-weight:900;margin-bottom:7px}
@@ -79,14 +79,14 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
 /* OFFICE A4 PRINT OUTPUT */
 #printSheet{display:none}
 .ps-page{width:210mm;height:297mm;background:#fff;color:#101828;font-family:Arial,Helvetica,sans-serif;padding:7mm;box-sizing:border-box}
-.ps-head{height:19mm;background:var(--navy);color:#fff;border-left:5mm solid var(--gold);border-radius:3mm;padding:3mm 4mm;display:flex;justify-content:space-between;align-items:center;box-sizing:border-box}
+.ps-head{height:19mm;background:var(--gold);color:var(--navy);border-left:5mm solid var(--navy);border-radius:3mm;padding:3mm 4mm;display:flex;justify-content:space-between;align-items:center;box-sizing:border-box}
 .ps-title{font-size:23pt;font-weight:900;line-height:1}.ps-sub{font-size:10.5pt;font-weight:900;line-height:1.1}
 .ps-meta{height:23mm;margin-top:3mm;border:.6mm solid #8fa6bf;border-radius:2.5mm;padding:2.8mm;display:grid;grid-template-columns:.9fr 1.8fr 1.05fr;gap:3mm;align-items:center;box-sizing:border-box}
 .ps-meta b,.ps-label{display:block;font-size:11pt;font-weight:900;color:#42546a;text-transform:uppercase;margin-bottom:1.2mm;line-height:1}
 .ps-meta .value{font-size:15pt;font-weight:900;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ps-section{height:109mm;margin-top:3mm;border:.6mm solid #8fa6bf;border-radius:3mm;overflow:hidden;box-sizing:border-box}
 .ps-section.delivery{background:var(--green)}.ps-section.pickup{background:var(--blue)}
-.ps-sec-head{height:13mm;background:var(--gold);color:#fff;padding:2.7mm 4mm;font-size:21pt;font-weight:900;display:flex;justify-content:space-between;align-items:center;box-sizing:border-box}
+.ps-sec-head{height:13mm;color:#fff;padding:2.7mm 4mm;font-size:21pt;font-weight:900;display:flex;justify-content:space-between;align-items:center;box-sizing:border-box}.ps-section.delivery .ps-sec-head{background:var(--delivery)}.ps-section.pickup .ps-sec-head{background:var(--pickup)}
 .ps-sec-head span:last-child{font-size:12pt;white-space:nowrap}
 .ps-sec-body{height:96mm;padding:3mm;box-sizing:border-box}
 .ps-address{height:17mm;border:.5mm solid #a9bdd2;border-radius:2mm;background:rgba(255,255,255,.94);padding:2.2mm 2.5mm;box-sizing:border-box}
@@ -95,14 +95,25 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
 .ps-stat{height:18mm;border:.5mm solid #a9bdd2;border-radius:2mm;background:rgba(255,255,255,.94);padding:2mm 2.2mm;box-sizing:border-box}
 .ps-stat b{display:block;font-size:10pt;color:#42546a;text-transform:uppercase;margin-bottom:1.1mm;line-height:1;font-weight:900}.ps-stat span{display:block;font-size:16pt;font-weight:900;line-height:1}
 .ps-qty-title{font-size:11pt;font-weight:900;color:#42546a;text-transform:uppercase;margin:2mm 0 1.3mm}
-.ps-qty-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5mm}
+.ps-qty-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5mm}
 .ps-qty-card{height:16mm;border:.5mm solid #c8b052;background:#fff9dc;border-radius:1.8mm;padding:1.5mm;text-align:center;display:flex;flex-direction:column;justify-content:center;overflow:hidden;box-sizing:border-box}
 .ps-item{font-size:10pt;font-weight:900;line-height:1.02}.ps-qty{font-size:16pt;font-weight:900;line-height:1;margin-top:.7mm}.ps-other{font-size:10.5pt;font-weight:900;line-height:1.05;margin-top:.7mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ps-bottom{display:grid;grid-template-columns:1.7fr .8fr .8fr;gap:2mm;margin-top:2mm}
 .ps-box{height:17mm;border:.5mm solid #a9bdd2;border-radius:2mm;background:rgba(255,255,255,.94);padding:2mm 2.2mm;overflow:hidden;box-sizing:border-box}
 .ps-box b{display:block;font-size:9.4pt;color:#42546a;text-transform:uppercase;margin-bottom:1.2mm;line-height:1;font-weight:900}.ps-box span{display:block;font-size:12pt;font-weight:900;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ps-footer{height:6mm;display:flex;justify-content:space-between;align-items:end;font-size:9pt;font-weight:900;color:#506176;text-transform:uppercase}
-@media print{body{background:#fff!important}.app{display:none!important}#printSheet{display:block!important}.ps-head,.ps-sec-head,.ps-section,.ps-qty-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{size:A4 portrait;margin:0}}
+.ps-photo-page{width:210mm;height:297mm;background:#fff;color:#101828;font-family:Arial,Helvetica,sans-serif;padding:7mm;box-sizing:border-box;page-break-before:always;break-before:page}
+.ps-photo-head{height:18mm;border-radius:3mm;padding:3mm 4mm;display:flex;justify-content:space-between;align-items:center;box-sizing:border-box;color:#fff}
+.ps-photo-head.delivery{background:var(--delivery)}.ps-photo-head.pickup{background:var(--pickup)}
+.ps-photo-title{font-size:22pt;font-weight:900;line-height:1}.ps-photo-sub{font-size:10.5pt;font-weight:900;line-height:1.1;text-align:right}
+.ps-photo-meta{height:16mm;margin-top:3mm;border:.6mm solid #8fa6bf;border-radius:2.5mm;padding:2.5mm 3mm;display:grid;grid-template-columns:1fr 1.6fr;gap:3mm;align-items:center;box-sizing:border-box;background:#f8fafc}
+.ps-photo-meta b{display:block;font-size:9.5pt;color:#42546a;text-transform:uppercase;line-height:1;margin-bottom:1mm}.ps-photo-meta span{display:block;font-size:12.5pt;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ps-photo-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3mm;margin-top:3mm;height:240mm}.ps-photo-grid.one{grid-template-columns:1fr;grid-template-rows:1fr}.ps-photo-grid.two{grid-template-columns:1fr;grid-template-rows:1fr 1fr}.ps-photo-grid.one .ps-photo-card img{height:222mm}.ps-photo-grid.two .ps-photo-card img{height:102mm}
+.ps-photo-card{border:.6mm solid #9fb1c3;border-radius:2.5mm;background:#fff;padding:2mm;display:flex;flex-direction:column;overflow:hidden}
+.ps-photo-card img{width:100%;height:105mm;object-fit:contain;background:#eef2f6;border-radius:1.5mm;display:block}
+.ps-photo-caption{font-size:11pt;font-weight:900;color:#344054;padding-top:1.5mm;text-align:center}
+
+@media print{body{background:#fff!important}.app{display:none!important}#printSheet{display:block!important}.ps-head,.ps-sec-head,.ps-section,.ps-qty-card,.ps-photo-head,.ps-photo-card{-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{size:A4 portrait;margin:0}}
 </style>
 </head>
 <body>
@@ -124,7 +135,6 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
         <div class="field"><label class="label" for="currentTime">Current Date &amp; Time</label><input id="currentTime" class="readonly" type="text" readonly></div>
         <div class="field"><label class="label" for="clientJob">Client / Job <span class="req">REQUIRED</span></label><input id="clientJob" type="text" placeholder="e.g. WBN - 70A Kennedy St, Alfred Cove"></div>
         <div class="field"><label class="label" for="kitSize">Brickies Kit Size <span class="req">REQUIRED</span></label><select id="kitSize"><option value="">Select kit size</option><option>0.9 m</option><option>1.2 m</option><option>1.5 m</option><option>1.8 m</option><option>2.0 m</option></select></div>
-        <div class="field"><label class="label" for="kitId">Kit ID / Number <span class="note">optional</span></label><input id="kitId" type="text" placeholder="e.g. KIT 12"></div>
       </div>
 
       <div class="section-title">WHAT ARE YOU DOING?</div>
@@ -134,13 +144,13 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
           <button id="pickupBtn" class="move-btn" type="button"><span>PICKUP<small id="pickupStatus">Complete the pickup side.</small></span><span class="arrow">›</span></button>
         </div>
         <button id="printBtn" class="office-btn" type="button">PRINT / SAVE OFFICE A4 PDF</button>
-        <div class="status">Delivery prints in light green. Pickup prints in light blue. If one side has not been done yet, it prints blank underneath for later.</div>
+        <div class="status">Delivery is green. Pickup is blue. Any selected photos are appended to the same PDF as photo evidence pages.</div>
       </div>
     </section>
 
     <section id="movement" class="screen" hidden>
       <button id="topBack" class="back-btn" type="button">‹ BACK TO KIT DOCKET</button>
-      <div class="summary"><div class="summary-grid"><div><strong>Driver:</strong> <span id="sumDriver">-</span></div><div><strong>Kit:</strong> <span id="sumKit">-</span></div><div><strong>Job:</strong> <span id="sumJob">-</span></div><div><strong>Movement Time:</strong> <span id="sumTime">Auto on save</span></div></div></div>
+      <div class="summary"><div class="summary-grid"><div><strong>Driver:</strong> <span id="sumDriver">-</span></div><div><strong>Kit Size:</strong> <span id="sumKit">-</span></div><div><strong>Job:</strong> <span id="sumJob">-</span></div><div><strong>Movement Time:</strong> <span id="sumTime">Auto on save</span></div></div></div>
 
       <div id="movementTitle" class="section-title">DELIVERY</div>
       <div class="card">
@@ -158,7 +168,7 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
       <div class="question"><div class="question-title">Any Other Issue Requiring Office Attention?</div><div class="answer-row"><label class="answer"><input type="radio" name="office" value="No">No</label><label class="answer"><input type="radio" name="office" value="Yes">Yes</label></div><div id="officeWrap" class="field conditional" hidden style="margin-top:13px"><label class="label" for="officeDetail">Office Issue</label><textarea id="officeDetail"></textarea></div></div>
 
       <div class="section-title">PHOTO EVIDENCE</div>
-      <div class="card"><div class="photo-note">Add clear photos of the kit and how it has been left. Up to 6 photos per Delivery / Pickup section.</div><div class="photo-actions"><label class="photo-action" for="cameraInput">TAKE PHOTO</label><label class="photo-action secondary" for="photoInput">ADD FROM PHOTOS</label></div><input id="cameraInput" class="photo-hidden" type="file" accept="image/*" capture="environment"><input id="photoInput" class="photo-hidden" type="file" accept="image/*" multiple><div id="previews" class="previews"></div></div>
+      <div class="card"><div class="photo-note">Add clear photos of the kit and how it has been left. Up to 3 photos per Delivery / Pickup section.</div><div class="photo-actions"><label class="photo-action" for="cameraInput">TAKE PHOTO</label><label class="photo-action secondary" for="photoInput">ADD FROM PHOTOS</label></div><input id="cameraInput" class="photo-hidden" type="file" accept="image/*" capture="environment"><input id="photoInput" class="photo-hidden" type="file" accept="image/*" multiple><div id="previews" class="previews"></div></div>
 
       <div class="section-title">CONFIRMATION</div>
       <div class="card"><label class="confirm"><input id="confirmBox" type="checkbox"><span id="confirmText">I confirm this delivery has been recorded correctly.</span></label></div>
@@ -171,18 +181,19 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
 <div id="printSheet">
   <div class="ps-page">
     <div class="ps-head"><div><div class="ps-title">SSSECURE KIT MOVEMENT DOCKET</div><div class="ps-sub">BRICKIES KIT · DELIVERY + PICKUP</div></div><div class="ps-sub" id="psDate">DOCKET</div></div>
-    <div class="ps-meta"><div><b>Driver</b><div class="value" id="psDriver">-</div></div><div><b>Client / Job</b><div class="value" id="psJob">-</div></div><div><b>Kit Size / ID</b><div class="value" id="psKit">-</div></div></div>
+    <div class="ps-meta"><div><b>Driver</b><div class="value" id="psDriver">-</div></div><div><b>Client / Job</b><div class="value" id="psJob">-</div></div><div><b>Kit Size</b><div class="value" id="psKit">-</div></div></div>
     <div id="psDelivery" class="ps-section delivery"></div>
     <div id="psPickup" class="ps-section pickup"></div>
     <div class="ps-footer"><span>SSSECURE · KIT MOVEMENT DOCKET</span><span>Delivery top · Pickup bottom</span></div>
   </div>
+  <div id="psPhotoPages"></div>
 </div>
 
 <script>
 (function(){
 'use strict';
 const $ = id => document.getElementById(id);
-const ITEMS = ['Sole Boards','Frames','Braces','Steels','Steel Boards','Lap Boards'];
+const ITEMS = ['Sole Boards','Frames','Braces','Steels','Lap Boards'];
 let active = 'delivery';
 let photos = {delivery:[], pickup:[]};
 let data = {delivery:newRecord(), pickup:newRecord()};
@@ -211,11 +222,11 @@ function buildInventory(){
 }
 
 function updateConditional(){ $('damageWrap').hidden=selected('damage')!=='Yes'; $('officeWrap').hidden=selected('office')!=='Yes'; }
-function summary(){ $('sumDriver').textContent=$('driver').value||'-'; $('sumKit').textContent=[$('kitSize').value,$('kitId').value].filter(Boolean).join(' · ')||'-'; $('sumJob').textContent=$('clientJob').value||'-'; $('sumTime').textContent=data[active].time||'Auto on save'; }
+function summary(){ $('sumDriver').textContent=$('driver').value||'-'; $('sumKit').textContent=$('kitSize').value||'-'; $('sumJob').textContent=$('clientJob').value||'-'; $('sumTime').textContent=data[active].time||'Auto on save'; }
 
 function loadRecord(type){
   active=type; const r=data[type];
-  $('movementTitle').textContent=type.toUpperCase();
+  $('movementTitle').textContent=type.toUpperCase(); $('movementTitle').classList.remove('delivery-title','pickup-title'); $('movementTitle').classList.add(type==='delivery'?'delivery-title':'pickup-title');
   $('addressLabel').innerHTML=(type==='delivery'?'Delivery':'Pickup')+' Site Address <span class="req">REQUIRED</span>';
   $('siteAddress').placeholder='Enter full '+type+' address';
   $('fullQuestion').textContent='Has The Full Brickies Kit Been '+(type==='delivery'?'Delivered':'Picked Up')+'?';
@@ -267,7 +278,7 @@ function compress(file){
 }
 
 async function addPhotos(e){
-  const room=6-photos[active].length;
+  const room=3-photos[active].length;
   for(const f of Array.from(e.target.files||[]).slice(0,room)){
     try{photos[active].push(await compress(f));}catch(err){}
   }
@@ -298,15 +309,39 @@ function officeSection(type){
   '</div>';
 }
 
+function photoPagesFor(type){
+  const list=photos[type];
+  if(!list.length) return '';
+  const cap=type==='delivery'?'DELIVERY':'PICKUP';
+  const address=data[type].address||'-';
+  const pages=[];
+  for(let start=0; start<list.length; start+=4){
+    const chunk=list.slice(start,start+4);
+    const cards=chunk.map((src,i)=>'<div class="ps-photo-card"><img src="'+src+'" alt="'+cap+' photo '+(start+i+1)+'"><div class="ps-photo-caption">'+cap+' PHOTO '+(start+i+1)+'</div></div>').join('');
+    const blanks=chunk.length>=3?'<div class="ps-photo-card" style="visibility:hidden"></div>'.repeat(4-chunk.length):'';
+    pages.push('<div class="ps-photo-page">'+
+      '<div class="ps-photo-head '+type+'"><div><div class="ps-photo-title">'+cap+' PHOTO EVIDENCE</div><div style="font-size:10.5pt;font-weight:900;margin-top:1mm">SSSECURE KIT MOVEMENT DOCKET</div></div><div class="ps-photo-sub">PAGE '+(Math.floor(start/4)+1)+'<br>'+esc(data[type].time||'')+'</div></div>'+
+      '<div class="ps-photo-meta"><div><b>Site Address</b><span>'+esc(address)+'</span></div><div><b>Client / Job</b><span>'+esc($('clientJob').value||'-')+'</span></div></div>'+
+      '<div class="ps-photo-grid '+(['','one','two','three','four'][chunk.length])+'">'+cards+blanks+'</div>'+
+    '</div>');
+  }
+  return pages.join('');
+}
+
+function refreshPhotoPages(){
+  $('psPhotoPages').innerHTML=photoPagesFor('delivery')+photoPagesFor('pickup');
+}
+
 function refreshPrint(){
   $('psDriver').textContent=$('driver').value||'-';
   $('psJob').textContent=$('clientJob').value||'-';
-  $('psKit').textContent=[$('kitSize').value,$('kitId').value].filter(Boolean).join(' · ')||'-';
+  $('psKit').textContent=$('kitSize').value||'-';
   $('psDate').textContent='DOCKET · '+new Date().toLocaleDateString('en-AU');
   $('psDelivery').innerHTML=officeSection('delivery'); $('psPickup').innerHTML=officeSection('pickup');
+  refreshPhotoPages();
 }
 
-function printDocket(){if(!validateCommon())return;if(!$('movement').hidden)saveRecord(false);refreshPrint();window.print();}
+async function printDocket(){if(!validateCommon())return;if(!$('movement').hidden)saveRecord(false);refreshPrint();const imgs=Array.from(document.querySelectorAll('#psPhotoPages img'));await Promise.all(imgs.map(img=>img.decode?img.decode().catch(()=>{}):Promise.resolve()));window.print();}
 function toggleLarge(){document.body.classList.toggle('large');$('largeBtn').textContent=document.body.classList.contains('large')?'NORMAL PRINT':'LARGE PRINT';}
 
 buildInventory(); current(); setInterval(current,60000); refreshHome(); refreshPrint();
@@ -318,7 +353,7 @@ $('bottomBack').onclick=()=>saveRecord(true);
 $('saveMovement').onclick=()=>saveRecord(true);
 $('printBtn').onclick=printDocket;
 ['damage','office'].forEach(n=>document.querySelectorAll('input[name="'+n+'"]').forEach(el=>el.addEventListener('change',updateConditional)));
-['driver','clientJob','kitSize','kitId'].forEach(id=>$(id).addEventListener(id==='clientJob'||id==='kitId'?'input':'change',refreshPrint));
+['driver','clientJob','kitSize'].forEach(id=>$(id).addEventListener(id==='clientJob'?'input':'change',refreshPrint));
 $('photoInput').addEventListener('change',addPhotos); $('cameraInput').addEventListener('change',addPhotos);
 })();
 </script>
