@@ -39,7 +39,7 @@ textarea{min-height:110px;resize:vertical}
 .move-btn.done{background:#f1faf4;border-color:#73a982}
 .move-btn.done small{color:#176338}
 .arrow{font-size:40px;color:var(--gold)}
-.office-btn{width:100%;min-height:72px;border:0;border-radius:14px;background:var(--navy);color:#fff;font-size:21px;font-weight:900;margin-top:16px}
+.office-actions{display:grid;grid-template-columns:1.35fr .65fr;gap:10px;margin-top:16px}.office-btn{width:100%;min-height:72px;border:0;border-radius:14px;color:#fff;font-size:21px;font-weight:900;margin:0}.share-btn{background:var(--gold);color:var(--navy)}.print-btn{background:var(--navy);color:#fff}
 .status{font-size:14px;color:var(--muted);font-weight:800;margin-top:8px}
 .screen[hidden],.conditional[hidden],.actions[hidden]{display:none!important}
 .back-btn{border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--navy);font-weight:900;padding:10px 12px;margin-bottom:14px}
@@ -74,7 +74,7 @@ textarea{min-height:110px;resize:vertical}
 .a-back{background:#e9eef4;color:#344054;border:1px solid #c5d0dd!important}.a-save{background:var(--gold);color:#fff}
 .invalid{border-color:var(--red)!important;box-shadow:0 0 0 3px rgba(180,35,24,.12)!important}
 body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{font-size:40px}body.large .label{font-size:24px}body.large input[type=text],body.large input[type=number],body.large select,body.large textarea{font-size:24px;min-height:74px}body.large .move-btn{font-size:35px;min-height:136px}body.large .question-title{font-size:28px}body.large .answer{font-size:28px;min-height:96px}body.large .item-name{font-size:23px;min-height:75px}
-@media(max-width:640px){.brand{font-size:23px}.sub{font-size:11px}.content{padding:13px 12px 124px}.hero h1{font-size:31px}.summary-grid{grid-template-columns:1fr}.move-btn{font-size:28px;min-height:110px}.question-title{font-size:22px}.answer{font-size:22px;min-height:80px}.inventory-row{grid-template-columns:minmax(0,1fr) 100px}.item-name{font-size:18px}.photo-actions{grid-template-columns:1fr}.previews{grid-template-columns:1fr}}
+@media(max-width:640px){.office-actions{grid-template-columns:1fr}.brand{font-size:23px}.sub{font-size:11px}.content{padding:13px 12px 124px}.hero h1{font-size:31px}.summary-grid{grid-template-columns:1fr}.move-btn{font-size:28px;min-height:110px}.question-title{font-size:22px}.answer{font-size:22px;min-height:80px}.inventory-row{grid-template-columns:minmax(0,1fr) 100px}.item-name{font-size:18px}.photo-actions{grid-template-columns:1fr}.previews{grid-template-columns:1fr}}
 
 /* OFFICE A4 PRINT OUTPUT */
 #printSheet{display:none}
@@ -143,8 +143,11 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
           <button id="deliveryBtn" class="move-btn" type="button"><span>DELIVERY<small id="deliveryStatus">Complete the delivery side.</small></span><span class="arrow">›</span></button>
           <button id="pickupBtn" class="move-btn" type="button"><span>PICKUP<small id="pickupStatus">Complete the pickup side.</small></span><span class="arrow">›</span></button>
         </div>
-        <button id="printBtn" class="office-btn" type="button">PRINT / SAVE OFFICE A4 PDF</button>
-        <div class="status">Delivery is green. Pickup is blue. Any selected photos are appended to the same PDF as photo evidence pages.</div>
+        <div class="office-actions">
+          <button id="shareBtn" class="office-btn share-btn" type="button">SHARE / EMAIL / MESSAGE PDF</button>
+          <button id="printBtn" class="office-btn print-btn" type="button">PRINT PDF</button>
+        </div>
+        <div class="status">Share sends the actual PDF file to your phone's share sheet (Messages, Mail, WhatsApp, AirDrop, Files, etc.). Print opens the normal printer dialog. Photos stay attached behind the main docket.</div>
       </div>
     </section>
 
@@ -189,6 +192,7 @@ body.large{font-size:23px}body.large .brand{font-size:32px}body.large .hero h1{f
   <div id="psPhotoPages"></div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js"></script>
 <script>
 (function(){
 'use strict';
@@ -341,7 +345,46 @@ function refreshPrint(){
   refreshPhotoPages();
 }
 
-async function printDocket(){if(!validateCommon())return;if(!$('movement').hidden)saveRecord(false);refreshPrint();const imgs=Array.from(document.querySelectorAll('#psPhotoPages img'));await Promise.all(imgs.map(img=>img.decode?img.decode().catch(()=>{}):Promise.resolve()));window.print();}
+function prepareOutput(){if(!validateCommon())return false;if(!$('movement').hidden)saveRecord(false);refreshPrint();return true;}
+function pdfText(v){return String(v||'').replace(/[–—]/g,'-').replace(/·/g,'-').replace(/[’‘]/g,"'").replace(/[“”]/g,'"');}
+function pdfFileName(){const job=pdfText($('clientJob').value||'Kit-Docket').replace(/[^A-Za-z0-9 _-]+/g,'').trim().replace(/\s+/g,'-').slice(0,45)||'Kit-Docket';const d=new Date();const ds=String(d.getDate()).padStart(2,'0')+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();return 'SSSECURE-'+job+'-'+ds+'.pdf';}
+function buildPdfBlob(){
+  if(!window.jspdf||!window.jspdf.jsPDF)throw new Error('PDF engine not loaded');
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const W=210,H=297,M=7,NAVY=[18,58,118],GOLD=[230,168,0],GREEN=[46,125,50],BLUE=[21,101,192],PALEGREEN=[237,248,239],PALEBLUE=[237,246,255],INK=[16,24,40],MUTED=[66,84,106],LINE=[143,166,191],WHITE=[255,255,255],PALEQ=[255,249,220];
+  const setFill=c=>pdf.setFillColor(...c),setDraw=c=>pdf.setDrawColor(...c),setText=c=>pdf.setTextColor(...c);
+  function text(t,x,y,size=10,bold=false,opts={}){pdf.setFont('helvetica',bold?'bold':'normal');pdf.setFontSize(size);pdf.text(pdfText(t),x,y,opts)}
+  function box(x,y,w,h,fill=null,draw=LINE,r=1.8){if(fill)setFill(fill);setDraw(draw);pdf.setLineWidth(.45);pdf.roundedRect(x,y,w,h,r,r,fill?'FD':'S')}
+  function fitLines(t,maxW,size=9,maxLines=2){pdf.setFont('helvetica','bold');pdf.setFontSize(size);let a=pdf.splitTextToSize(pdfText(t||''),maxW);if(a.length>maxLines)a=a.slice(0,maxLines);return a}
+  function drawHeader(){setFill(GOLD);pdf.roundedRect(M,M,W-2*M,19,3,3,'F');setFill(NAVY);pdf.rect(M,M,5,19,'F');setText(NAVY);text('SSSECURE KIT MOVEMENT DOCKET',16,17,16,true);text('BRICKIES KIT - DELIVERY + PICKUP',16,22.5,8.5,true);text('DOCKET - '+new Date().toLocaleDateString('en-AU'),W-M-3,18,8.5,true,{align:'right'});}
+  function drawMeta(){const y=29,h=22;box(M,y,W-2*M,h,WHITE);const cols=[44,98,54],labels=['DRIVER','CLIENT / JOB','KIT SIZE'],vals=[$('driver').value||'-',$('clientJob').value||'-',$('kitSize').value||'-'];let x=M+3;for(let i=0;i<3;i++){setText(MUTED);text(labels[i],x,y+5,8,true);setText(INK);const lines=fitLines(vals[i],cols[i]-5,10.5,2);pdf.text(lines,x,y+11.5);x+=cols[i];}}
+  function drawSection(type,y){const r=data[type],isD=type==='delivery',strong=isD?GREEN:BLUE,pale=isD?PALEGREEN:PALEBLUE,cap=isD?'DELIVERY':'PICKUP';box(M,y,W-2*M,108,pale);setFill(strong);pdf.rect(M,y,W-2*M,13,'F');setText(WHITE);text(cap,M+4,y+8.5,15,true);text(r.time||'DATE / TIME: __________________',W-M-4,y+8.2,8.5,true,{align:'right'});
+    const bx=M+3, bw=W-2*M-6; box(bx,y+16,bw,16,WHITE);setText(MUTED);text('SITE ADDRESS',bx+2.5,y+21,7.8,true);setText(INK);pdf.text(fitLines(r.address||'____________________________________________',bw-5,10.5,1),bx+2.5,y+27);
+    const sy=y+35,gap=2,sw=(bw-2*gap)/3;const stats=[[isD?'FULL KIT DELIVERED?':'FULL KIT PICKED UP?',r.full||'YES / NO'],['VISIBLE DAMAGE?',r.damage||'YES / NO'],[isD?'STACKED SAFELY / ACCESS CLEAR?':'AREA SAFE / CLEAR AFTER PICKUP?',r.safe||'YES / NO']];stats.forEach((st,i)=>{const x=bx+i*(sw+gap);box(x,sy,sw,17,WHITE);setText(MUTED);pdf.text(fitLines(st[0],sw-4,6.8,2),x+2,y+40);setText(INK);text(st[1],x+2,sy+13.5,11.5,true)});
+    setText(MUTED);text(isD?'DELIVERED QUANTITIES':'PICKUP QUANTITIES',bx,sy+22,8,true);const items=[...ITEMS,'OTHER'];const vals=[...ITEMS.map(k=>r.qty[k]||'___'),r.other||'________________'];const qy=sy+24.5,qgap=2,qw=(bw-2*qgap)/3,qh=14;items.forEach((it,i)=>{const row=Math.floor(i/3),col=i%3,x=bx+col*(qw+qgap),yy=qy+row*(qh+2);box(x,yy,qw,qh,PALEQ,[200,176,82],1.4);setText(INK);text(it,x+qw/2,yy+4.5,7.4,true,{align:'center'});text(vals[i],x+qw/2,yy+10.8,it==='OTHER'?7.8:11,true,{align:'center'});});
+    const by=qy+2*(qh+2)+1, notesW=bw*0.54, smallW=(bw-notesW-4)/2;box(bx,by,notesW,17,WHITE);box(bx+notesW+2,by,smallW,17,WHITE);box(bx+notesW+smallW+4,by,smallW,17,WHITE);setText(MUTED);text('DAMAGE / NOTES / OFFICE ATTENTION',bx+2,by+4.5,6.8,true);setText(INK);const notes=[r.damageDetail,r.officeDetail].filter(Boolean).join(' | ')||'________________________________________________';pdf.text(fitLines(notes,notesW-4,8,2),bx+2,by+9.3);setText(MUTED);text('PHOTO EVIDENCE',bx+notesW+4,by+4.5,6.8,true);setText(INK);text('Photos: '+photos[type].length,bx+notesW+4,by+11.5,9.5,true);setText(MUTED);text('DRIVER CONFIRMATION',bx+notesW+smallW+6,by+4.5,6.4,true);setText(INK);text(r.confirmed?'CONFIRMED':'____________',bx+notesW+smallW+6,by+11.5,8.5,true);
+  }
+  drawHeader();drawMeta();drawSection('delivery',55);drawSection('pickup',166);setText(MUTED);text('SSSECURE - KIT MOVEMENT DOCKET',M,290,7.5,true);text('Delivery top - Pickup bottom',W-M,290,7.5,true,{align:'right'});
+  function fitImage(src,x,y,w,h){const props=pdf.getImageProperties(src);const ratio=Math.min(w/props.width,h/props.height);const iw=props.width*ratio,ih=props.height*ratio,ix=x+(w-iw)/2,iy=y+(h-ih)/2;setDraw(LINE);pdf.setLineWidth(.45);pdf.rect(x,y,w,h);pdf.addImage(src,'JPEG',ix,iy,iw,ih,undefined,'FAST');}
+  function addPhotoPage(type){const list=photos[type];if(!list.length)return;pdf.addPage('a4','portrait');const strong=type==='delivery'?GREEN:BLUE,cap=type==='delivery'?'DELIVERY':'PICKUP';setFill(strong);pdf.roundedRect(M,M,W-2*M,22,3,3,'F');setText(WHITE);text(cap+' PHOTO EVIDENCE',M+4,17,16,true);text('SSSECURE KIT MOVEMENT DOCKET',M+4,23,8.5,true);text(data[type].time||'',W-M-4,19,8.5,true,{align:'right'});box(M,32,W-2*M,18,WHITE);setText(MUTED);text('SITE ADDRESS',M+3,37,7.5,true);setText(INK);pdf.text(fitLines(data[type].address||'-',92,9.5,1),M+3,43);setText(MUTED);text('CLIENT / JOB',108,37,7.5,true);setText(INK);pdf.text(fitLines($('clientJob').value||'-',90,9.5,1),108,43);
+    if(list.length===1){fitImage(list[0],10,57,190,225);text(cap+' PHOTO 1',105,287,8.5,true,{align:'center'});}
+    else if(list.length===2){fitImage(list[0],10,57,190,105);fitImage(list[1],10,170,190,105);text(cap+' PHOTO 1',105,166,7.5,true,{align:'center'});text(cap+' PHOTO 2',105,279,7.5,true,{align:'center'});}
+    else {fitImage(list[0],10,57,190,103);fitImage(list[1],10,169,92,105);fitImage(list[2],108,169,92,105);text(cap+' PHOTO 1',105,164,7.5,true,{align:'center'});text(cap+' PHOTO 2',56,279,7.5,true,{align:'center'});text(cap+' PHOTO 3',154,279,7.5,true,{align:'center'});}
+  }
+  addPhotoPage('delivery');addPhotoPage('pickup');return pdf.output('blob');
+}
+function downloadPdf(blob,fileName){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);}
+function sharePdf(){
+  if(!prepareOutput())return;
+  try{
+    const blob=buildPdfBlob(),name=pdfFileName(),file=new File([blob],name,{type:'application/pdf'});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      navigator.share({title:'SSSECURE Kit Movement Docket',files:[file]}).catch(err=>{if(err&&err.name!=='AbortError')downloadPdf(blob,name);});
+    }else{downloadPdf(blob,name);alert('PDF saved to your device. Open the downloaded PDF and use Share to send it by message or email.');}
+  }catch(err){alert('Could not create the PDF. Please refresh the page and try again.');}
+}
+function printDocket(){if(!prepareOutput())return;window.print();}
 function toggleLarge(){document.body.classList.toggle('large');$('largeBtn').textContent=document.body.classList.contains('large')?'NORMAL PRINT':'LARGE PRINT';}
 
 buildInventory(); current(); setInterval(current,60000); refreshHome(); refreshPrint();
@@ -351,6 +394,7 @@ $('pickupBtn').onclick=()=>{if(validateCommon())loadRecord('pickup')};
 $('topBack').onclick=()=>saveRecord(true);
 $('bottomBack').onclick=()=>saveRecord(true);
 $('saveMovement').onclick=()=>saveRecord(true);
+$('shareBtn').onclick=sharePdf;
 $('printBtn').onclick=printDocket;
 ['damage','office'].forEach(n=>document.querySelectorAll('input[name="'+n+'"]').forEach(el=>el.addEventListener('change',updateConditional)));
 ['driver','clientJob','kitSize'].forEach(id=>$(id).addEventListener(id==='clientJob'?'input':'change',refreshPrint));
